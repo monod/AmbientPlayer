@@ -9,7 +9,10 @@
 #import <AVFoundation/AVFoundation.h>
 
 @interface APCrossFadePlayer : NSObject
-- (BOOL)playWithSoundName:(NSString *)soundName;
+- (BOOL)play;
 - (void)stop;
 - (BOOL)isPlaying;
+-(void)setCurrentSoundName:(NSString *)currentSoundName;
+
+@property (nonatomic, copy) NSString *currentSoundFileName;
 @end

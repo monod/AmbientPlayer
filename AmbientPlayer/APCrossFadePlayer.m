@@ -17,20 +17,21 @@ static const NSTimeInterval kCrossFadeStep = 0.1;
 @property (nonatomic, strong) AVAudioPlayer *player1;
 @property (nonatomic, strong) AVAudioPlayer *player2;
 @property (nonatomic, assign) NSTimeInterval duration;
-@property (nonatomic, copy) NSString *currentSoundName;
 @end
 
 @implementation APCrossFadePlayer
 SYNTHESIZE(player1);
 SYNTHESIZE(player2);
 SYNTHESIZE(duration);
-SYNTHESIZE(currentSoundName);
 
-- (BOOL)playWithSoundName:(NSString *)soundName {
+-(void)setCurrentSoundName:(NSString *)currentSoundName {
+    self.currentSoundFileName = [[NSBundle mainBundle] pathForResource:currentSoundName ofType:@"m4a"];
+}
+
+- (BOOL)play {
     if ([self isPlaying]) {
         [self stop];
     }
-    self.currentSoundName = soundName;
     self.player1 = [self newPlayer];
     [self.player1 setVolume:1.0];
 
@@ -77,11 +78,14 @@ SYNTHESIZE(currentSoundName);
 }
 
 -(AVAudioPlayer *)newPlayer {
-    NSError* errRet = nil;
-    NSString* soundFilePath = [[NSBundle mainBundle] pathForResource:self.currentSoundName ofType:@"m4a"];
-    NSURL* url = [[NSURL alloc] initFileURLWithPath:soundFilePath];
+    NSError* error = nil;
+    NSURL* url = [[NSURL alloc] initFileURLWithPath:self.currentSoundFileName];
     
-    AVAudioPlayer *player =[[AVAudioPlayer alloc] initWithContentsOfURL:url error:&errRet];
+    AVAudioPlayer *player =[[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+        return nil;
+    }
     [player prepareToPlay];
     return player;
 }
