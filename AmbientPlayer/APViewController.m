@@ -228,15 +228,19 @@ SYNTHESIZE(preset);
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
 
+            // Stop in case of the same entry
+            if ([self.player isPlaying:entry]) {
+                [self.player stop];
+                return;
+            }
+
             // Slider
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             UISlider *slider = (UISlider *)cell.accessoryView;
             slider.value =  entry.volume;
             slider.hidden = NO;
             
-            [self.player setCurrentSoundName:entry.fileName];
-            [self.player setVolume:entry.volume];
-            [self.player play];
+            [self.player play:entry];
             return;
         }
         case kSectionRecorded:
