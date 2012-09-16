@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface APRecordViewController : UIViewController
-
+-(IBAction)donePushed:(id)sender;
 @end

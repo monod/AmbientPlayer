@@ -40,4 +40,9 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+-(IBAction)donePushed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 @end

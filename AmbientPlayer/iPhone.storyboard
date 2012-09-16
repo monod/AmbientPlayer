@@ -28,6 +28,7 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="kjb-gy-flz" id="ASH-Wi-qKM"/>
+                        <segue destination="u9a-S0-9Ye" kind="modal" identifier="toRecord" id="KUf-a8-ByQ"/>
                     </connections>
                 </viewController>
             </objects>
@@ -54,6 +55,18 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="jNm-Qf-Fu6">
+                                <rect key="frame" x="0.0" y="-6" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem systemItem="flexibleSpace" id="vuR-6B-dYP"/>
+                                    <barButtonItem systemItem="done" id="4NO-4P-sZf">
+                                        <connections>
+                                            <action selector="donePushed:" destination="u9a-S0-9Ye" id="vIo-56-1nR"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -62,6 +75,20 @@
             <point key="canvasLocation" x="399" y="17"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="APRecordViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/APRecordViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePushed:"/>
+            </relationships>
+        </class>
+        <class className="APViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/APViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

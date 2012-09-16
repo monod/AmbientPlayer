@@ -183,9 +183,11 @@ SYNTHESIZE(preset);
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
             [self.player playWithSoundName:entry.fileName];
+            return;
         }
         case 1:
-            // TODO 「追加」のセルだった場合、録音用画面を呼び出すようにする
+            // 「追加」のセルだった場合、録音用画面を呼び出すようにする
+            [self performSegueWithIdentifier:@"toRecord" sender:self];
             return;
         default:
             NSAssert(NO, @"This line should not be reached");
