@@ -162,6 +162,7 @@ SYNTHESIZE(preset);
             slider.minimumValue = 0.0;
             slider.maximumValue = 1.0;
             slider.value = 1.0;
+            slider.hidden = YES;
             [slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = slider;
             
@@ -222,7 +223,15 @@ SYNTHESIZE(preset);
         case kSectionPreset:
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
+
+            // Slider
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            UISlider *slider = (UISlider *)cell.accessoryView;
+            slider.value =  entry.volume;
+            slider.hidden = NO;
+            
             [self.player setCurrentSoundName:entry.fileName];
+            [self.player setVolume:entry.volume];
             [self.player play];
             return;
         }
@@ -243,6 +252,29 @@ SYNTHESIZE(preset);
             return;
     }
 
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.section) {
+        case kSectionPreset:
+        {
+            // Slider
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            UISlider *slider = (UISlider *)cell.accessoryView;
+            slider.hidden = YES;
+            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
+            entry.volume = slider.value;
+            
+            break;
+        }
+        case kSectionRecorded:
+            break;
+        case kSectionOther:
+            break;
+        default:
+            NSAssert(NO, @"This line should not be reached");
+            return;
+    }
 }
 
 - (void)onSliderChanged:(UISlider *)slider {
