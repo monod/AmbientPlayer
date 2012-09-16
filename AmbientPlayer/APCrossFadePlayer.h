@@ -13,4 +13,7 @@
 - (void)stop;
 - (BOOL)isPlaying;
 - (void)setVolume:(float)vol;
+-(void)setCurrentSoundName:(NSString *)currentSoundName;
+
+@property (nonatomic, copy) NSString *currentSoundFileName;
 @end

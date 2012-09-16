@@ -28,8 +28,7 @@ SYNTHESIZE(duration);
 SYNTHESIZE(currentSoundName);
 SYNTHESIZE(targetVolume);
 
-- (id)init
-{
+- (id)init {
     self = [super init];
     if (self) {
         self.targetVolume = 1.0f;
