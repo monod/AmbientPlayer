@@ -45,8 +45,22 @@ SYNTHESIZE(preset);
         [self initPreset];
         self.bannerView = [ADBannerView new];
         self.bannerView.delegate = self;
+        
+        AudioSessionAddPropertyListener(
+                                        kAudioSessionProperty_AudioRouteChange,
+                                        audioRouteChangeListenerCallback,
+                                        (__bridge void *)(self)
+                                        );
     }
     return self;
+}
+
+-(void)dealloc {
+    AudioSessionRemovePropertyListenerWithUserData(
+                                                   kAudioSessionProperty_AudioRouteChange,
+                                                   audioRouteChangeListenerCallback,
+                                                   (__bridge void *)(self)
+                                                   );
 }
 
 -(void)initPreset {
@@ -58,6 +72,20 @@ SYNTHESIZE(preset);
                    [[APSoundEntry alloc] initPresetWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
                    [[APSoundEntry alloc] initPresetWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
                    nil];
+}
+
+void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID inID, UInt32 dataSize, const void *inData) {
+    CFDictionaryRef dict = (CFDictionaryRef) inData;
+    CFNumberRef reason = CFDictionaryGetValue(dict, kAudioSession_RouteChangeKey_Reason);
+//    CFDictionaryRef oldRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_PreviousRouteDescription);
+//    CFDictionaryRef newRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_CurrentRouteDescription);
+    
+    SInt32 routeChangeReason;
+    CFNumberGetValue (reason, kCFNumberSInt32Type, &routeChangeReason);
+    if (routeChangeReason ==  kAudioSessionRouteChangeReason_OldDeviceUnavailable) {
+        APViewController *controller = (__bridge APViewController *)(inData);
+        [controller.player stop];
+    }
 }
 
 
