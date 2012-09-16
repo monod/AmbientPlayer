@@ -45,12 +45,6 @@ SYNTHESIZE(preset);
         [self initPreset];
         self.bannerView = [ADBannerView new];
         self.bannerView.delegate = self;
-        
-        AudioSessionAddPropertyListener(
-                                        kAudioSessionProperty_AudioRouteChange,
-                                        audioRouteChangeListenerCallback,
-                                        (__bridge void *)(self)
-                                        );
     }
     return self;
 }
@@ -83,7 +77,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     SInt32 routeChangeReason;
     CFNumberGetValue (reason, kCFNumberSInt32Type, &routeChangeReason);
     if (routeChangeReason ==  kAudioSessionRouteChangeReason_OldDeviceUnavailable) {
-        APViewController *controller = (__bridge APViewController *)(inData);
+        APViewController *controller = (__bridge APViewController *)(clientData);
         [controller.player stop];
     }
 }
@@ -110,6 +104,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                              &allowMixing                                          // 3
                              );
     [self.session setActive: YES error: &errRet];
+    AudioSessionAddPropertyListener(
+                                    kAudioSessionProperty_AudioRouteChange,
+                                    audioRouteChangeListenerCallback,
+                                    (__bridge void *)(self)
+                                    );
+
 }
 
 - (void)viewDidUnload
