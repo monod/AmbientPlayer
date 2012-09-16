@@ -14,6 +14,7 @@
 @interface APRecordViewController () <AVAudioRecorderDelegate>
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSURL *lastRecordedFile;
+@property (nonatomic, assign) BOOL isRecording;
 @end
 
 @implementation APRecordViewController
@@ -22,6 +23,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.isRecording = NO;
     }
     return self;
 }
@@ -59,34 +61,41 @@
         return nil;
     }
     [self.recorder setDelegate:self];
-    [self.recorder prepareToRecord];
+//    [self.recorder prepareToRecord];
     [self.recorder record];
     //[self.recorder recordForDuration:(NSTimeInterval) 10]
+    
+    [self.recordButton setTitle:@"録音終了" forState:UIControlStateNormal];
+    self.isRecording = YES;
+
     return recordedTmpFile;
 }
 
--(IBAction)donePushed:(id)sender {
-    if (self.recorder.isRecording) {
-        [self.recorder stop];
+-(void)stopRecording {
+    [self.recordButton setTitle:@"録音開始" forState:UIControlStateNormal];
+    [self.recorder stop];
+    self.isRecording = NO;
+}
 
+-(IBAction)donePushed:(id)sender {
+    if (self.isRecording) {
+        [self stopRecording];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction)recordPushed:(id)sender {
-    if (self.recorder.isRecording) {
-        [self.recordButton setTitle:@"録音開始" forState:UIControlStateNormal];
-        [self.recorder stop];
+    if (self.isRecording) {
+        [self stopRecording];
     } else {
-        [self.recordButton setTitle:@"録音終了" forState:UIControlStateNormal];
         self.lastRecordedFile = [self startRecording];
     }
 }
 
 #pragma mark - AVAudioRecorderDelegate
 
-- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
-    
-}
+//- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
+//    
+//}
 
 @end
