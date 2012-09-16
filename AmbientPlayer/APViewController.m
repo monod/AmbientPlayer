@@ -100,7 +100,7 @@ SYNTHESIZE(preset);
 - (NSArray *)findRecordedFiles {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.caf'"];
+    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
     return [dirContents filteredArrayUsingPredicate:fltr];
 }
 
