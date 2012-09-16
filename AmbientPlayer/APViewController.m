@@ -66,11 +66,15 @@ SYNTHESIZE(preset);
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view addSubview:_bannerView];
-    
+
+    self.player = [APCrossFadePlayer new];
+}
+
+- (void)setupAudioSession {
     _session = [AVAudioSession sharedInstance];
     NSError* errRet = nil;
     [self.session setCategory: AVAudioSessionCategoryPlayback error: &errRet];
-
+    
     UInt32 allowMixing = true;
     AudioSessionSetProperty (
                              kAudioSessionProperty_OverrideCategoryMixWithOthers,  // 1
@@ -78,7 +82,6 @@ SYNTHESIZE(preset);
                              &allowMixing                                          // 3
                              );
     [self.session setActive: YES error: &errRet];
-    self.player = [APCrossFadePlayer new];
 }
 
 - (void)viewDidUnload
@@ -91,6 +94,7 @@ SYNTHESIZE(preset);
     [super viewWillAppear:animated];
     self.recordedFiles = [self findRecordedFiles];
     [self.tableView reloadData];
+    [self setupAudioSession];
 }
 
 - (NSArray *)findRecordedFiles {

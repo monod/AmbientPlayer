@@ -40,9 +40,28 @@
     // Release any retained subviews of the main view.
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setupAudioSession];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)setupAudioSession {
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError* error = nil;
+    [session setCategory: AVAudioSessionCategoryPlayAndRecord error: &error];
+    if (error) {
+        NSLog(@"%@", error);
+        return;
+    }
+    [session setActive: YES error: &error];
+    if (error) {
+        NSLog(@"%@", error);
+    }
 }
 
 -(NSURL *)startRecording {
