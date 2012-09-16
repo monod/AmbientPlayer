@@ -12,4 +12,5 @@
 - (BOOL)playWithSoundName:(NSString *)soundName;
 - (void)stop;
 - (BOOL)isPlaying;
+- (void)setVolume:(float)vol;
 @end

@@ -139,6 +139,14 @@ SYNTHESIZE(preset);
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
             }
             cell.textLabel.text = entry.title;
+
+            UISlider *slider = [[UISlider alloc] init];
+            slider.minimumValue = 0.0;
+            slider.maximumValue = 1.0;
+            slider.value = 1.0;
+            [slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = slider;
+            
             if (entry.imageFileName) {
                 NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
                 UIImage *img = [UIImage imageWithContentsOfFile:path];
@@ -194,6 +202,11 @@ SYNTHESIZE(preset);
             return;
     }
 
+}
+
+- (void)onSliderChanged:(UISlider *)slider {
+    NSLog(@"val = %f", slider.value);
+    [self.player setVolume:slider.value];
 }
 
 #pragma mark - iAd

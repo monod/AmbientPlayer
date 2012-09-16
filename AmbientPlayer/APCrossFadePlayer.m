@@ -18,6 +18,7 @@ static const NSTimeInterval kCrossFadeStep = 0.1;
 @property (nonatomic, strong) AVAudioPlayer *player2;
 @property (nonatomic, assign) NSTimeInterval duration;
 @property (nonatomic, copy) NSString *currentSoundName;
+@property float targetVolume;
 @end
 
 @implementation APCrossFadePlayer
@@ -25,6 +26,16 @@ SYNTHESIZE(player1);
 SYNTHESIZE(player2);
 SYNTHESIZE(duration);
 SYNTHESIZE(currentSoundName);
+SYNTHESIZE(targetVolume);
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.targetVolume = 1.0f;
+    }
+    return self;
+}
 
 - (BOOL)playWithSoundName:(NSString *)soundName {
     if ([self isPlaying]) {
@@ -32,7 +43,7 @@ SYNTHESIZE(currentSoundName);
     }
     self.currentSoundName = soundName;
     self.player1 = [self newPlayer];
-    [self.player1 setVolume:1.0];
+    [self.player1 setVolume:self.targetVolume];
 
     self.player2 = [self newPlayer];
     
@@ -66,7 +77,7 @@ SYNTHESIZE(currentSoundName);
     if (self.player1.volume - 0.1 < 0.0) {
         [self.player1 stop];
         self.player1 = self.player2;
-        self.player1.volume = 1.0;
+        self.player1.volume = self.targetVolume;
         self.player2 = [self newPlayer];
         [self performSelector:@selector(startCrossFade) withObject:nil afterDelay:self.duration - self.player1.currentTime - kCrossFadeDuration];
     } else {
@@ -74,6 +85,12 @@ SYNTHESIZE(currentSoundName);
         self.player2.volume += 0.1;
         [self performSelector:@selector(stepCrossFade) withObject:nil afterDelay:kCrossFadeStep];
     }
+}
+
+- (void)setVolume:(float)vol {
+    self.targetVolume = vol;
+    self.player1.volume = vol;
+    self.player2.volume = vol;
 }
 
 -(AVAudioPlayer *)newPlayer {
