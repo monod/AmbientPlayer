@@ -13,6 +13,7 @@
 - (BOOL)play;
 - (BOOL)play:(APSoundEntry *) soundEntry;
 - (void)stop;
+- (void)stopEntry;
 - (BOOL)isPlaying;
 - (void)setVolume:(float)vol;
 -(void)setCurrentSoundName:(NSString *)currentSoundName;

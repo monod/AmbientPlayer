@@ -230,7 +230,7 @@ SYNTHESIZE(preset);
 
             // Stop in case of the same entry
             if ([self.player isPlaying:entry]) {
-                [self.player stop];
+                [self.player stopEntry];
                 return;
             }
 

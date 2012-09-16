@@ -19,7 +19,7 @@ static const NSTimeInterval kCrossFadeStep = 0.1;
 @property (nonatomic, assign) NSTimeInterval duration;
 @property (nonatomic, copy) NSString *currentSoundName;
 @property float targetVolume;
-@property (nonatomic, assign) APSoundEntry * soundEntry;
+@property (nonatomic, strong) APSoundEntry * soundEntry;
 @end
 
 @implementation APCrossFadePlayer
@@ -70,14 +70,18 @@ SYNTHESIZE(soundEntry);
 }
 
 - (void)stop {
-    
-    if(self.soundEntry) {
-        self.soundEntry = nil;
-    }        
-    
+        
     [self.player1 stop];
     [self.player2 stop];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+- (void)stopEntry{
+    if(self.soundEntry) {
+        self.soundEntry = nil;
+    }
+    
+    [self stop];
 }
 
 - (BOOL)isPlaying {
