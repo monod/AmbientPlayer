@@ -37,11 +37,14 @@ SYNTHESIZE(targetVolume);
     return self;
 }
 
-- (BOOL)playWithSoundName:(NSString *)soundName {
+-(void)setCurrentSoundName:(NSString *)currentSoundName {
+    self.currentSoundFileName = [[NSBundle mainBundle] pathForResource:currentSoundName ofType:@"m4a"];
+}
+
+- (BOOL)play {
     if ([self isPlaying]) {
         [self stop];
     }
-    self.currentSoundName = soundName;
     self.player1 = [self newPlayer];
     [self.player1 setVolume:self.targetVolume];
 
@@ -94,11 +97,14 @@ SYNTHESIZE(targetVolume);
 }
 
 -(AVAudioPlayer *)newPlayer {
-    NSError* errRet = nil;
-    NSString* soundFilePath = [[NSBundle mainBundle] pathForResource:self.currentSoundName ofType:@"m4a"];
-    NSURL* url = [[NSURL alloc] initFileURLWithPath:soundFilePath];
+    NSError* error = nil;
+    NSURL* url = [[NSURL alloc] initFileURLWithPath:self.currentSoundFileName];
     
-    AVAudioPlayer *player =[[AVAudioPlayer alloc] initWithContentsOfURL:url error:&errRet];
+    AVAudioPlayer *player =[[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    if (error) {
+        NSLog(@"%@", error);
+        return nil;
+    }
     [player prepareToPlay];
     return player;
 }

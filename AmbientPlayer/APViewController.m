@@ -16,6 +16,9 @@
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
+const int kSectionPreset = 0;
+const int kSectionRecorded = 1;
+const int kSectionOther = 2;
 
 @interface APViewController () <ADBannerViewDelegate>
 
@@ -23,6 +26,7 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
 @property (nonatomic, strong) ADBannerView *bannerView;
+@property (nonatomic, strong) NSArray *recordedFiles;
 
 @end
 
@@ -83,6 +87,18 @@ SYNTHESIZE(preset);
     // Release any retained subviews of the main view.
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.recordedFiles = [self findRecordedFiles];
+    [self.tableView reloadData];
+}
+
+- (NSArray *)findRecordedFiles {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSArray *dirContents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
+    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.caf'"];
+    return [dirContents filteredArrayUsingPredicate:fltr];
+}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -115,15 +131,17 @@ SYNTHESIZE(preset);
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case 0:
+        case kSectionPreset:
             return @"Preset";
-        case 1:
-            return @"Custom";
+        case kSectionRecorded:
+            return @"Recorded";
+        case kSectionOther:
+            return @"Other";
         default:
             return nil;
     }
@@ -131,7 +149,7 @@ SYNTHESIZE(preset);
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
-        case 0:
+        case kSectionPreset:
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -151,10 +169,23 @@ SYNTHESIZE(preset);
                 NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
                 UIImage *img = [UIImage imageWithContentsOfFile:path];
                 cell.imageView.image = img;
+            } else {
+                cell.imageView.image = nil;
             }
             return cell;
         }
-        case 1:
+        case kSectionRecorded:
+        {
+            NSString *soundFile = [self.recordedFiles objectAtIndex:indexPath.row];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+            }
+            cell.textLabel.text = soundFile;
+            cell.imageView.image = nil;
+            return cell;
+        }
+        case kSectionOther:
         {
             // TODO 今は、「追加」のセルだけを作っているけど、追加した音声も作るようにする
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -172,10 +203,11 @@ SYNTHESIZE(preset);
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case 0:
+        case kSectionPreset:
             return self.preset.count;
-        case 1:
-            // TODO
+        case kSectionRecorded:
+            return [self.recordedFiles count];
+        case kSectionOther:
             return 1;
         default:
             NSAssert(NO, @"This line should not be reached");
@@ -187,14 +219,23 @@ SYNTHESIZE(preset);
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
-        case 0:
+        case kSectionPreset:
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            [self.player playWithSoundName:entry.fileName];
+            [self.player setCurrentSoundName:entry.fileName];
+            [self.player play];
             return;
         }
-        case 1:
+        case kSectionRecorded:
+        {
+            NSString *fileName = [self.recordedFiles objectAtIndex:indexPath.row];
+            self.player.currentSoundFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+            [self.player play];
+            return;
+        }
+        case kSectionOther:
             // 「追加」のセルだった場合、録音用画面を呼び出すようにする
+            [self.player stop];
             [self performSegueWithIdentifier:@"toRecord" sender:self];
             return;
         default:

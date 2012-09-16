@@ -10,4 +10,7 @@
 
 @interface APRecordViewController : UIViewController
 -(IBAction)donePushed:(id)sender;
+-(IBAction)recordPushed:(id)sender;
+
+@property (nonatomic, weak) IBOutlet UIButton *recordButton;
 @end
