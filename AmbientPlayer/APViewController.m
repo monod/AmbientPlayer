@@ -12,9 +12,13 @@
 #import "AudioToolbox/AudioToolbox.h"
 #import "APCrossFadePlayer.h"
 #import "APSoundEntry.h"
+#import "APSoundSelectViewCell.h"
 
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
+
+NSString * const PresetCellIdentifier = @"PresetCell";
+NSString * const RecordedCellIdentifier = @"RecordedCell";
 
 const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
@@ -62,7 +66,7 @@ SYNTHESIZE(preset);
                    [[APSoundEntry alloc] initPresetWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
                    [[APSoundEntry alloc] initPresetWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
                    [[APSoundEntry alloc] initPresetWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Sea" withFileName:@"sea" andImageFileName:@"sea"],
+                   [[APSoundEntry alloc] initPresetWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
                    [[APSoundEntry alloc] initPresetWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
                    [[APSoundEntry alloc] initPresetWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
                    nil];
@@ -184,48 +188,49 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         case kSectionPreset:
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            APSoundSelectViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PresetCellIdentifier];
             if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+                cell = [[APSoundSelectViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PresetCellIdentifier];
+                [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            cell.textLabel.text = entry.title;
-
-            UISlider *slider = [[UISlider alloc] init];
-            slider.minimumValue = 0.0;
-            slider.maximumValue = 1.0;
-            slider.value = 1.0;
-            slider.hidden = YES;
-            [slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.accessoryView = slider;
+            
+            cell.title.text = entry.title;
+            if ([indexPath compare:[tableView indexPathForSelectedRow]] == NSOrderedSame) {
+                cell.selected = YES;
+            } else {
+                cell.selected = NO;
+            }
             
             if (entry.imageFileName) {
                 NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
                 UIImage *img = [UIImage imageWithContentsOfFile:path];
-                cell.imageView.image = img;
+                cell.preview.image = img;
             } else {
-                cell.imageView.image = nil;
+                cell.preview.image = nil;
             }
             return cell;
         }
         case kSectionRecorded:
         {
             NSString *soundFile = [self.recordedFiles objectAtIndex:indexPath.row];
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
             if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
             }
             cell.textLabel.text = soundFile;
+            cell.textLabel.textColor = [UIColor whiteColor];
             cell.imageView.image = nil;
             return cell;
         }
         case kSectionOther:
         {
             // TODO 今は、「追加」のセルだけを作っているけど、追加した音声も作るようにする
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
             if(!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
             }
-            cell.textLabel.text = @"追加";
+            cell.textLabel.text = @"Add...";
+            cell.textLabel.textColor = [UIColor whiteColor];
             return cell;
         }
         default:
@@ -250,6 +255,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100.0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
@@ -263,8 +272,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             }
 
             // Slider
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.accessoryView;
+            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+            UISlider *slider = (UISlider *)cell.slider;
             slider.value =  entry.volume;
             slider.hidden = NO;
             
@@ -295,8 +304,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         case kSectionPreset:
         {
             // Slider
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.accessoryView;
+            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+            UISlider *slider = (UISlider *)cell.slider;
             slider.hidden = YES;
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
             entry.volume = slider.value;
