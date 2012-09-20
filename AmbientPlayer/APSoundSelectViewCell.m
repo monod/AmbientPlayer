@@ -36,6 +36,8 @@
         self.slider.maximumValue = 1.0;
         self.slider.value = 1.0;
         self.slider.hidden = YES;
+        self.slider.minimumTrackTintColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.4];
+        self.slider.maximumTrackTintColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.4];
         [self.contentView addSubview:self.slider];
         
         self.selectionStyle = UITableViewCellSelectionStyleNone;
