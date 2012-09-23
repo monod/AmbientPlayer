@@ -15,7 +15,7 @@ SYNTHESIZE(title);
 SYNTHESIZE(fileName);
 SYNTHESIZE(volume);
 
--(id)initPresetWithTitle:(NSString *)title withFileName:(NSString *)fileName {
+-(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName {
     self = [self init];
     if (self) {
         self.title = title;
@@ -25,8 +25,8 @@ SYNTHESIZE(volume);
     return self;
 }
 
-- (id) initPresetWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName {
-    self = [self initPresetWithTitle:title withFileName:fileName];
+- (id) initWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName {
+    self = [self initWithTitle:title withFileName:fileName];
     if (self) {
         self.imageFileName = imageFileName;
     }

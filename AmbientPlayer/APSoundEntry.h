@@ -14,6 +14,6 @@
 @property (nonatomic, copy) NSString *imageFileName;
 @property float volume;
 
--(id)initPresetWithTitle:(NSString *)title withFileName:(NSString *)fileName;
--(id)initPresetWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName;
+-(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName;
+-(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName;
 @end

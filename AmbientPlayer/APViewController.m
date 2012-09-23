@@ -63,12 +63,12 @@ SYNTHESIZE(preset);
 
 -(void)initPreset {
     self.preset = [NSArray arrayWithObjects:
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
+                   [[APSoundEntry alloc] initWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
+                   [[APSoundEntry alloc] initWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
+                   [[APSoundEntry alloc] initWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
+                   [[APSoundEntry alloc] initWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
+                   [[APSoundEntry alloc] initWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
+                   [[APSoundEntry alloc] initWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
                    nil];
 }
 
