@@ -19,6 +19,7 @@ NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 NSString * const PresetCellIdentifier = @"PresetCell";
 NSString * const RecordedCellIdentifier = @"RecordedCell";
+NSString * const AddCellIdentifier = @"Add";
 
 const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
@@ -30,7 +31,7 @@ const int kSectionOther = 2;
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
 @property (nonatomic, strong) ADBannerView *bannerView;
-@property (nonatomic, strong) NSArray *recordedFiles;
+@property (nonatomic, strong) NSArray *recordedSoundEntries;
 
 @end
 
@@ -124,16 +125,26 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.recordedFiles = [self findRecordedFiles];
+    self.recordedSoundEntries = [self findRecordedSoundEntries];
     [self.tableView reloadData];
     [self setupAudioSession];
 }
 
-- (NSArray *)findRecordedFiles {
+- (NSArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
     NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
-    return [dirContents filteredArrayUsingPredicate:fltr];
+    
+    //保存した.m4aファイルからAPSoundEntryを生成する処理
+    NSMutableArray *recordedSoundEntries = [NSMutableArray array];
+    id recordedFileName;
+    for (recordedFileName in [dirContents filteredArrayUsingPredicate:fltr]) {
+        APSoundEntry *recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName];
+        [recordedSoundEntries addObject:recordedSountEntry];
+    }
+    
+    //return [dirContents filteredArrayUsingPredicate:fltr];
+    return recordedSoundEntries;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -187,47 +198,18 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            APSoundSelectViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PresetCellIdentifier];
-            if (!cell) {
-                cell = [[APSoundSelectViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PresetCellIdentifier];
-                [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            
-            cell.title.text = entry.title;
-            if ([indexPath compare:[tableView indexPathForSelectedRow]] == NSOrderedSame) {
-                cell.selected = YES;
-            } else {
-                cell.selected = NO;
-            }
-            
-            if (entry.imageFileName) {
-                NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
-                UIImage *img = [UIImage imageWithContentsOfFile:path];
-                cell.preview.image = img;
-            } else {
-                cell.preview.image = nil;
-            }
-            return cell;
+            return [self setUpSoundSelectViewCell:tableView cellForRowAtIndexPath:indexPath cellIdentifier:PresetCellIdentifier soundEntriesArray:self.preset];
         }
         case kSectionRecorded:
         {
-            NSString *soundFile = [self.recordedFiles objectAtIndex:indexPath.row];
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
-            }
-            cell.textLabel.text = soundFile;
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.imageView.image = nil;
-            return cell;
+            return [self setUpSoundSelectViewCell:tableView cellForRowAtIndexPath:indexPath cellIdentifier:RecordedCellIdentifier soundEntriesArray:self.recordedSoundEntries];
         }
         case kSectionOther:
         {
             // TODO 今は、「追加」のセルだけを作っているけど、追加した音声も作るようにする
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:AddCellIdentifier];
             if(!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddCellIdentifier];
             }
             cell.textLabel.text = @"Add...";
             cell.textLabel.textColor = [UIColor whiteColor];
@@ -239,12 +221,37 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
+- (APSoundSelectViewCell *)setUpSoundSelectViewCell:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath cellIdentifier:(NSString *)identifier soundEntriesArray:(NSArray *) soundEntriesArray {
+    APSoundEntry *entry = [soundEntriesArray objectAtIndex:indexPath.row];
+    APSoundSelectViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[APSoundSelectViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
+    }
+    
+    cell.title.text = entry.title;
+    if ([indexPath compare:[tableView indexPathForSelectedRow]] == NSOrderedSame) {
+        cell.selected = YES;
+    } else {
+        cell.selected = NO;
+    }
+    
+    if (entry.imageFileName) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        cell.preview.image = img;
+    } else {
+        cell.preview.image = nil;
+    }
+    return cell;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case kSectionPreset:
             return self.preset.count;
         case kSectionRecorded:
-            return [self.recordedFiles count];
+            return [self.recordedSoundEntries count];
         case kSectionOther:
             return 1;
         default:
@@ -263,29 +270,16 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-
-            // Stop in case of the same entry
-            if ([self.player isPlaying:entry]) {
-                [self.player stopEntry];
-                [self saveVolume:tableView atIndex:indexPath];
-                return;
-            }
-
-            // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.slider;
-            slider.value =  entry.volume;
-            slider.hidden = NO;
-            
-            [self.player play:entry];
+            [self playOrStopSoundEntry:tableView rowAtIndexPath:indexPath soundEntries:self.preset soundRootDirectory:nil];
             return;
         }
         case kSectionRecorded:
         {
-            NSString *fileName = [self.recordedFiles objectAtIndex:indexPath.row];
-            self.player.currentSoundFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
-            [self.player play];
+            [self playOrStopSoundEntry:tableView rowAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
+//            NSString *fileName = ((APSoundEntry *)[self.recordedSoundEntries objectAtIndex:indexPath.row]).fileName;
+//            NSString *dirName = NSTemporaryDirectory();
+//            self.player.currentSoundFileName = [dirName stringByAppendingPathComponent:fileName];
+//            [self.player play];
             return;
         }
         case kSectionOther:
@@ -300,16 +294,39 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 }
 
+- (void) playOrStopSoundEntry:(UITableView *) tableView rowAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries soundRootDirectory:(NSString *) rootDirectory{
+    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
+    
+    // Stop in case of the same entry
+    if ([self.player isPlaying:entry]) {
+        [self.player stopEntry];
+        [self saveVolume:tableView atIndex:indexPath soundEntries:soundEntries];
+        return;
+    }
+    
+    // Slider
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    UISlider *slider = (UISlider *)cell.slider;
+    slider.value =  entry.volume;
+    slider.hidden = NO;
+    
+    [self.player play:entry rootDirectory:rootDirectory];
+}
+
+
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
         {
             //save volume value
-            [self saveVolume:tableView atIndex:indexPath];            
+            [self saveVolume:tableView atIndex:indexPath soundEntries:self.preset];
             
             break;
         }
         case kSectionRecorded:
+            //save volume value
+            [self saveVolume:tableView atIndex:indexPath soundEntries:self.recordedSoundEntries];
+            
             break;
         case kSectionOther:
             break;
@@ -319,12 +336,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
-- (void) saveVolume:(UITableView *)tableView atIndex:(NSIndexPath *) indexPath {
+- (void) saveVolume:(UITableView *)tableView atIndex:(NSIndexPath *) indexPath soundEntries:(NSArray *) soundEntries{
     // Slider
     APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     UISlider *slider = (UISlider *)cell.slider;
     slider.hidden = YES;
-    APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
+    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
     entry.volume = slider.value;
 }
 

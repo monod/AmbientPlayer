@@ -61,9 +61,14 @@ SYNTHESIZE(soundEntry);
     return playSucc;
 }
 
-- (BOOL)play:(APSoundEntry *) soundEntry {
+- (BOOL)play:(APSoundEntry *) soundEntry rootDirectory:(NSString *)rootDirectory {
     [self setVolume:soundEntry.volume];
-    [self setCurrentSoundName:soundEntry.fileName];
+    if (rootDirectory) {
+        [self setCurrentSoundFileName:[rootDirectory stringByAppendingPathComponent:soundEntry.fileName]];
+    } else {
+        [self setCurrentSoundName:soundEntry.fileName];
+    }
+        
     self.soundEntry = soundEntry;
     
     return [self play];
