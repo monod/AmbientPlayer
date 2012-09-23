@@ -268,6 +268,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             // Stop in case of the same entry
             if ([self.player isPlaying:entry]) {
                 [self.player stopEntry];
+                [self saveVolume:tableView atIndex:indexPath];
                 return;
             }
 
@@ -303,12 +304,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.slider;
-            slider.hidden = YES;
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            entry.volume = slider.value;
+            //save volume value
+            [self saveVolume:tableView atIndex:indexPath];            
             
             break;
         }
@@ -320,6 +317,15 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             NSAssert(NO, @"This line should not be reached");
             return;
     }
+}
+
+- (void) saveVolume:(UITableView *)tableView atIndex:(NSIndexPath *) indexPath {
+    // Slider
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    UISlider *slider = (UISlider *)cell.slider;
+    slider.hidden = YES;
+    APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
+    entry.volume = slider.value;
 }
 
 - (void)onSliderChanged:(UISlider *)slider {
