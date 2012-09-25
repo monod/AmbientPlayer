@@ -276,10 +276,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         case kSectionRecorded:
         {
             [self playOrStopSoundEntry:tableView rowAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
-//            NSString *fileName = ((APSoundEntry *)[self.recordedSoundEntries objectAtIndex:indexPath.row]).fileName;
-//            NSString *dirName = NSTemporaryDirectory();
-//            self.player.currentSoundFileName = [dirName stringByAppendingPathComponent:fileName];
-//            [self.player play];
             return;
         }
         case kSectionOther:
