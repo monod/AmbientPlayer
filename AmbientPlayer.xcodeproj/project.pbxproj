@@ -40,6 +40,7 @@
 		40D289CF1608C46E00685175 /* APGradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D289CE1608C46E00685175 /* APGradientBackgroundView.m */; };
 		40E50C951608DA5200AEE0B5 /* sea.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40E50C931608DA5200AEE0B5 /* sea.jpg */; };
 		40E50C961608DA5200AEE0B5 /* sea@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40E50C941608DA5200AEE0B5 /* sea@2x.jpg */; };
+		40E50C9C160CD88200AEE0B5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */; };
 		7EC929BC15FB475200A5C4A7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EC929BB15FB475200A5C4A7 /* AudioToolbox.framework */; };
 		7EDE0C0415FB108200789400 /* APCrossFadePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */; };
 		7EDE0C0615FB180000789400 /* sea.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0515FB180000789400 /* sea.m4a */; };
@@ -103,6 +104,7 @@
 		40D289CE1608C46E00685175 /* APGradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APGradientBackgroundView.m; sourceTree = "<group>"; };
 		40E50C931608DA5200AEE0B5 /* sea.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sea.jpg; sourceTree = "<group>"; };
 		40E50C941608DA5200AEE0B5 /* sea@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "sea@2x.jpg"; sourceTree = "<group>"; };
+		40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7EC929BB15FB475200A5C4A7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		7EDE0C0215FB108200789400 /* APCrossFadePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCrossFadePlayer.h; sourceTree = "<group>"; };
 		7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCrossFadePlayer.m; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				40A2069215F67790004BE2E1 /* Foundation.framework in Frameworks */,
 				40A2069415F67790004BE2E1 /* CoreGraphics.framework in Frameworks */,
 				40A206C815F67C19004BE2E1 /* AVFoundation.framework in Frameworks */,
+				40E50C9C160CD88200AEE0B5 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +206,7 @@
 		40A2068E15F67790004BE2E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */,
 				7EC929BB15FB475200A5C4A7 /* AudioToolbox.framework */,
 				40A206C715F67C19004BE2E1 /* AVFoundation.framework */,
 				7EE380801605A69F006647C8 /* CoreAudio.framework */,

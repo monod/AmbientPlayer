@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MPVolumeView.h>
 
-@interface APViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface APViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
 }
 
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) IBOutlet MPVolumeView *volumeView;
 
 @end
 

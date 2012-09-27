@@ -17,8 +17,7 @@
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
-NSString * const PresetCellIdentifier = @"PresetCell";
-NSString * const RecordedCellIdentifier = @"RecordedCell";
+NSString * const SoundCellIdentifier = @"SoundCell";
 
 const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
@@ -92,8 +91,18 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view addSubview:_bannerView];
-
+    
+    // CollectionView configuration
+    [self.collectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
+    layout.minimumInteritemSpacing = 2;
+    layout.minimumLineSpacing = 2;
+    
     self.player = [APCrossFadePlayer new];
+    
+    self.volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100) ];
+    self.volumeView.showsVolumeSlider = NO;
+    [self.view addSubview:self.volumeView];
 }
 
 - (void)setupAudioSession {
@@ -125,7 +134,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.recordedFiles = [self findRecordedFiles];
-    [self.tableView reloadData];
+    [self.collectionView reloadData];
     [self setupAudioSession];
 }
 
@@ -160,16 +169,16 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     } else {
         bannerFrame.origin.y = contentFrame.size.height;
     }
-    self.tableView.frame = contentFrame;
+    self.collectionView.frame = contentFrame;
     self.bannerView.frame = bannerFrame;
 }
 
 
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 3;
 }
-
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case kSectionPreset:
@@ -182,20 +191,17 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             return nil;
     }
 }
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+*/
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
         {
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            APSoundSelectViewCell *cell = [tableView dequeueReusableCellWithIdentifier:PresetCellIdentifier];
-            if (!cell) {
-                cell = [[APSoundSelectViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PresetCellIdentifier];
-                [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            
+            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+
+            [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
             cell.title.text = entry.title;
-            if ([indexPath compare:[tableView indexPathForSelectedRow]] == NSOrderedSame) {
+            if ([indexPath compare:[collectionView indexPathForCell:cell]] == NSOrderedSame) {
                 cell.selected = YES;
             } else {
                 cell.selected = NO;
@@ -213,24 +219,17 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         case kSectionRecorded:
         {
             NSString *soundFile = [self.recordedFiles objectAtIndex:indexPath.row];
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
-            }
-            cell.textLabel.text = soundFile;
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.imageView.image = nil;
+            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+            cell.title.text = soundFile;
+            cell.preview.image = nil;
             return cell;
         }
         case kSectionOther:
         {
             // TODO 今は、「追加」のセルだけを作っているけど、追加した音声も作るようにする
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:RecordedCellIdentifier];
-            if(!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RecordedCellIdentifier];
-            }
-            cell.textLabel.text = @"Add...";
-            cell.textLabel.textColor = [UIColor whiteColor];
+            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+            cell.title.text = @"Add...";
+            cell.preview.image = nil;
             return cell;
         }
         default:
@@ -239,7 +238,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     switch (section) {
         case kSectionPreset:
             return self.preset.count;
@@ -253,13 +252,17 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark - UICollectionViewDelegateFlowLayout
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100.0;
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout*)collectionViewLayout;
+    CGFloat w = (collectionView.frame.size.width - flow.minimumInteritemSpacing) / 2;
+    return CGSizeMake(w, w);
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
         {
@@ -272,7 +275,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             }
 
             // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
             UISlider *slider = (UISlider *)cell.slider;
             slider.value =  entry.volume;
             slider.hidden = NO;
@@ -299,12 +302,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
         {
             // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
             UISlider *slider = (UISlider *)cell.slider;
             slider.hidden = YES;
             APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APGradientBackgroundView.h"
 
-@interface APSoundSelectViewCell : UITableViewCell {
+@interface APSoundSelectViewCell : UICollectionViewCell {
     APGradientBackgroundView* cover;
 }
 
