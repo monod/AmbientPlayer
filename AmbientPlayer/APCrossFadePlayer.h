@@ -11,7 +11,7 @@
 
 @interface APCrossFadePlayer : NSObject
 - (BOOL)play;
-- (BOOL)play:(APSoundEntry *) soundEntry;
+- (BOOL)play:(APSoundEntry *) soundEntry rootDirectory:(NSString *) rootDirectory;
 - (void)stop;
 - (void)stopEntry;
 - (BOOL)isPlaying;

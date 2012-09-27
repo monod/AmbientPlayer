@@ -29,7 +29,7 @@ const int kSectionOther = 2;
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
 @property (nonatomic, strong) ADBannerView *bannerView;
-@property (nonatomic, strong) NSArray *recordedFiles;
+@property (nonatomic, strong) NSArray *recordedSoundEntries;
 
 @end
 
@@ -62,12 +62,12 @@ SYNTHESIZE(preset);
 
 -(void)initPreset {
     self.preset = [NSArray arrayWithObjects:
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
-                   [[APSoundEntry alloc] initPresetWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
+                   [[APSoundEntry alloc] initWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
+                   [[APSoundEntry alloc] initWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
+                   [[APSoundEntry alloc] initWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
+                   [[APSoundEntry alloc] initWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
+                   [[APSoundEntry alloc] initWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
+                   [[APSoundEntry alloc] initWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
                    nil];
 }
 
@@ -138,11 +138,21 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [self setupAudioSession];
 }
 
-- (NSArray *)findRecordedFiles {
+- (NSArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
     NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
-    return [dirContents filteredArrayUsingPredicate:fltr];
+    
+    //保存した.m4aファイルからAPSoundEntryを生成する処理
+    NSMutableArray *recordedSoundEntries = [NSMutableArray array];
+    id recordedFileName;
+    for (recordedFileName in [dirContents filteredArrayUsingPredicate:fltr]) {
+        APSoundEntry *recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName];
+        [recordedSoundEntries addObject:recordedSountEntry];
+    }
+    
+    //return [dirContents filteredArrayUsingPredicate:fltr];
+    return recordedSoundEntries;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -243,7 +253,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         case kSectionPreset:
             return self.preset.count;
         case kSectionRecorded:
-            return [self.recordedFiles count];
+            return [self.recordedSoundEntries count];
         case kSectionOther:
             return 1;
         default:
@@ -285,9 +295,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         }
         case kSectionRecorded:
         {
-            NSString *fileName = [self.recordedFiles objectAtIndex:indexPath.row];
-            self.player.currentSoundFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
-            [self.player play];
+            [self playOrStopSoundEntry:tableView rowAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
             return;
         }
         case kSectionOther:
@@ -316,6 +324,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             break;
         }
         case kSectionRecorded:
+            //save volume value
+            [self saveVolume:tableView atIndex:indexPath soundEntries:self.recordedSoundEntries];
+            
             break;
         case kSectionOther:
             break;
@@ -323,6 +334,15 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             NSAssert(NO, @"This line should not be reached");
             return;
     }
+}
+
+- (void) saveVolume:(UITableView *)tableView atIndex:(NSIndexPath *) indexPath soundEntries:(NSArray *) soundEntries{
+    // Slider
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    UISlider *slider = (UISlider *)cell.slider;
+    slider.hidden = YES;
+    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
+    entry.volume = slider.value;
 }
 
 - (void)onSliderChanged:(UISlider *)slider {
