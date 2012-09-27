@@ -133,7 +133,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.recordedFiles = [self findRecordedFiles];
+    self.recordedSoundEntries = [self findRecordedSoundEntries];
     [self.collectionView reloadData];
     [self setupAudioSession];
 }
@@ -228,7 +228,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         }
         case kSectionRecorded:
         {
-            NSString *soundFile = [self.recordedFiles objectAtIndex:indexPath.row];
+            NSString *soundFile = [self.recordedSoundEntries objectAtIndex:indexPath.row];
             APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
             cell.title.text = soundFile;
             cell.preview.image = nil;
@@ -276,26 +276,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-
-            // Stop in case of the same entry
-            if ([self.player isPlaying:entry]) {
-                [self.player stopEntry];
-                return;
-            }
-
-            // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.slider;
-            slider.value =  entry.volume;
-            slider.hidden = NO;
-            
-            [self.player play:entry];
+            [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.preset soundRootDirectory:nil];
             return;
         }
         case kSectionRecorded:
         {
-            [self playOrStopSoundEntry:tableView rowAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
+            [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
             return;
         }
         case kSectionOther:
@@ -325,7 +311,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         }
         case kSectionRecorded:
             //save volume value
-            [self saveVolume:tableView atIndex:indexPath soundEntries:self.recordedSoundEntries];
+            [self saveVolume:collectionView atIndex:indexPath soundEntries:self.recordedSoundEntries];
             
             break;
         case kSectionOther:
@@ -336,9 +322,29 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
-- (void) saveVolume:(UITableView *)tableView atIndex:(NSIndexPath *) indexPath soundEntries:(NSArray *) soundEntries{
+
+- (void) playOrStopSoundEntry:(UICollectionView *) collectionView itemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries soundRootDirectory:(NSString *) rootDirectory{
+    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
+    
+    // Stop in case of the same entry
+    if ([self.player isPlaying:entry]) {
+        [self.player stopEntry];
+        [self saveVolume:collectionView atIndex:indexPath soundEntries:soundEntries];
+        return;
+    }
+    
     // Slider
-    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    UISlider *slider = (UISlider *)cell.slider;
+    slider.value =  entry.volume;
+    slider.hidden = NO;
+    
+    [self.player play:entry rootDirectory:rootDirectory];
+}
+
+- (void) saveVolume:(UICollectionView *)collectionView atIndex:(NSIndexPath *) indexPath soundEntries:(NSArray *) soundEntries{
+    // Slider
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     UISlider *slider = (UISlider *)cell.slider;
     slider.hidden = YES;
     APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
