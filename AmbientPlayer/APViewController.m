@@ -188,51 +188,16 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 3;
 }
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    switch (section) {
-        case kSectionPreset:
-            return @"Preset";
-        case kSectionRecorded:
-            return @"Recorded";
-        case kSectionOther:
-            return @"Other";
-        default:
-            return nil;
-    }
-}
-*/
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
-
-            [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.title.text = entry.title;
-            if ([indexPath compare:[collectionView indexPathForCell:cell]] == NSOrderedSame) {
-                cell.selected = YES;
-            } else {
-                cell.selected = NO;
-            }
-            
-            if (entry.imageFileName) {
-                NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
-                UIImage *img = [UIImage imageWithContentsOfFile:path];
-                cell.preview.image = img;
-            } else {
-                cell.preview.image = nil;
-            }
-            return cell;
+            return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.preset];
         }
         case kSectionRecorded:
         {
-            NSString *soundFile = [self.recordedSoundEntries objectAtIndex:indexPath.row];
-            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
-            cell.title.text = soundFile;
-            cell.preview.image = nil;
-            return cell;
+            return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries];
         }
         case kSectionOther:
         {
@@ -247,6 +212,29 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             return nil;
     }
 }
+
+- (UICollectionViewCell *) setUpCollectionViewCell:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries {
+    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
+    APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+    
+    [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
+    cell.title.text = entry.title;
+    if ([indexPath compare:[collectionView indexPathForCell:cell]] == NSOrderedSame) {
+        cell.selected = YES;
+    } else {
+        cell.selected = NO;
+    }
+    
+    if (entry.imageFileName) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        cell.preview.image = img;
+    } else {
+        cell.preview.image = nil;
+    }
+    return cell;
+}
+
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     switch (section) {
@@ -300,12 +288,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     switch (indexPath.section) {
         case kSectionPreset:
         {
-            // Slider
-            APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-            UISlider *slider = (UISlider *)cell.slider;
-            slider.hidden = YES;
-            APSoundEntry *entry = [self.preset objectAtIndex:indexPath.row];
-            entry.volume = slider.value;
+            //save volume value
+            [self saveVolume:collectionView atIndex:indexPath soundEntries:self.preset];
             
             break;
         }
