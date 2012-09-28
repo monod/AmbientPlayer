@@ -13,14 +13,12 @@
 @implementation APSoundEntry
 SYNTHESIZE(title);
 SYNTHESIZE(fileName);
-SYNTHESIZE(volume);
 
 -(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName {
     self = [self init];
     if (self) {
         self.title = title;
         self.fileName = fileName;
-        self.volume = 1.0f;
     }
     return self;
 }

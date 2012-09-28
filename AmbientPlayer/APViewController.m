@@ -23,6 +23,9 @@ const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
 const int kSectionOther = 2;
 
+const NSInteger kTagPresetSoundCollectionView = 1;
+const NSInteger kTagRecordedSoundCollectionView = 0;
+
 @interface APViewController () <ADBannerViewDelegate>
 
 @property (nonatomic, strong) AVAudioSession* session;
@@ -46,8 +49,8 @@ SYNTHESIZE(preset);
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self initPreset];
-        self.bannerView = [ADBannerView new];
-        self.bannerView.delegate = self;
+        //self.bannerView = [ADBannerView new];
+        //self.bannerView.delegate = self;
     }
     return self;
 }
@@ -92,17 +95,27 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view addSubview:_bannerView];
     
+    // PageScroll
+    self.pageScrollView.contentSize = CGSizeMake(self.pageScrollView.frame.size.width * 2, self.pageScrollView.frame.size.height);
+    
     // CollectionView configuration
-    [self.collectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
-    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
-    layout.minimumInteritemSpacing = 2;
-    layout.minimumLineSpacing = 2;
+    self.presetCollectionView.tag = kTagPresetSoundCollectionView;
+    [self.presetCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
+    ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
+    ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumLineSpacing = 2;
+    
+    self.recordedCollectionView.tag = kTagRecordedSoundCollectionView;
+    [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
+    ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
+    ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumLineSpacing = 2;
+    
     
     self.player = [APCrossFadePlayer new];
-    
-    self.volumeView = [[MPVolumeView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100) ];
-    self.volumeView.showsVolumeSlider = NO;
-    [self.view addSubview:self.volumeView];
+
+    self.routeView.showsRouteButton = YES;
+    self.routeView.showsVolumeSlider = NO;
+    CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
+    self.routeView.bounds = CGRectMake(self.routeView.bounds.origin.x, self.routeView.bounds.origin.y, sz.width, sz.height);
 }
 
 - (void)setupAudioSession {
@@ -134,7 +147,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.recordedSoundEntries = [self findRecordedSoundEntries];
-    [self.collectionView reloadData];
+    [self.presetCollectionView reloadData];
     [self setupAudioSession];
 }
 
@@ -179,33 +192,42 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     } else {
         bannerFrame.origin.y = contentFrame.size.height;
     }
-    self.collectionView.frame = contentFrame;
     self.bannerView.frame = bannerFrame;
 }
 
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+	
+    // Switch the indicator when more than 50% of the previous/next page is visible
+    CGFloat pageWidth = self.pageScrollView.frame.size.width;
+    int page = floor((self.pageScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    self.pageControl.currentPage = page;
+}
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 3;
+    return 1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    switch (indexPath.section) {
-        case kSectionPreset:
+    switch (collectionView.tag) {
+        case kTagPresetSoundCollectionView:
         {
             return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.preset];
         }
-        case kSectionRecorded:
+        case kTagRecordedSoundCollectionView:
         {
-            return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries];
-        }
-        case kSectionOther:
-        {
-            // TODO 今は、「追加」のセルだけを作っているけど、追加した音声も作るようにする
-            APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
-            cell.title.text = @"Add...";
-            cell.preview.image = nil;
-            return cell;
+            if ([collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
+                // last item in the section: "Add" button
+                APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+                cell.title.text = @"Add...";
+                cell.preview.image = nil;
+                cell.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2];
+                return cell;
+            } else {
+                return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries];
+            }
         }
         default:
             NSAssert(NO, @"This line should not be reached");
@@ -214,10 +236,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 }
 
 - (UICollectionViewCell *) setUpCollectionViewCell:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries {
-    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
+    NSInteger index = indexPath.row;
+    APSoundEntry *entry = [soundEntries objectAtIndex:index];
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
     
-    [cell.slider addTarget:self action:@selector(onSliderChanged:) forControlEvents:UIControlEventValueChanged];
     cell.title.text = entry.title;
     if ([indexPath compare:[collectionView indexPathForCell:cell]] == NSOrderedSame) {
         cell.selected = YES;
@@ -231,19 +253,18 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         cell.preview.image = img;
     } else {
         cell.preview.image = nil;
+        cell.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2];
     }
     return cell;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    switch (section) {
-        case kSectionPreset:
+    switch (collectionView.tag) {
+        case kTagPresetSoundCollectionView:
             return self.preset.count;
-        case kSectionRecorded:
-            return [self.recordedSoundEntries count];
-        case kSectionOther:
-            return 1;
+        case kTagRecordedSoundCollectionView:
+            return [self.recordedSoundEntries count] + 1;
         default:
             NSAssert(NO, @"This line should not be reached");
             return 0;
@@ -261,21 +282,25 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    switch (indexPath.section) {
-        case kSectionPreset:
+    switch (collectionView.tag) {
+        case kTagPresetSoundCollectionView:
         {
             [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.preset soundRootDirectory:nil];
+
             return;
         }
-        case kSectionRecorded:
+        case kTagRecordedSoundCollectionView:
         {
-            [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
+            if ([collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
+                // 「追加」のセルだった場合、録音用画面を呼び出すようにする
+                [self.player stop];
+                [self performSegueWithIdentifier:@"toRecord" sender:self];
+            } else {
+                [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
+            }
             return;
         }
         case kSectionOther:
-            // 「追加」のセルだった場合、録音用画面を呼び出すようにする
-            [self.player stop];
-            [self performSegueWithIdentifier:@"toRecord" sender:self];
             return;
         default:
             NSAssert(NO, @"This line should not be reached");
@@ -285,25 +310,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    switch (indexPath.section) {
-        case kSectionPreset:
-        {
-            //save volume value
-            [self saveVolume:collectionView atIndex:indexPath soundEntries:self.preset];
-            
-            break;
-        }
-        case kSectionRecorded:
-            //save volume value
-            [self saveVolume:collectionView atIndex:indexPath soundEntries:self.recordedSoundEntries];
-            
-            break;
-        case kSectionOther:
-            break;
-        default:
-            NSAssert(NO, @"This line should not be reached");
-            return;
-    }
+
 }
 
 
@@ -313,34 +320,30 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     // Stop in case of the same entry
     if ([self.player isPlaying:entry]) {
         [self.player stopEntry];
-        [self saveVolume:collectionView atIndex:indexPath soundEntries:soundEntries];
         return;
     }
-    
-    // Slider
-    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    UISlider *slider = (UISlider *)cell.slider;
-    slider.value =  entry.volume;
-    slider.hidden = NO;
-    
+    [self.player setVolume:self.volumeSlider.value];
     [self.player play:entry rootDirectory:rootDirectory];
 }
 
-- (void) saveVolume:(UICollectionView *)collectionView atIndex:(NSIndexPath *) indexPath soundEntries:(NSArray *) soundEntries{
-    // Slider
-    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    UISlider *slider = (UISlider *)cell.slider;
-    slider.hidden = YES;
-    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
-    entry.volume = slider.value;
-}
-
-- (void)onSliderChanged:(UISlider *)slider {
-    NSLog(@"val = %f", slider.value);
+- (IBAction)changeVolume:(id)sender {
+    UISlider *slider = (UISlider*)sender;
     [self.player setVolume:slider.value];
 }
 
+- (IBAction)changePage:(id)sender
+{
+    int page = self.pageControl.currentPage;
+	    
+	// update the scroll view to the appropriate page
+    CGRect frame = self.pageScrollView.frame;
+    frame.origin.x = frame.size.width * page;
+    frame.origin.y = 0;
+    [self.pageScrollView scrollRectToVisible:frame animated:YES];    
+}
+
 #pragma mark - iAd
+
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
     [UIView animateWithDuration:0.25 animations:^{

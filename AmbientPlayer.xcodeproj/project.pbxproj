@@ -45,7 +45,6 @@
 		7EDE0C0415FB108200789400 /* APCrossFadePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */; };
 		7EDE0C0615FB180000789400 /* sea.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0515FB180000789400 /* sea.m4a */; };
 		7EDE0C0C15FB234C00789400 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0B15FB234C00789400 /* iPhone.storyboard */; };
-		7EDE0C0F15FB238600789400 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0E15FB238600789400 /* iPad.storyboard */; };
 		7EDE0C1215FB2C4300789400 /* APSoundEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C1115FB2C4300789400 /* APSoundEntry.m */; };
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
@@ -110,7 +109,6 @@
 		7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCrossFadePlayer.m; sourceTree = "<group>"; };
 		7EDE0C0515FB180000789400 /* sea.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sea.m4a; sourceTree = "<group>"; };
 		7EDE0C0B15FB234C00789400 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone.storyboard; sourceTree = "<group>"; };
-		7EDE0C0E15FB238600789400 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad.storyboard; sourceTree = "<group>"; };
 		7EDE0C1015FB2C4300789400 /* APSoundEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundEntry.h; sourceTree = "<group>"; };
 		7EDE0C1115FB2C4300789400 /* APSoundEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundEntry.m; sourceTree = "<group>"; };
 		7EE380801605A69F006647C8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -236,7 +234,6 @@
 				409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */,
 				40A206A115F67790004BE2E1 /* APViewController.h */,
 				40A206A215F67790004BE2E1 /* APViewController.m */,
-				7EDE0C0E15FB238600789400 /* iPad.storyboard */,
 				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
 				40A2069615F67790004BE2E1 /* Supporting Files */,
 			);
@@ -352,7 +349,6 @@
 				4018F06A15F6D00600DB5B15 /* stream.m4a in Resources */,
 				7EDE0C0615FB180000789400 /* sea.m4a in Resources */,
 				7EDE0C0C15FB234C00789400 /* iPhone.storyboard in Resources */,
-				7EDE0C0F15FB238600789400 /* iPad.storyboard in Resources */,
 				405E060815FB381E00C93E26 /* rain.jpg in Resources */,
 				405E061815FB3F5200C93E26 /* forest.jpg in Resources */,
 				405E061915FB3F5200C93E26 /* ocean.jpg in Resources */,

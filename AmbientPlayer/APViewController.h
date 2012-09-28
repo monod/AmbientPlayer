@@ -10,11 +10,18 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MPVolumeView.h>
 
-@interface APViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
+@interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
 }
 
-@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) IBOutlet MPVolumeView *volumeView;
+@property (nonatomic, strong) IBOutlet UIScrollView *pageScrollView;
+@property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
+@property (nonatomic, strong) IBOutlet UICollectionView *presetCollectionView;
+@property (nonatomic, strong) IBOutlet UICollectionView *recordedCollectionView;
+@property (nonatomic, strong) IBOutlet MPVolumeView *routeView;
+@property (nonatomic, strong) IBOutlet UISlider *volumeSlider;
+
+- (IBAction)changeVolume:(id)sender;
+- (IBAction)changePage:(id)sender;
 
 @end
 

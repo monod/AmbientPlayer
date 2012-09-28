@@ -14,7 +14,6 @@
 }
 
 @property (nonatomic, strong) UILabel *title;
-@property (nonatomic, strong) UISlider *slider;
 @property (nonatomic, strong) UIImageView *preview;
 
 @end
