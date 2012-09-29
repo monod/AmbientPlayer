@@ -147,7 +147,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.recordedSoundEntries = [self findRecordedSoundEntries];
-    [self.presetCollectionView reloadData];
+    [self.recordedCollectionView reloadData];
     [self setupAudioSession];
 }
 
