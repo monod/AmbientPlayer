@@ -71,6 +71,7 @@ SYNTHESIZE(preset);
                    [[APSoundEntry alloc] initWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
                    [[APSoundEntry alloc] initWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
                    [[APSoundEntry alloc] initWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
+                   [[APSoundEntry alloc] initWithTitle:@"Airport" withFileName:@"airport_in" andImageFileName:@"airport_in"],
                    nil];
 }
 
@@ -241,11 +242,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
     
     cell.title.text = entry.title;
-    if ([indexPath compare:[collectionView indexPathForCell:cell]] == NSOrderedSame) {
-        cell.selected = YES;
-    } else {
-        cell.selected = NO;
-    }
     
     if (entry.imageFileName) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
