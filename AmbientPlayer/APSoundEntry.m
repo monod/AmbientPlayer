@@ -31,4 +31,11 @@ SYNTHESIZE(fileName);
     return self;
 }
 
++ (NSString *) recordedFileDirectory {
+    // Get documents directory
+	NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    return 	[arrayPaths objectAtIndex:0];
+}
+
 @end

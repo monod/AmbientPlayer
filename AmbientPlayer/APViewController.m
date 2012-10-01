@@ -153,7 +153,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 - (NSArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil];
+    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[APSoundEntry recordedFileDirectory] error:nil];
     NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
     
     //保存した.m4aファイルからAPSoundEntryを生成する処理
@@ -296,7 +296,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                 [self.player stop];
                 [self performSegueWithIdentifier:@"toRecord" sender:self];
             } else {
-                [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:NSTemporaryDirectory()];
+                [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:[APSoundEntry recordedFileDirectory]];
             }
             return;
         }

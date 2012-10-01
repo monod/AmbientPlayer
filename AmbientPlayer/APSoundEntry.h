@@ -15,4 +15,5 @@
 
 -(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName;
 -(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName;
++(NSString *) recordedFileDirectory;
 @end
