@@ -223,8 +223,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                 // last item in the section: "Add" button
                 APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
                 cell.title.text = @"Add...";
-                cell.preview.image = nil;
-                cell.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2];
+                NSString *path = [[NSBundle mainBundle] pathForResource:@"add" ofType:@"png"];
+                UIImage *img = [UIImage imageWithContentsOfFile:path];
+                cell.preview.image = img;
                 return cell;
             } else {
                 return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries];
@@ -248,8 +249,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
     } else {
-        cell.preview.image = nil;
-        cell.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.2];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        cell.preview.image = img;
     }
     return cell;
 }
