@@ -346,7 +346,7 @@
 			attributes = {
 				CLASSPREFIX = AP;
 				LastUpgradeCheck = 0440;
-				ORGANIZATIONNAME = InteractionPlus;
+				ORGANIZATIONNAME = "Veronica Software";
 			};
 			buildConfigurationList = 40A2068515F67790004BE2E1 /* Build configuration list for PBXProject "AmbientPlayer" */;
 			compatibilityVersion = "Xcode 3.2";
