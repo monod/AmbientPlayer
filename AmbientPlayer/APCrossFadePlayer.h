@@ -16,9 +16,9 @@
 - (void)stopEntry;
 - (BOOL)isPlaying;
 - (void)setVolume:(float)vol;
--(void)setCurrentSoundName:(NSString *)currentSoundName;
+- (void)setCurrentSoundName:(NSString *)currentSoundName;
 - (BOOL)isPlaying:(APSoundEntry *) soundEntry;
-
+- (float)powerForChannel:(NSUInteger)ch;
 
 @property (nonatomic, copy) NSString *currentSoundFileName;
 

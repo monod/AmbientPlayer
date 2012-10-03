@@ -53,6 +53,7 @@
     self.bgColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
     
     self.vertical = NO;
+    self.opaque = NO;
 }
 
 - (void)drawRect:(CGRect)rect
@@ -117,7 +118,7 @@
     }
 }
 
-- (void)updateValuesWith:(float)ch0 ch:(float)ch1 {
+- (void)updateValuesWith:(float)ch0 and:(float)ch1 {
     _ch0 = [self dBToLinearValue:ch0];
     _ch1 = [self dBToLinearValue:ch1];
     [self setNeedsDisplay];

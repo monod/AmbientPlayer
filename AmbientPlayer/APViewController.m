@@ -118,6 +118,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     self.routeView.showsVolumeSlider = NO;
     CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
     self.routeView.bounds = CGRectMake(self.routeView.bounds.origin.x, self.routeView.bounds.origin.y, sz.width, sz.height);
+    
+    _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
+    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)setupAudioSession {
@@ -333,7 +336,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
-- (void) deselectAll {
+- (void)deselectAll {
     if (_playingItemPathInPreset) {
         APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
         cell.playing = NO;
@@ -347,7 +350,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 }
 
 // Play or stop sound according to the selection state
-- (void) updatePlayState {
+- (void)updatePlayState {
     if (_playingItemPathInPreset) {
         APSoundEntry *entry = [self.preset objectAtIndex:_playingItemPathInPreset.row];
         [self.player setVolume:self.volumeSlider.value];
@@ -358,6 +361,21 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         [self.player play:entry rootDirectory:[APSoundEntry recordedFileDirectory]];
     } else {
         [self.player stop];
+    }
+}
+
+- (void)timerUpdate:(CADisplayLink*)sender {
+    APSoundSelectViewCell *cell = nil;
+    if (_playingItemPathInPreset) {
+        cell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+    } else if (_playingItemPathInRecorded) {
+        cell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+    }
+    
+    if (cell) {
+        float ch0 = [self.player powerForChannel:0];
+        float ch1 = [self.player powerForChannel:1];
+        [cell updateLevelMeterForChannels:ch0 and:ch1];
     }
 }
 

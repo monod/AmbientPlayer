@@ -23,7 +23,7 @@
     NSMutableArray* _table;    
 }
 
-- (void)updateValuesWith:(float) ch0 ch:(float) ch1;
+- (void)updateValuesWith:(float) ch0 and:(float) ch1;
 
 @property BOOL vertical;
 @property int nLights;

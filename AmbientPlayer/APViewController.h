@@ -11,6 +11,7 @@
 #import <MediaPlayer/MPVolumeView.h>
 
 @interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
+    CADisplayLink *_updateTimer;
     NSIndexPath *_playingItemPathInPreset;
     NSIndexPath *_playingItemPathInRecorded;
 }

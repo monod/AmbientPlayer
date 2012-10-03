@@ -63,7 +63,7 @@
         [self.recorder updateMeters];
         float v0 = [self.recorder averagePowerForChannel:0];
         float v1 = [self.recorder averagePowerForChannel:1];
-        [self.levelMeter updateValuesWith:v0 ch:v1];
+        [self.levelMeter updateValuesWith:v0 and:v1];
         
         if (self.recorder.isRecording) {
             int m = (int)self.recorder.currentTime / 60;

@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "APGradientBackgroundView.h"
+#import "APLevelMeterView.h"
 
 @interface APSoundSelectViewCell : UICollectionViewCell {
-    APGradientBackgroundView* cover;
+    APGradientBackgroundView *_cover;
+    APLevelMeterView *_levelMeter;
+    
     BOOL _playing;
 }
+
+- (void)updateLevelMeterForChannels:(float)ch0 and:(float)ch1;
 
 @property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UIImageView *preview;

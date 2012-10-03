@@ -10,7 +10,7 @@
 
 #define SYNTHESIZE(propertyName) @synthesize propertyName = _ ## propertyName
 
-static const NSTimeInterval kCrossFadeDuration = 1.0;
+static const NSTimeInterval kCrossFadeDuration = 2.0;
 static const NSTimeInterval kCrossFadeStep = 0.1;
 
 @interface APCrossFadePlayer ()
@@ -74,7 +74,6 @@ SYNTHESIZE(soundEntry);
 }
 
 - (void)stop {
-        
     [self.player1 stop];
     [self.player2 stop];
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
@@ -96,6 +95,15 @@ SYNTHESIZE(soundEntry);
     return [self isPlaying] && self.soundEntry == soundEntry;
 }
 
+- (float)powerForChannel:(NSUInteger)ch {
+    float ret = 0.0;
+    if (self.player1 && self.player1.isPlaying) {
+        [self.player1 updateMeters];
+        ret = [self.player1 averagePowerForChannel:ch];
+    }
+    return ret;
+}
+
 - (void)startCrossFade {
     [self.player2 setVolume:0.0];
     [self.player2 play];
@@ -111,7 +119,8 @@ SYNTHESIZE(soundEntry);
         [self performSelector:@selector(startCrossFade) withObject:nil afterDelay:self.duration - self.player1.currentTime - kCrossFadeDuration];
     } else {
         self.player1.volume -= 0.1;
-        self.player2.volume += 0.1;
+        self.player2.volume = MIN(self.player2.volume + 0.2, self.targetVolume);
+        NSLog(@"[Volume] #1:%4.2f #2:%4.2f", self.player1.volume, self.player2.volume);
         [self performSelector:@selector(stepCrossFade) withObject:nil afterDelay:kCrossFadeStep];
     }
 }
@@ -132,6 +141,7 @@ SYNTHESIZE(soundEntry);
         return nil;
     }
     [player prepareToPlay];
+    player.meteringEnabled = YES;
     return player;
 }
 
