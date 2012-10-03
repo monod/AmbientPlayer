@@ -11,6 +11,8 @@
 #import <MediaPlayer/MPVolumeView.h>
 
 @interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
+    NSIndexPath *_playingItemPathInPreset;
+    NSIndexPath *_playingItemPathInRecorded;
 }
 
 @property (nonatomic, strong) IBOutlet UIScrollView *pageScrollView;

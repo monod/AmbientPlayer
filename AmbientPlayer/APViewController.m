@@ -104,12 +104,13 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [self.presetCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
     ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumLineSpacing = 2;
+    _playingItemPathInPreset = nil;
     
     self.recordedCollectionView.tag = kTagRecordedSoundCollectionView;
     [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumLineSpacing = 2;
-    
+    _playingItemPathInRecorded = nil;
     
     self.player = [APCrossFadePlayer new];
 
@@ -260,7 +261,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     switch (collectionView.tag) {
         case kTagPresetSoundCollectionView:
-            return self.preset.count;
+            return [self.preset count];
         case kTagRecordedSoundCollectionView:
             return [self.recordedSoundEntries count] + 1;
         default:
@@ -280,48 +281,84 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    switch (collectionView.tag) {
-        case kTagPresetSoundCollectionView:
-        {
-            [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.preset soundRootDirectory:nil];
+    if (collectionView.tag == kTagRecordedSoundCollectionView && [collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
+        // 「追加」のセルだった場合、録音用画面を呼び出すようにする
+        [self deselectAll];
+        [self updatePlayState];
+        [self performSegueWithIdentifier:@"toRecord" sender:self];
+    } else {
+        [self toggleCellInView:collectionView withIndexPath:indexPath];        
+    }
+}
 
-            return;
-        }
-        case kTagRecordedSoundCollectionView:
-        {
-            if ([collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
-                // 「追加」のセルだった場合、録音用画面を呼び出すようにする
-                [self.player stop];
-                [self performSegueWithIdentifier:@"toRecord" sender:self];
-            } else {
-                [self playOrStopSoundEntry:collectionView itemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries soundRootDirectory:[APSoundEntry recordedFileDirectory]];
+- (void) toggleCellInView:(UICollectionView*)collectionView withIndexPath:(NSIndexPath*)indexPath {
+    NSInteger tag = collectionView.tag;
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+
+    if (tag == kTagPresetSoundCollectionView) {
+        // if the same cell is selected again, then deselect it
+        if (cell.playing) {
+            cell.playing = NO;
+            _playingItemPathInPreset = nil;
+        } else {
+            // deselect the current cell
+            ((APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset]).playing = NO;
+            cell.playing = YES;
+            _playingItemPathInPreset = indexPath;
+            
+            if (_playingItemPathInRecorded) {
+                // deselect all in recorded collection view
+                ((APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded]).playing = NO;
+                _playingItemPathInRecorded = nil;
             }
-            return;
         }
-        case kSectionOther:
-            return;
-        default:
-            NSAssert(NO, @"This line should not be reached");
-            return;
+        [self updatePlayState];
+    } else if (tag == kTagRecordedSoundCollectionView) {
+        // if the same cell is selected again, then deselect it
+        if (cell.playing) {
+            cell.playing = NO;
+            _playingItemPathInRecorded = nil;
+        } else {
+            // deselect the current cell
+            ((APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded]).playing = NO;
+            cell.playing = YES;
+            _playingItemPathInRecorded = indexPath;
+            // deselect all in preset collection view
+            if (_playingItemPathInPreset) {
+                ((APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset]).playing = NO;
+                _playingItemPathInPreset = nil;
+            }
+        }
+        [self updatePlayState];
     }
-
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-
+- (void) deselectAll {
+    if (_playingItemPathInPreset) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+        cell.playing = NO;
+        _playingItemPathInPreset = nil;
+    }
+    if (_playingItemPathInRecorded) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+        cell.playing = NO;
+        _playingItemPathInRecorded = nil;
+    }
 }
 
-
-- (void) playOrStopSoundEntry:(UICollectionView *) collectionView itemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries soundRootDirectory:(NSString *) rootDirectory{
-    APSoundEntry *entry = [soundEntries objectAtIndex:indexPath.row];
-    
-    // Stop in case of the same entry
-    if ([self.player isPlaying:entry]) {
-        [self.player stopEntry];
-        return;
+// Play or stop sound according to the selection state
+- (void) updatePlayState {
+    if (_playingItemPathInPreset) {
+        APSoundEntry *entry = [self.preset objectAtIndex:_playingItemPathInPreset.row];
+        [self.player setVolume:self.volumeSlider.value];
+        [self.player play:entry rootDirectory:nil];
+    } else if (_playingItemPathInRecorded) {
+        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
+        [self.player setVolume:self.volumeSlider.value];
+        [self.player play:entry rootDirectory:[APSoundEntry recordedFileDirectory]];
+    } else {
+        [self.player stop];
     }
-    [self.player setVolume:self.volumeSlider.value];
-    [self.player play:entry rootDirectory:rootDirectory];
 }
 
 - (IBAction)changeVolume:(id)sender {

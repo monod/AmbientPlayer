@@ -96,7 +96,6 @@
     [recordSetting setValue:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
     
     NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:[NSDate date]], @"m4a"]]];
-    NSLog(@"Using File called: %@",recordedTmpFile);
     
     NSError *error = nil;
     self.recorder = [[AVAudioRecorder alloc] initWithURL:recordedTmpFile settings:recordSetting error:&error];

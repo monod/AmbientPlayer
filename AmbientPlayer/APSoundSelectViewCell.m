@@ -30,29 +30,19 @@
         self.title.textColor = [UIColor whiteColor];
         [self.contentView addSubview:self.title];
         
-        // Slider
-        //self.slider = [[UISlider alloc] initWithFrame:CGRectMake(10.0, frame.size.height - 40.0, frame.size.width - 20.0, 40.0)];
-        //self.slider.minimumValue = 0;
-        //self.slider.maximumValue = 1.0;
-        //self.slider.value = 1.0;
-        //self.slider.hidden = YES;
-        //self.slider.minimumTrackTintColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.4];
-        //self.slider.maximumTrackTintColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.4];
-        //[self.contentView addSubview:self.slider];
-        
     }
     return self;
 }
 
-- (void)setSelected:(BOOL)selected
-{
-    [super setSelected:selected];
-
+- (void)setPlaying:(BOOL)playing {
+    _playing = playing;
     // Configure the view for the selected state
-    cover.selected = selected;
+    cover.selected = playing;
     [cover setNeedsDisplay];
-    //self.slider.hidden = !selected;
+}
 
+- (BOOL)isPlaying {
+    return _playing;
 }
 
 @end

@@ -11,9 +11,11 @@
 
 @interface APSoundSelectViewCell : UICollectionViewCell {
     APGradientBackgroundView* cover;
+    BOOL _playing;
 }
 
 @property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UIImageView *preview;
+@property (getter=isPlaying) BOOL playing;
 
 @end
