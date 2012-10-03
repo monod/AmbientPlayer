@@ -149,10 +149,16 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <view contentMode="scaleToFill" id="3WS-mm-a3Z" customClass="APLevelMeterView">
+                                <rect key="frame" x="20" y="60" width="280" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="levelMeter" destination="3WS-mm-a3Z" id="MjT-jW-neV"/>
                         <outlet property="recordButton" destination="X2x-5x-JKo" id="woX-u1-cUX"/>
                     </connections>
                 </viewController>
@@ -162,11 +168,15 @@
         </scene>
     </scenes>
     <classes>
+        <class className="APLevelMeterView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/APLevelMeterView.h"/>
+        </class>
         <class className="APRecordViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/APRecordViewController.h"/>
             <relationships>
                 <relationship kind="action" name="donePushed:"/>
                 <relationship kind="action" name="recordPushed:"/>
+                <relationship kind="outlet" name="levelMeter" candidateClass="APLevelMeterView"/>
                 <relationship kind="outlet" name="recordButton" candidateClass="UIButton"/>
             </relationships>
         </class>

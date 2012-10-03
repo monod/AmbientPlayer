@@ -3,7 +3,7 @@
 //  AmbientPlayer
 //
 //  Created by 瀬戸山 雅人 on 2012/09/08.
-//  Copyright (c) 2012年 InteractionPlus. All rights reserved.
+//  Copyright (c) 2012 Veronica Software. All rights reserved.
 //
 
 #import "APRecordViewController.h"
@@ -33,6 +33,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    // Update timer for level meter
+    _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
+    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)viewDidUnload
@@ -49,6 +53,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)timerUpdate:(CADisplayLink *)sender {
+    if (self.recorder) {
+        [self.recorder updateMeters];
+        float v0 = [self.recorder averagePowerForChannel:0];
+        float v1 = [self.recorder averagePowerForChannel:1];
+        [self.levelMeter updateValuesWith:v0 ch:v1];
+    }
 }
 
 - (void)setupAudioSession {
@@ -71,7 +84,7 @@
     //[recordSetting setValue: [NSNumber numberWithInt:kAudioFormatAppleIMA4] forKey:AVFormatIDKey];
     [recordSetting setValue :[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
     [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
-    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
+    [recordSetting setValue:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
     
     NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.%@", [NSDate timeIntervalSinceReferenceDate] * 1000.0, @"m4a"]]];
     NSLog(@"Using File called: %@",recordedTmpFile);
@@ -82,6 +95,7 @@
         NSLog(@"Failed to create AVAudioRecorder %@", error);
         return nil;
     }
+    self.recorder.meteringEnabled = YES;
     [self.recorder setDelegate:self];
 //    [self.recorder prepareToRecord];
     [self.recorder record];
