@@ -11,6 +11,7 @@
 
 @interface APRecordViewController : UIViewController {
     CADisplayLink *_updateTimer;
+    NSDateFormatter *_formatter;
 }
 
 -(IBAction)donePushed:(id)sender;
@@ -18,5 +19,5 @@
 
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet APLevelMeterView *levelMeter;
-
+@property (nonatomic, strong) IBOutlet UILabel *elapsedTime;
 @end

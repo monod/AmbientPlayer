@@ -37,6 +37,9 @@
     // Update timer for level meter
     _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
     [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    
+    _formatter = [[NSDateFormatter alloc] init];
+    _formatter.dateFormat = @"yyyyMMdd_HHmmss";
 }
 
 - (void)viewDidUnload
@@ -61,6 +64,12 @@
         float v0 = [self.recorder averagePowerForChannel:0];
         float v1 = [self.recorder averagePowerForChannel:1];
         [self.levelMeter updateValuesWith:v0 ch:v1];
+        
+        if (self.recorder.isRecording) {
+            int m = (int)self.recorder.currentTime / 60;
+            double s = self.recorder.currentTime - m * 60;
+           self.elapsedTime.text = [NSString stringWithFormat:@"%02d:%04.1f", m, s];
+        }
     }
 }
 
@@ -86,7 +95,7 @@
     [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
     [recordSetting setValue:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
     
-    NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.%@", [NSDate timeIntervalSinceReferenceDate] * 1000.0, @"m4a"]]];
+    NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:[NSDate date]], @"m4a"]]];
     NSLog(@"Using File called: %@",recordedTmpFile);
     
     NSError *error = nil;

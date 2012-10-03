@@ -123,7 +123,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="X2x-5x-JKo">
-                                <rect key="frame" x="100" y="125" width="121" height="37"/>
+                                <rect key="frame" x="100" y="212" width="121" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="録音開始">
@@ -150,14 +150,22 @@
                                 </items>
                             </toolbar>
                             <view contentMode="scaleToFill" id="3WS-mm-a3Z" customClass="APLevelMeterView">
-                                <rect key="frame" x="20" y="60" width="280" height="40"/>
+                                <rect key="frame" x="20" y="143" width="280" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="00:00.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LIz-1q-8wT">
+                                <rect key="frame" x="20" y="67" width="280" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="48"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="elapsedTime" destination="LIz-1q-8wT" id="6B1-hh-aSi"/>
                         <outlet property="levelMeter" destination="3WS-mm-a3Z" id="MjT-jW-neV"/>
                         <outlet property="recordButton" destination="X2x-5x-JKo" id="woX-u1-cUX"/>
                     </connections>
@@ -176,6 +184,7 @@
             <relationships>
                 <relationship kind="action" name="donePushed:"/>
                 <relationship kind="action" name="recordPushed:"/>
+                <relationship kind="outlet" name="elapsedTime" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="levelMeter" candidateClass="APLevelMeterView"/>
                 <relationship kind="outlet" name="recordButton" candidateClass="UIButton"/>
             </relationships>

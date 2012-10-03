@@ -20,13 +20,13 @@
     float _minDecibels;
     int _tableSize;
     float _root;
-    NSMutableArray* _table;
-    
-    int _nLights;
-    UIColor *_fgColor;
-    UIColor *_bgColor;
+    NSMutableArray* _table;    
 }
 
 - (void)updateValuesWith:(float) ch0 ch:(float) ch1;
 
+@property BOOL vertical;
+@property int nLights;
+@property (nonatomic, strong) UIColor *fgColor;
+@property (nonatomic, strong) UIColor *bgColor;
 @end
