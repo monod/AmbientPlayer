@@ -14,6 +14,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self initializeiCloudAccess];
     return YES;
 }
 
@@ -42,6 +43,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)initializeiCloudAccess {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] != nil)
+            NSLog(@"iCloud is available\n");
+        else
+            NSLog(@"This application requires iCloud, but it is not available.\n");
+    });
 }
 
 @end
