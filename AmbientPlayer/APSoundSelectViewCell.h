@@ -12,15 +12,15 @@
 
 @interface APSoundSelectViewCell : UICollectionViewCell {
     APGradientBackgroundView *_cover;
-    APLevelMeterView *_levelMeter;
     
     BOOL _playing;
 }
 
-- (void)updateLevelMeterForChannels:(float)ch0 and:(float)ch1;
-
 @property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UIImageView *preview;
+@property (nonatomic, strong) UIButton *info;
+@property (nonatomic, strong) APLevelMeterView *levelMeter;
+
 @property (getter=isPlaying) BOOL playing;
 
 @end

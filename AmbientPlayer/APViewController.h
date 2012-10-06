@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MPVolumeView.h>
 
-@interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource> {
+@interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, AVAudioPlayerDelegate> {
     CADisplayLink *_updateTimer;
     NSIndexPath *_playingItemPathInPreset;
     NSIndexPath *_playingItemPathInRecorded;
@@ -25,6 +25,9 @@
 
 - (IBAction)changeVolume:(id)sender;
 - (IBAction)changePage:(id)sender;
+
+- (void)deselectAll;
+- (void)updatePlayState;
 
 @end
 

@@ -18,6 +18,7 @@ NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 NSString * const SoundCellIdentifier = @"SoundCell";
+NSString * const AddCellIdentifier = @"AddCell";
 
 const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
@@ -85,7 +86,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     CFNumberGetValue (reason, kCFNumberSInt32Type, &routeChangeReason);
     if (routeChangeReason ==  kAudioSessionRouteChangeReason_OldDeviceUnavailable) {
         APViewController *controller = (__bridge APViewController *)(clientData);
-        [controller.player stop];
+        [controller deselectAll];
+        [controller updatePlayState];
     }
 }
 
@@ -108,6 +110,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
     self.recordedCollectionView.tag = kTagRecordedSoundCollectionView;
     [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
+    [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:AddCellIdentifier];
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumLineSpacing = 2;
     _playingItemPathInRecorded = nil;
@@ -200,6 +203,13 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     self.bannerView.frame = bannerFrame;
 }
 
+#pragma mark - AVAudioPlayerDelegate
+
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
+    // Deselect all if there is an incoming call
+    [self deselectAll];
+}
+
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender {
@@ -225,7 +235,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         {
             if ([collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
                 // last item in the section: "Add" button
-                APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
+                APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddCellIdentifier forIndexPath:indexPath];
                 cell.title.text = @"Add...";
                 NSString *path = [[NSBundle mainBundle] pathForResource:@"add" ofType:@"png"];
                 UIImage *img = [UIImage imageWithContentsOfFile:path];
@@ -248,14 +258,16 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
     cell.title.text = entry.title;
     
-    if (entry.imageFileName) {
+    if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
-    } else {
+        cell.playing = [indexPath isEqual:_playingItemPathInPreset];
+    } else if (collectionView.tag == kTagRecordedSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
+        cell.playing = [indexPath isEqual:_playingItemPathInRecorded];
     }
     return cell;
 }
@@ -372,10 +384,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         cell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
     }
     
-    if (cell) {
+    if (cell && cell.isPlaying) {
         float ch0 = [self.player powerForChannel:0];
         float ch1 = [self.player powerForChannel:1];
-        [cell updateLevelMeterForChannels:ch0 and:ch1];
+        [cell.levelMeter updateValuesWith:ch0 and:ch1];
     }
 }
 

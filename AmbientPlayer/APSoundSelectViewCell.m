@@ -24,21 +24,27 @@
         [self.contentView addSubview:_cover];
         
         // Level
-        _levelMeter = [[APLevelMeterView alloc] initWithFrame:CGRectMake(0.0, frame.size.height * 3 / 8, frame.size.width, frame.size.height / 4.0)];
-        _levelMeter.nLights = 10;
-        _levelMeter.bgColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
-        _levelMeter.fgColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.4];
-        _levelMeter.hidden = YES;
-        [self.contentView addSubview:_levelMeter];
+        self.levelMeter = [[APLevelMeterView alloc] initWithFrame:CGRectMake(0.0, frame.size.height * 3 / 8, frame.size.width, frame.size.height / 4.0)];
+        self.levelMeter.nLights = 20;
+        self.levelMeter.bgColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
+        self.levelMeter.fgColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.4];
+        self.levelMeter.hidden = YES;
+        [self.contentView addSubview:self.levelMeter];
         
         // Title
         self.title = [[UILabel alloc]initWithFrame:CGRectMake(10.0, frame.size.height - 40.0, frame.size.width - 20.0, 40.0)];
         self.title.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:32.0];
         self.title.backgroundColor = [UIColor clearColor];
         self.title.textColor = [UIColor whiteColor];
-        self.title.textAlignment = NSTextAlignmentRight;
+        self.title.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:self.title];
         
+        // Info
+        self.info = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        self.info.frame = CGRectMake(frame.size.width - 27.0, 9.0, 18.0, 18.0);
+        self.info.hidden = YES;
+        [self.info addTarget:self action:@selector(showDetail) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:self.info];
     }
     return self;
 }
@@ -47,7 +53,8 @@
     _playing = playing;
     // Configure the view for the selected state
     _cover.selected = playing;
-    _levelMeter.hidden = !playing;
+    self.levelMeter.hidden = !playing;
+    self.info.hidden = !playing;
     [_cover setNeedsDisplay];
 }
 
@@ -55,10 +62,8 @@
     return _playing;
 }
 
-- (void)updateLevelMeterForChannels:(float)ch0 and:(float)ch1 {
-    if (self.playing) {
-        [_levelMeter updateValuesWith:ch0 and:ch1];
-    }
+- (void)showDetail {
+
 }
 
 @end
