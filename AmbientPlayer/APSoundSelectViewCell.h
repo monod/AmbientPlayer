@@ -22,5 +22,5 @@
 @property (nonatomic, strong) APLevelMeterView *levelMeter;
 
 @property (getter=isPlaying) BOOL playing;
-
+@property (getter=isDisclosed) BOOL disclosed;
 @end

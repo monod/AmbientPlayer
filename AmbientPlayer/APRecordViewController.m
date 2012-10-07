@@ -15,16 +15,20 @@
 @interface APRecordViewController () <AVAudioRecorderDelegate>
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) NSURL *lastRecordedFile;
-@property (nonatomic, assign) BOOL isRecording;
 @end
 
 @implementation APRecordViewController
+
+const int kMaxRecordSeconds = 120;
+const int kMinRecordSeconds = 2;
+typedef enum PlayState { kPlayStateStop, kPlayStateRecording, kPlayStatePause } PlayState;
+
+PlayState _state;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.isRecording = NO;
     }
     return self;
 }
@@ -36,21 +40,25 @@
     
     // Update timer for level meter
     _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
-    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
     _formatter = [[NSDateFormatter alloc] init];
-    _formatter.dateFormat = @"yyyyMMdd_HHmmss";
+    _formatter.dateFormat = @"HHmmss_yyyyMMdd";
+    
+    int m = kMaxRecordSeconds / 60;
+    int s = kMaxRecordSeconds % 60;
+    self.maxTime.text = [NSString stringWithFormat:@"%02d:%02d.0", m, s];
+    self.waveForm.duration = kMaxRecordSeconds;
+    self.waveForm.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
--(void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
+    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [super viewWillAppear:animated];
     [self setupAudioSession];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [_updateTimer removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -66,9 +74,12 @@
         [self.levelMeter updateValuesWith:v0 and:v1];
         
         if (self.recorder.isRecording) {
-            int m = (int)self.recorder.currentTime / 60;
-            double s = self.recorder.currentTime - m * 60;
-           self.elapsedTime.text = [NSString stringWithFormat:@"%02d:%04.1f", m, s];
+            _duration = self.recorder.currentTime;
+            NSTimeInterval time = MIN(kMaxRecordSeconds, _duration);
+            int m = (int)time / 60;
+            double s = time - m * 60;
+            self.elapsedTime.text = [NSString stringWithFormat:@"%02d:%04.1f", m, s];
+            [self.waveForm addSampleAt:time withValue:v0];
         }
     }
 }
@@ -85,9 +96,7 @@
     if (error) {
         NSLog(@"%@", error);
     }
-}
-
--(NSURL *)startRecording {
+    
     NSMutableDictionary* recordSetting = [[NSMutableDictionary alloc] init];
     
     //[recordSetting setValue: [NSNumber numberWithInt:kAudioFormatAppleIMA4] forKey:AVFormatIDKey];
@@ -97,49 +106,96 @@
     
     NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:[NSDate date]], @"m4a"]]];
     
-    NSError *error = nil;
     self.recorder = [[AVAudioRecorder alloc] initWithURL:recordedTmpFile settings:recordSetting error:&error];
     if (error) {
         NSLog(@"Failed to create AVAudioRecorder %@", error);
-        return nil;
+        return;
     }
     self.recorder.meteringEnabled = YES;
     [self.recorder setDelegate:self];
-//    [self.recorder prepareToRecord];
-    [self.recorder record];
-    //[self.recorder recordForDuration:(NSTimeInterval) 10]
+    [self.recorder prepareToRecord];
     
-    [self.recordButton setTitle:@"録音終了" forState:UIControlStateNormal];
-    self.isRecording = YES;
-
-    return recordedTmpFile;
+    _duration = 0;
+    _state = kPlayStateStop;
+    [self updateButtonLabel];
 }
 
--(void)stopRecording {
-    [self.recordButton setTitle:@"録音開始" forState:UIControlStateNormal];
+- (void)updateButtonLabel {
+    NSString *label = nil;
+    switch (_state) {
+        case kPlayStateStop:
+            label = @"REC";
+            break;
+        case kPlayStateRecording:
+            label = @"PAUSE";
+            break;
+        case kPlayStatePause:
+            label = @"RESUME";
+            break;
+    }
+    if (label) {
+        [self.recordButton setTitle:label forState:UIControlStateNormal];
+    }
+}
+
+- (void)startRecording {
+    [self.recorder recordForDuration:(NSTimeInterval)kMaxRecordSeconds];
+    _state = kPlayStateRecording;
+    [self updateButtonLabel];
+    NSLog(@"[REC][START]");
+}
+
+- (void)pauseRecording {
+    [self.recorder pause];
+    _state = kPlayStatePause;
+    [self updateButtonLabel];
+    NSLog(@"[REC][PAUSE]");
+}
+
+- (void)resumeRecording {
+    [self.recorder record];
+    _state = kPlayStateRecording;
+    [self updateButtonLabel];
+    NSLog(@"[REC][RESUME]");
+}
+
+- (void)stopRecording {
     [self.recorder stop];
-    self.isRecording = NO;
+    _state = kPlayStateStop;
+    [self updateButtonLabel];
+    NSLog(@"[REC][STOP]");
 }
 
 -(IBAction)donePushed:(id)sender {
-    if (self.isRecording) {
-        [self stopRecording];
+    [self stopRecording];
+    NSLog(@"[REC][DONE] %4.1f", _duration);
+    if (_duration < kMinRecordSeconds) {
+        [self.recorder deleteRecording];
+        NSLog(@"[REC][DELETE] File deleted");
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction)recordPushed:(id)sender {
-    if (self.isRecording) {
-        [self stopRecording];
-    } else {
-        self.lastRecordedFile = [self startRecording];
+    switch (_state) {
+        case kPlayStateStop:
+            [self.waveForm resetSample];
+            [self startRecording];
+            break;
+        case kPlayStateRecording:
+            [self pauseRecording];
+            break;
+        case kPlayStatePause:
+            [self resumeRecording];
+            break;
     }
 }
 
 #pragma mark - AVAudioRecorderDelegate
 
-//- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
-//    
-//}
+- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
+    _state = kPlayStateStop;
+    [self updateButtonLabel];
+}
 
 @end

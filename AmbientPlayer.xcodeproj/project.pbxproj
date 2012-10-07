@@ -10,6 +10,7 @@
 		4018F06815F6D00600DB5B15 /* forest.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4018F06515F6D00600DB5B15 /* forest.m4a */; };
 		4018F06915F6D00600DB5B15 /* rain.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4018F06615F6D00600DB5B15 /* rain.m4a */; };
 		4018F06A15F6D00600DB5B15 /* stream.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4018F06715F6D00600DB5B15 /* stream.m4a */; };
+		403270FF1621056600E44DDB /* APWaveFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 403270FE1621056500E44DDB /* APWaveFormView.m */; };
 		405E060815FB381E00C93E26 /* rain.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 405E060715FB381E00C93E26 /* rain.jpg */; };
 		405E061815FB3F5200C93E26 /* forest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 405E061515FB3F5200C93E26 /* forest.jpg */; };
 		405E061915FB3F5200C93E26 /* ocean.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 405E061615FB3F5200C93E26 /* ocean.jpg */; };
@@ -76,6 +77,8 @@
 		4018F06515F6D00600DB5B15 /* forest.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = forest.m4a; sourceTree = "<group>"; };
 		4018F06615F6D00600DB5B15 /* rain.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = rain.m4a; sourceTree = "<group>"; };
 		4018F06715F6D00600DB5B15 /* stream.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = stream.m4a; sourceTree = "<group>"; };
+		403270FD1621056500E44DDB /* APWaveFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APWaveFormView.h; sourceTree = "<group>"; };
+		403270FE1621056500E44DDB /* APWaveFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APWaveFormView.m; sourceTree = "<group>"; };
 		405E060715FB381E00C93E26 /* rain.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = rain.jpg; sourceTree = "<group>"; };
 		405E061515FB3F5200C93E26 /* forest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = forest.jpg; sourceTree = "<group>"; };
 		405E061615FB3F5200C93E26 /* ocean.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ocean.jpg; sourceTree = "<group>"; };
@@ -264,6 +267,8 @@
 				40D289CE1608C46E00685175 /* APGradientBackgroundView.m */,
 				40B6FA58161BCB530051FD8B /* APLevelMeterView.h */,
 				40B6FA59161BCB540051FD8B /* APLevelMeterView.m */,
+				403270FD1621056500E44DDB /* APWaveFormView.h */,
+				403270FE1621056500E44DDB /* APWaveFormView.m */,
 				AF4E5D0915FB376A001438B3 /* APRecordViewController.h */,
 				AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */,
 				7EDE0C1015FB2C4300789400 /* APSoundEntry.h */,
@@ -453,6 +458,7 @@
 				409D4F0D1608314E00261E70 /* APSoundSelectViewCell.m in Sources */,
 				40D289CF1608C46E00685175 /* APGradientBackgroundView.m in Sources */,
 				40B6FA5A161BCB540051FD8B /* APLevelMeterView.m in Sources */,
+				403270FF1621056600E44DDB /* APWaveFormView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

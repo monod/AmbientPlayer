@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "APLevelMeterView.h"
+#import "APWaveFormView.h"
 
 @interface APRecordViewController : UIViewController {
     CADisplayLink *_updateTimer;
     NSDateFormatter *_formatter;
+    NSTimeInterval _duration;
 }
 
 -(IBAction)donePushed:(id)sender;
@@ -19,5 +21,7 @@
 
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet APLevelMeterView *levelMeter;
+@property (nonatomic, strong) IBOutlet APWaveFormView *waveForm;
 @property (nonatomic, strong) IBOutlet UILabel *elapsedTime;
+@property (nonatomic, strong) IBOutlet UILabel *maxTime;
 @end

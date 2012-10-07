@@ -52,6 +52,7 @@ SYNTHESIZE(preset);
         [self initPreset];
         //self.bannerView = [ADBannerView new];
         //self.bannerView.delegate = self;
+        _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
     }
     return self;
 }
@@ -121,9 +122,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     self.routeView.showsVolumeSlider = NO;
     CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
     self.routeView.bounds = CGRectMake(self.routeView.bounds.origin.x, self.routeView.bounds.origin.y, sz.width, sz.height);
-    
-    _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
-    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)setupAudioSession {
@@ -146,17 +144,17 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     self.recordedSoundEntries = [self findRecordedSoundEntries];
     [self.recordedCollectionView reloadData];
+    self.recordedCollectionView.delegate = self;
     [self setupAudioSession];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [_updateTimer removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (NSArray *)findRecordedSoundEntries {
@@ -257,6 +255,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
     
     cell.title.text = entry.title;
+    [cell.info addTarget:self action:@selector(showDetailView:) forControlEvents:UIControlEventTouchUpInside];
     
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
@@ -405,6 +404,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     frame.origin.x = frame.size.width * page;
     frame.origin.y = 0;
     [self.pageScrollView scrollRectToVisible:frame animated:YES];    
+}
+
+- (void)showDetailView:(id)sender {
+
 }
 
 #pragma mark - iAd

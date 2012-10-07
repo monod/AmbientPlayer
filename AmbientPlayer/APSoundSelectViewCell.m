@@ -15,6 +15,9 @@
     self = [super initWithFrame:frame];
     
     if (self) {
+        self.playing = NO;
+        self.disclosed = NO;
+        
         // Image
         self.preview = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
         self.backgroundView = self.preview;
@@ -43,7 +46,6 @@
         self.info = [UIButton buttonWithType:UIButtonTypeInfoLight];
         self.info.frame = CGRectMake(frame.size.width - 27.0, 9.0, 18.0, 18.0);
         self.info.hidden = YES;
-        [self.info addTarget:self action:@selector(showDetail) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.info];
     }
     return self;
@@ -60,10 +62,6 @@
 
 - (BOOL)isPlaying {
     return _playing;
-}
-
-- (void)showDetail {
-
 }
 
 @end
