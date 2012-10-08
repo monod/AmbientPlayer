@@ -25,7 +25,9 @@ const int kSectionRecorded = 1;
 const int kSectionOther = 2;
 
 const NSInteger kTagPresetSoundCollectionView = 1;
-const NSInteger kTagRecordedSoundCollectionView = 0;
+const NSInteger kTagRecordedSoundCollectionView = 2;
+
+const NSInteger kTagAlertDeleteSound = 1;
 
 @interface APViewController () <ADBannerViewDelegate>
 
@@ -33,7 +35,7 @@ const NSInteger kTagRecordedSoundCollectionView = 0;
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
 @property (nonatomic, strong) ADBannerView *bannerView;
-@property (nonatomic, strong) NSArray *recordedSoundEntries;
+@property (nonatomic, strong) NSMutableArray *recordedSoundEntries;
 
 @end
 
@@ -176,7 +178,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [_updateTimer removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
-- (NSArray *)findRecordedSoundEntries {
+- (NSMutableArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:[APSoundEntry recordedFileDirectory] error:nil];
     NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
@@ -277,11 +279,13 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     cell.backView.title.text = entry.title;
     [cell.info addTarget:self action:@selector(showBackView:) forControlEvents:UIControlEventTouchUpInside];
     [cell.backView.doneButton addTarget:self action:@selector(hideBackView:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.backView.deleteButton addTarget:self action:@selector(showDeleteConfirmAlert) forControlEvents:UIControlEventTouchUpInside];
     
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
+        cell.backView.deleteButton.hidden = YES;
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInPreset]) {
             cell.playing = YES;
@@ -294,6 +298,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
+        cell.backView.deleteButton.hidden = NO;
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInRecorded]) {
             cell.playing = YES;
@@ -435,6 +440,24 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
+- (void)deleteSelectedItem {
+    if (_playingItemPathInRecorded) {
+        // Remove entry from array
+        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
+        [self.recordedSoundEntries removeObjectAtIndex:_playingItemPathInRecorded.row];
+        
+        // Remove file
+        NSString *path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
+        NSFileManager *fileMgr = [NSFileManager defaultManager];
+        [fileMgr removeItemAtPath:path error:nil];
+        
+        // Update UI
+        [self.recordedCollectionView deleteItemsAtIndexPaths:@[_playingItemPathInRecorded]];
+        _playingItemInRecordedFlipped = NO;
+        _playingItemPathInRecorded = nil;
+    }
+}
+
 - (void)timerUpdate:(CADisplayLink*)sender {
     APSoundSelectViewCell *cell = nil;
     if (_playingItemPathInPreset) {
@@ -487,8 +510,29 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
 }
 
-- (void)deletePlayingCell {
-    
+- (void)showDeleteConfirmAlert {
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Delete"
+                          message:@"Are you sure you want to delete the playing sound?"
+                          delegate:self
+                          cancelButtonTitle:@"Cancel"
+                          otherButtonTitles:@"OK", nil];
+    alert.tag = kTagAlertDeleteSound;
+    [alert show];
+}
+
+#pragma mark - UIAlertViewDelegate 
+
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (alertView.tag) {
+        case kTagAlertDeleteSound:
+            if (buttonIndex == 1) {
+                [self deleteSelectedItem];
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - iAd
