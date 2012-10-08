@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MPVolumeView.h>
+#import "APSoundCellBackView.h"
 
 @interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, AVAudioPlayerDelegate> {
     CADisplayLink *_updateTimer;
     NSIndexPath *_playingItemPathInPreset;
+    BOOL _playingItemInPresetFlipped;
     NSIndexPath *_playingItemPathInRecorded;
+    BOOL _playingItemInRecordedFlipped;
 }
 
 @property (nonatomic, strong) IBOutlet UIScrollView *pageScrollView;
