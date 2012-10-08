@@ -25,7 +25,6 @@
 
 @property (getter=isPlaying) BOOL playing;
 
-- (void)flipView;
-- (void)setFlipStateWithoutAnimation:(BOOL)flipToFront;
+- (void)flipViewToBackSide:(BOOL)backSide withAnimation:(BOOL)animation;
 
 @end

@@ -276,6 +276,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     cell.title.text = entry.title;
     cell.backView.title.text = entry.title;
     [cell.info addTarget:self action:@selector(showBackView:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.backView.doneButton addTarget:self action:@selector(hideBackView:) forControlEvents:UIControlEventTouchUpInside];
     
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
@@ -284,9 +285,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInPreset]) {
             cell.playing = YES;
-            [cell setFlipStateWithoutAnimation:_playingItemInPresetFlipped];
+            [cell flipViewToBackSide:_playingItemInPresetFlipped withAnimation:NO];
         } else {
             cell.playing = NO;
+            [cell flipViewToBackSide:NO withAnimation:NO];
         }
     } else if (collectionView.tag == kTagRecordedSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
@@ -295,9 +297,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInRecorded]) {
             cell.playing = YES;
-            [cell setFlipStateWithoutAnimation:_playingItemInRecordedFlipped];
+            [cell flipViewToBackSide:_playingItemInRecordedFlipped withAnimation:NO];
         } else {
             cell.playing = NO;
+            [cell flipViewToBackSide:NO withAnimation:NO];
         }
     }
     return cell;
@@ -354,14 +357,14 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                 // deselect the current cell in Preset Collection
                 APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
                 if (_playingItemInPresetFlipped) {
-                    [currentCell flipView];
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
                 }
                 currentCell.playing = NO;
             } else if (_playingItemPathInRecorded) {
                 // deselect the current cell in Recorded Collection
                 APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
                 if (_playingItemInRecordedFlipped) {
-                    [currentCell flipView];
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
                 }
                 currentCell.playing = NO;
                 _playingItemPathInRecorded = nil;
@@ -384,14 +387,14 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                 // deselect the current cell in Recorded Collection
                 APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
                 if (_playingItemInRecordedFlipped) {
-                    [currentCell flipView];
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
                 }
                 currentCell.playing = NO;
             } else if (_playingItemPathInPreset) {
                 // deselect the current cell in Preset Collection
                 APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
                 if (_playingItemInPresetFlipped) {
-                    [currentCell flipView];
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
                 }
                 currentCell.playing = NO;
                 _playingItemPathInPreset = nil;
@@ -465,11 +468,21 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 - (void)showBackView:(id)sender {
     APSoundSelectViewCell *cell = (APSoundSelectViewCell *)((UIView *)sender).superview.superview;
-    [cell flipView];
+    [cell flipViewToBackSide:YES withAnimation:YES];
     if (_playingItemPathInPreset) {
         _playingItemInPresetFlipped = YES;
     } else if (_playingItemPathInRecorded) {
         _playingItemInRecordedFlipped = YES;
+    }
+}
+
+- (void)hideBackView:(id)sender {
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell *)((UIView *)sender).superview.superview.superview;
+    [cell flipViewToBackSide:NO withAnimation:YES];
+    if (_playingItemPathInPreset) {
+        _playingItemInPresetFlipped = NO;
+    } else if (_playingItemPathInRecorded) {
+        _playingItemInRecordedFlipped = NO;
     }
     
 }

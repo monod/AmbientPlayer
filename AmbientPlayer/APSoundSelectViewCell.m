@@ -51,7 +51,6 @@
         
         // Back View
         self.backView = [[APSoundCellBackView alloc] initWithFrame:frame];
-        [self.backView.doneButton addTarget:self action:@selector(flipView) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -69,47 +68,34 @@
     return _playing;
 }
 
-- (void)flipView {
-    if (_frontView) {
-        [UIView transitionFromView:self.backView
-                            toView:_frontView
-                          duration:0.75
-                           options:UIViewAnimationOptionTransitionFlipFromLeft
-                        completion:^(BOOL finished) {
-                            // animation completed
-                            _frontView = nil;
-                        }];
-    } else {
+- (void)flipViewToBackSide:(BOOL)backSide withAnimation:(BOOL)animation {
+    UIViewAnimationOptions options = UIViewAnimationOptionTransitionNone;
+    NSTimeInterval duration = 0;
+    if (animation) {
+        options = backSide ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft;
+        duration = 0.75;
+    }
+    
+    if (backSide) {
         _frontView = self.contentView;
         //NSLog(@"[FRNT] frame(x,y)=(%f,%f), bounds(x,y)=(%f,%f)", _frontView.frame.origin.x, _frontView.frame.origin.y, _frontView.bounds.origin.x, _frontView.bounds.origin.y);
         //NSLog(@"[BACK] frame(x,y)=(%f,%f), bounds(x,y)=(%f,%f)", self.backView.frame.origin.x, self.backView.frame.origin.y, self.backView.bounds.origin.x, self.backView.bounds.origin.y);
         self.backView.frame = _frontView.frame;
         [UIView transitionFromView:_frontView
                             toView:self.backView
-                          duration:0.75
-                           options:UIViewAnimationOptionTransitionFlipFromRight
-                        completion:^(BOOL finished) {
-                            // animation completed
-                        }];
-    }
-}
-
-- (void)setFlipStateWithoutAnimation:(BOOL)flipToFront {
-    if (flipToFront) {
-        [UIView transitionFromView:self.backView
-                            toView:_frontView
-                          duration:0
-                           options:UIViewAnimationOptionTransitionNone
+                          duration:duration
+                           options:options
                         completion:^(BOOL finished) {
                             // animation completed
                         }];
     } else {
-        [UIView transitionFromView:_frontView
-                            toView:self.backView
-                          duration:0
-                           options:UIViewAnimationOptionTransitionNone
+        [UIView transitionFromView:self.backView
+                            toView:_frontView
+                          duration:duration
+                           options:options
                         completion:^(BOOL finished) {
                             // animation completed
+                            _frontView = nil;
                         }];
     }
 }
