@@ -50,6 +50,16 @@
 		40D289C61608B2D400685175 /* crickets@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40D289C51608B2D400685175 /* crickets@2x.jpg */; };
 		40D289C81608B2F200685175 /* stream@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40D289C71608B2F200685175 /* stream@2x.jpg */; };
 		40D289CF1608C46E00685175 /* APGradientBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D289CE1608C46E00685175 /* APGradientBackgroundView.m */; };
+		40DB23CB16225A360015CD81 /* knob@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23CA16225A360015CD81 /* knob@2x.png */; };
+		40DB23CE16225AF40015CD81 /* knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23CD16225AF40015CD81 /* knob.png */; };
+		40DB23D116225BAE0015CD81 /* knob_hl.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23CF16225BAE0015CD81 /* knob_hl.png */; };
+		40DB23D216225BAE0015CD81 /* knob_hl@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23D016225BAE0015CD81 /* knob_hl@2x.png */; };
+		40DB23D716225D5A0015CD81 /* max.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23D316225D5A0015CD81 /* max.png */; };
+		40DB23D816225D5A0015CD81 /* max@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23D416225D5A0015CD81 /* max@2x.png */; };
+		40DB23D916225D5A0015CD81 /* min.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23D516225D5A0015CD81 /* min.png */; };
+		40DB23DA16225D5A0015CD81 /* min@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23D616225D5A0015CD81 /* min@2x.png */; };
+		40DB23E416229C640015CD81 /* APSoundCellBackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40DB23E316229C640015CD81 /* APSoundCellBackView.m */; };
+		40DB23E81622BA410015CD81 /* APSoundCellBackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40DB23E71622BA400015CD81 /* APSoundCellBackView.xib */; };
 		40E50C951608DA5200AEE0B5 /* sea.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40E50C931608DA5200AEE0B5 /* sea.jpg */; };
 		40E50C961608DA5200AEE0B5 /* sea@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 40E50C941608DA5200AEE0B5 /* sea@2x.jpg */; };
 		40E50C9C160CD88200AEE0B5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */; };
@@ -59,8 +69,12 @@
 		7EDE0C0C15FB234C00789400 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0B15FB234C00789400 /* iPhone.storyboard */; };
 		7EDE0C1215FB2C4300789400 /* APSoundEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C1115FB2C4300789400 /* APSoundEntry.m */; };
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
+		AF15BE4916255C25009B46FB /* APiCloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APiCloudAdapter.m */; };
+		AF15BE4A16255C25009B46FB /* APiCloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APiCloudAdapter.m */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
 		AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF57FF3F15FB114000D8040A /* iAd.framework */; };
+		AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
+		AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +142,17 @@
 		40D289C71608B2F200685175 /* stream@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "stream@2x.jpg"; sourceTree = "<group>"; };
 		40D289CD1608C46E00685175 /* APGradientBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APGradientBackgroundView.h; sourceTree = "<group>"; };
 		40D289CE1608C46E00685175 /* APGradientBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APGradientBackgroundView.m; sourceTree = "<group>"; };
+		40DB23CA16225A360015CD81 /* knob@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "knob@2x.png"; sourceTree = "<group>"; };
+		40DB23CD16225AF40015CD81 /* knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = knob.png; sourceTree = "<group>"; };
+		40DB23CF16225BAE0015CD81 /* knob_hl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = knob_hl.png; sourceTree = "<group>"; };
+		40DB23D016225BAE0015CD81 /* knob_hl@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "knob_hl@2x.png"; sourceTree = "<group>"; };
+		40DB23D316225D5A0015CD81 /* max.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = max.png; sourceTree = "<group>"; };
+		40DB23D416225D5A0015CD81 /* max@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "max@2x.png"; sourceTree = "<group>"; };
+		40DB23D516225D5A0015CD81 /* min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = min.png; sourceTree = "<group>"; };
+		40DB23D616225D5A0015CD81 /* min@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "min@2x.png"; sourceTree = "<group>"; };
+		40DB23E216229C640015CD81 /* APSoundCellBackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundCellBackView.h; sourceTree = "<group>"; };
+		40DB23E316229C640015CD81 /* APSoundCellBackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundCellBackView.m; sourceTree = "<group>"; };
+		40DB23E71622BA400015CD81 /* APSoundCellBackView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APSoundCellBackView.xib; sourceTree = "<group>"; };
 		40E50C931608DA5200AEE0B5 /* sea.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sea.jpg; sourceTree = "<group>"; };
 		40E50C941608DA5200AEE0B5 /* sea@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "sea@2x.jpg"; sourceTree = "<group>"; };
 		40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -139,9 +164,13 @@
 		7EDE0C1015FB2C4300789400 /* APSoundEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundEntry.h; sourceTree = "<group>"; };
 		7EDE0C1115FB2C4300789400 /* APSoundEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundEntry.m; sourceTree = "<group>"; };
 		7EE380801605A69F006647C8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		AF15BE4716255C25009B46FB /* APiCloudAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APiCloudAdapter.h; sourceTree = "<group>"; };
+		AF15BE4816255C25009B46FB /* APiCloudAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APiCloudAdapter.m; sourceTree = "<group>"; };
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF57FF3F15FB114000D8040A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APiCloudSoundDocument.h; sourceTree = "<group>"; };
+		AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APiCloudSoundDocument.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +221,14 @@
 		405E060515FB37EA00C93E26 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				40DB23D316225D5A0015CD81 /* max.png */,
+				40DB23D416225D5A0015CD81 /* max@2x.png */,
+				40DB23D516225D5A0015CD81 /* min.png */,
+				40DB23D616225D5A0015CD81 /* min@2x.png */,
+				40DB23CF16225BAE0015CD81 /* knob_hl.png */,
+				40DB23D016225BAE0015CD81 /* knob_hl@2x.png */,
+				40DB23CD16225AF40015CD81 /* knob.png */,
+				40DB23CA16225A360015CD81 /* knob@2x.png */,
 				40B6FA4C161A6A850051FD8B /* add.png */,
 				40B6FA4D161A6A850051FD8B /* add@2x.png */,
 				40B6FA48161A69060051FD8B /* sound.png */,
@@ -271,6 +308,9 @@
 				403270FE1621056500E44DDB /* APWaveFormView.m */,
 				AF4E5D0915FB376A001438B3 /* APRecordViewController.h */,
 				AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */,
+				40DB23E216229C640015CD81 /* APSoundCellBackView.h */,
+				40DB23E316229C640015CD81 /* APSoundCellBackView.m */,
+				40DB23E71622BA400015CD81 /* APSoundCellBackView.xib */,
 				7EDE0C1015FB2C4300789400 /* APSoundEntry.h */,
 				7EDE0C1115FB2C4300789400 /* APSoundEntry.m */,
 				409D4F0B1608314D00261E70 /* APSoundSelectViewCell.h */,
@@ -278,6 +318,10 @@
 				40A206A115F67790004BE2E1 /* APViewController.h */,
 				40A206A215F67790004BE2E1 /* APViewController.m */,
 				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
+				AF15BE4716255C25009B46FB /* APiCloudAdapter.h */,
+				AF15BE4816255C25009B46FB /* APiCloudAdapter.m */,
+				AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */,
+				AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */,
 				40A2069615F67790004BE2E1 /* Supporting Files */,
 			);
 			path = AmbientPlayer;
@@ -415,6 +459,15 @@
 				40B6FA4B161A69060051FD8B /* sound@2x.png in Resources */,
 				40B6FA4E161A6A850051FD8B /* add.png in Resources */,
 				40B6FA4F161A6A850051FD8B /* add@2x.png in Resources */,
+				40DB23CB16225A360015CD81 /* knob@2x.png in Resources */,
+				40DB23CE16225AF40015CD81 /* knob.png in Resources */,
+				40DB23D116225BAE0015CD81 /* knob_hl.png in Resources */,
+				40DB23D216225BAE0015CD81 /* knob_hl@2x.png in Resources */,
+				40DB23D716225D5A0015CD81 /* max.png in Resources */,
+				40DB23D816225D5A0015CD81 /* max@2x.png in Resources */,
+				40DB23D916225D5A0015CD81 /* min.png in Resources */,
+				40DB23DA16225D5A0015CD81 /* min@2x.png in Resources */,
+				40DB23E81622BA410015CD81 /* APSoundCellBackView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +512,9 @@
 				40D289CF1608C46E00685175 /* APGradientBackgroundView.m in Sources */,
 				40B6FA5A161BCB540051FD8B /* APLevelMeterView.m in Sources */,
 				403270FF1621056600E44DDB /* APWaveFormView.m in Sources */,
+				40DB23E416229C640015CD81 /* APSoundCellBackView.m in Sources */,
+				AF15BE4916255C25009B46FB /* APiCloudAdapter.m in Sources */,
+				AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,6 +523,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				40A206BE15F67791004BE2E1 /* AmbientPlayerTests.m in Sources */,
+				AF15BE4A16255C25009B46FB /* APiCloudAdapter.m in Sources */,
+				AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -560,6 +618,7 @@
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -572,6 +631,7 @@
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -25,7 +25,9 @@ const int kSectionRecorded = 1;
 const int kSectionOther = 2;
 
 const NSInteger kTagPresetSoundCollectionView = 1;
-const NSInteger kTagRecordedSoundCollectionView = 0;
+const NSInteger kTagRecordedSoundCollectionView = 2;
+
+const NSInteger kTagAlertDeleteSound = 1;
 
 @interface APViewController () <ADBannerViewDelegate>
 
@@ -33,7 +35,7 @@ const NSInteger kTagRecordedSoundCollectionView = 0;
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
 @property (nonatomic, strong) ADBannerView *bannerView;
-@property (nonatomic, strong) NSArray *recordedSoundEntries;
+@property (nonatomic, strong) NSMutableArray *recordedSoundEntries;
 
 @end
 
@@ -80,8 +82,8 @@ SYNTHESIZE(preset);
 void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID inID, UInt32 dataSize, const void *inData) {
     CFDictionaryRef dict = (CFDictionaryRef) inData;
     CFNumberRef reason = CFDictionaryGetValue(dict, kAudioSession_RouteChangeKey_Reason);
-//    CFDictionaryRef oldRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_PreviousRouteDescription);
-//    CFDictionaryRef newRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_CurrentRouteDescription);
+    //    CFDictionaryRef oldRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_PreviousRouteDescription);
+    //    CFDictionaryRef newRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_CurrentRouteDescription);
     
     SInt32 routeChangeReason;
     CFNumberGetValue (reason, kCFNumberSInt32Type, &routeChangeReason);
@@ -108,6 +110,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout*)self.presetCollectionView.collectionViewLayout).minimumLineSpacing = 2;
     _playingItemPathInPreset = nil;
+    _playingItemInPresetFlipped = NO;
     
     self.recordedCollectionView.tag = kTagRecordedSoundCollectionView;
     [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
@@ -115,13 +118,31 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout*)self.recordedCollectionView.collectionViewLayout).minimumLineSpacing = 2;
     _playingItemPathInRecorded = nil;
+    _playingItemInRecordedFlipped = NO;
     
     self.player = [APCrossFadePlayer new];
-
+    
     self.routeView.showsRouteButton = YES;
     self.routeView.showsVolumeSlider = NO;
     CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
     self.routeView.bounds = CGRectMake(self.routeView.bounds.origin.x, self.routeView.bounds.origin.y, sz.width, sz.height);
+    
+    // Slider
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"knob" ofType:@"png"];
+    UIImage *img = [UIImage imageWithContentsOfFile:path];
+    [self.volumeSlider setThumbImage:img forState:UIControlStateNormal];
+    
+    path = [[NSBundle mainBundle] pathForResource:@"knob_hl" ofType:@"png"];
+    img = [UIImage imageWithContentsOfFile:path];
+    [self.volumeSlider setThumbImage:img forState:UIControlStateHighlighted];
+    
+    path = [[NSBundle mainBundle] pathForResource:@"min" ofType:@"png"];
+    img = [UIImage imageWithContentsOfFile:path];
+    [self.volumeSlider setMinimumTrackImage:img forState:UIControlStateNormal];
+    
+    path = [[NSBundle mainBundle] pathForResource:@"max" ofType:@"png"];
+    img = [UIImage imageWithContentsOfFile:path];
+    [self.volumeSlider setMaximumTrackImage:img forState:UIControlStateNormal];
 }
 
 - (void)setupAudioSession {
@@ -141,7 +162,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                                     audioRouteChangeListenerCallback,
                                     (__bridge void *)(self)
                                     );
-
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -157,7 +178,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [_updateTimer removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
-- (NSArray *)findRecordedSoundEntries {
+- (NSMutableArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:[APSoundEntry recordedFileDirectory] error:nil];
     
@@ -264,13 +285,24 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
     
     cell.title.text = entry.title;
-    [cell.info addTarget:self action:@selector(showDetailView:) forControlEvents:UIControlEventTouchUpInside];
+    cell.backView.title.text = entry.title;
+    [cell.info addTarget:self action:@selector(showBackView:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.backView.doneButton addTarget:self action:@selector(hideBackView:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.backView.deleteButton addTarget:self action:@selector(showDeleteConfirmAlert) forControlEvents:UIControlEventTouchUpInside];
     
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
-        cell.playing = [indexPath isEqual:_playingItemPathInPreset];
+        cell.backView.deleteButton.hidden = YES;
+        // check wheter it is now playing
+        if ([indexPath isEqual:_playingItemPathInPreset]) {
+            cell.playing = YES;
+            [cell flipViewToBackSide:_playingItemInPresetFlipped withAnimation:NO];
+        } else {
+            cell.playing = NO;
+            [cell flipViewToBackSide:NO withAnimation:NO];
+        }
     } else if (collectionView.tag == kTagRecordedSoundCollectionView) {
         NSString *path = nil;
         if (entry.imageFileName == nil)
@@ -279,7 +311,15 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
-        cell.playing = [indexPath isEqual:_playingItemPathInRecorded];
+        cell.backView.deleteButton.hidden = NO;
+        // check wheter it is now playing
+        if ([indexPath isEqual:_playingItemPathInRecorded]) {
+            cell.playing = YES;
+            [cell flipViewToBackSide:_playingItemInRecordedFlipped withAnimation:NO];
+        } else {
+            cell.playing = NO;
+            [cell flipViewToBackSide:NO withAnimation:NO];
+        }
     }
     return cell;
 }
@@ -314,47 +354,72 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         [self updatePlayState];
         [self performSegueWithIdentifier:@"toRecord" sender:self];
     } else {
-        [self toggleCellInView:collectionView withIndexPath:indexPath];        
+        [self toggleCellInView:collectionView withIndexPath:indexPath];
     }
 }
 
 - (void) toggleCellInView:(UICollectionView*)collectionView withIndexPath:(NSIndexPath*)indexPath {
     NSInteger tag = collectionView.tag;
     APSoundSelectViewCell *cell = (APSoundSelectViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-
+    
     if (tag == kTagPresetSoundCollectionView) {
         // if the same cell is selected again, then deselect it
         if (cell.playing) {
-            cell.playing = NO;
-            _playingItemPathInPreset = nil;
+            if (!_playingItemInPresetFlipped) {
+                // unless the cell is flipped
+                cell.playing = NO;
+                _playingItemPathInPreset = nil;
+            }
         } else {
-            // deselect the current cell
-            ((APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset]).playing = NO;
-            cell.playing = YES;
-            _playingItemPathInPreset = indexPath;
-            
-            if (_playingItemPathInRecorded) {
-                // deselect all in recorded collection view
-                ((APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded]).playing = NO;
+            if (_playingItemPathInPreset) {
+                // deselect the current cell in Preset Collection
+                APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+                if (_playingItemInPresetFlipped) {
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
+                }
+                currentCell.playing = NO;
+            } else if (_playingItemPathInRecorded) {
+                // deselect the current cell in Recorded Collection
+                APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+                if (_playingItemInRecordedFlipped) {
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
+                }
+                currentCell.playing = NO;
                 _playingItemPathInRecorded = nil;
             }
+            cell.playing = YES;
+            _playingItemPathInPreset = indexPath;
+            _playingItemInPresetFlipped = NO;
         }
         [self updatePlayState];
     } else if (tag == kTagRecordedSoundCollectionView) {
         // if the same cell is selected again, then deselect it
         if (cell.playing) {
-            cell.playing = NO;
-            _playingItemPathInRecorded = nil;
+            if (!_playingItemInRecordedFlipped) {
+                // unless the cell is flipped
+                cell.playing = NO;
+                _playingItemPathInRecorded = nil;
+            }
         } else {
-            // deselect the current cell
-            ((APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded]).playing = NO;
-            cell.playing = YES;
-            _playingItemPathInRecorded = indexPath;
-            // deselect all in preset collection view
-            if (_playingItemPathInPreset) {
-                ((APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset]).playing = NO;
+            if (_playingItemPathInRecorded) {
+                // deselect the current cell in Recorded Collection
+                APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+                if (_playingItemInRecordedFlipped) {
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
+                }
+                currentCell.playing = NO;
+            } else if (_playingItemPathInPreset) {
+                // deselect the current cell in Preset Collection
+                APSoundSelectViewCell *currentCell = (APSoundSelectViewCell*)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+                if (_playingItemInPresetFlipped) {
+                    [currentCell flipViewToBackSide:NO withAnimation:YES];
+                }
+                currentCell.playing = NO;
                 _playingItemPathInPreset = nil;
             }
+            cell.playing = YES;
+            _playingItemPathInRecorded = indexPath;
+            _playingItemInRecordedFlipped = NO;
         }
         [self updatePlayState];
     }
@@ -388,6 +453,24 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
+- (void)deleteSelectedItem {
+    if (_playingItemPathInRecorded) {
+        // Remove entry from array
+        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
+        [self.recordedSoundEntries removeObjectAtIndex:_playingItemPathInRecorded.row];
+        
+        // Remove file
+        NSString *path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
+        NSFileManager *fileMgr = [NSFileManager defaultManager];
+        [fileMgr removeItemAtPath:path error:nil];
+        
+        // Update UI
+        [self.recordedCollectionView deleteItemsAtIndexPaths:@[_playingItemPathInRecorded]];
+        _playingItemInRecordedFlipped = NO;
+        _playingItemPathInRecorded = nil;
+    }
+}
+
 - (void)timerUpdate:(CADisplayLink*)sender {
     APSoundSelectViewCell *cell = nil;
     if (_playingItemPathInPreset) {
@@ -411,16 +494,58 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (IBAction)changePage:(id)sender
 {
     int page = self.pageControl.currentPage;
-	    
+    
 	// update the scroll view to the appropriate page
     CGRect frame = self.pageScrollView.frame;
     frame.origin.x = frame.size.width * page;
     frame.origin.y = 0;
-    [self.pageScrollView scrollRectToVisible:frame animated:YES];    
+    [self.pageScrollView scrollRectToVisible:frame animated:YES];
 }
 
-- (void)showDetailView:(id)sender {
+- (void)showBackView:(id)sender {
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell *)((UIView *)sender).superview.superview;
+    [cell flipViewToBackSide:YES withAnimation:YES];
+    if (_playingItemPathInPreset) {
+        _playingItemInPresetFlipped = YES;
+    } else if (_playingItemPathInRecorded) {
+        _playingItemInRecordedFlipped = YES;
+    }
+}
 
+- (void)hideBackView:(id)sender {
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell *)((UIView *)sender).superview.superview.superview;
+    [cell flipViewToBackSide:NO withAnimation:YES];
+    if (_playingItemPathInPreset) {
+        _playingItemInPresetFlipped = NO;
+    } else if (_playingItemPathInRecorded) {
+        _playingItemInRecordedFlipped = NO;
+    }
+    
+}
+
+- (void)showDeleteConfirmAlert {
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:@"Delete"
+                          message:@"Are you sure you want to delete the playing sound?"
+                          delegate:self
+                          cancelButtonTitle:@"Cancel"
+                          otherButtonTitles:@"OK", nil];
+    alert.tag = kTagAlertDeleteSound;
+    [alert show];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (alertView.tag) {
+        case kTagAlertDeleteSound:
+            if (buttonIndex == 1) {
+                [self deleteSelectedItem];
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - iAd
