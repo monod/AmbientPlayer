@@ -10,7 +10,7 @@
 #import "APLevelMeterView.h"
 #import "APWaveFormView.h"
 
-@interface APRecordViewController : UIViewController {
+@interface APRecordViewController : UIViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate> {
     CADisplayLink *_updateTimer;
     NSDateFormatter *_formatter;
     NSTimeInterval _duration;
@@ -18,10 +18,16 @@
 
 -(IBAction)donePushed:(id)sender;
 -(IBAction)recordPushed:(id)sender;
+-(IBAction)thumbPickButtonPressed:(id)sender;
+
+@property (nonatomic, strong) NSDate *sessionTime;
 
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
 @property (nonatomic, strong) IBOutlet APLevelMeterView *levelMeter;
 @property (nonatomic, strong) IBOutlet APWaveFormView *waveForm;
 @property (nonatomic, strong) IBOutlet UILabel *elapsedTime;
 @property (nonatomic, strong) IBOutlet UILabel *maxTime;
+
+@property (nonatomic, strong) IBOutlet UIButton *thumbPickButton;
+@property (nonatomic, strong) IBOutlet UIImageView *thumbImage;
 @end

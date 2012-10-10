@@ -160,13 +160,22 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (NSArray *)findRecordedSoundEntries {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSArray *dirContents = [fm contentsOfDirectoryAtPath:[APSoundEntry recordedFileDirectory] error:nil];
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
     
+    //サムネイル検索処理が少し重いので、1エントリごとに.m4aと.pngを含む1ディレクトリというファイル構造にした方がよくない？
+    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
+    NSPredicate *thumbFltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.png'"];
+    NSArray *thumbs = [dirContents filteredArrayUsingPredicate:thumbFltr];
+
     //保存した.m4aファイルからAPSoundEntryを生成する処理
     NSMutableArray *recordedSoundEntries = [NSMutableArray array];
     id recordedFileName;
     for (recordedFileName in [dirContents filteredArrayUsingPredicate:fltr]) {
-        APSoundEntry *recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName];
+        NSString *thumbFileName = [recordedFileName stringByReplacingOccurrencesOfString:@".m4a" withString:@".png"]; // know that ".m4a" occurs only in the extension?
+        APSoundEntry *recordedSountEntry;
+        if ([thumbs containsObject:thumbFileName])
+            recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName andImageFileName:thumbFileName];
+        else
+            recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName];
         [recordedSoundEntries addObject:recordedSountEntry];
     }
     
@@ -263,7 +272,11 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         cell.preview.image = img;
         cell.playing = [indexPath isEqual:_playingItemPathInPreset];
     } else if (collectionView.tag == kTagRecordedSoundCollectionView) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
+        NSString *path = nil;
+        if (entry.imageFileName == nil)
+            path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
+        else
+            path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
         cell.playing = [indexPath isEqual:_playingItemPathInRecorded];
