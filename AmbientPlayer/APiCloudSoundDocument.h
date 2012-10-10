@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol APiCloudSoundDocumentDelegate;
+
 @interface APiCloudSoundDocument : UIDocument
+
+@property (copy, nonatomic) NSData * soundData;
+@property (weak, nonatomic) id<APiCloudSoundDocumentDelegate> delegate;
+
+@end
+
+@protocol APiCloudSoundDocumentDelegate <NSObject>
+
+- (void) documentContentsDidChange:(APiCloudSoundDocument *) soundDocument;
 
 @end
