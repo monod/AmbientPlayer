@@ -69,10 +69,12 @@
 		7EDE0C0C15FB234C00789400 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0B15FB234C00789400 /* iPhone.storyboard */; };
 		7EDE0C1215FB2C4300789400 /* APSoundEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C1115FB2C4300789400 /* APSoundEntry.m */; };
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
-		AF15BE4916255C25009B46FB /* APICloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APICloudAdapter.m */; };
-		AF15BE4A16255C25009B46FB /* APICloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APICloudAdapter.m */; };
+		AF15BE4916255C25009B46FB /* APiCloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APiCloudAdapter.m */; };
+		AF15BE4A16255C25009B46FB /* APiCloudAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = AF15BE4816255C25009B46FB /* APiCloudAdapter.m */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
 		AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF57FF3F15FB114000D8040A /* iAd.framework */; };
+		AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
+		AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,11 +164,13 @@
 		7EDE0C1015FB2C4300789400 /* APSoundEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundEntry.h; sourceTree = "<group>"; };
 		7EDE0C1115FB2C4300789400 /* APSoundEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundEntry.m; sourceTree = "<group>"; };
 		7EE380801605A69F006647C8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		AF15BE4716255C25009B46FB /* APICloudAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APICloudAdapter.h; sourceTree = "<group>"; };
-		AF15BE4816255C25009B46FB /* APICloudAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APICloudAdapter.m; sourceTree = "<group>"; };
+		AF15BE4716255C25009B46FB /* APiCloudAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APiCloudAdapter.h; sourceTree = "<group>"; };
+		AF15BE4816255C25009B46FB /* APiCloudAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APiCloudAdapter.m; sourceTree = "<group>"; };
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF57FF3F15FB114000D8040A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APiCloudSoundDocument.h; sourceTree = "<group>"; };
+		AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APiCloudSoundDocument.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,8 +318,10 @@
 				40A206A115F67790004BE2E1 /* APViewController.h */,
 				40A206A215F67790004BE2E1 /* APViewController.m */,
 				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
-				AF15BE4716255C25009B46FB /* APICloudAdapter.h */,
-				AF15BE4816255C25009B46FB /* APICloudAdapter.m */,
+				AF15BE4716255C25009B46FB /* APiCloudAdapter.h */,
+				AF15BE4816255C25009B46FB /* APiCloudAdapter.m */,
+				AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */,
+				AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */,
 				40A2069615F67790004BE2E1 /* Supporting Files */,
 			);
 			path = AmbientPlayer;
@@ -507,7 +513,8 @@
 				40B6FA5A161BCB540051FD8B /* APLevelMeterView.m in Sources */,
 				403270FF1621056600E44DDB /* APWaveFormView.m in Sources */,
 				40DB23E416229C640015CD81 /* APSoundCellBackView.m in Sources */,
-				AF15BE4916255C25009B46FB /* APICloudAdapter.m in Sources */,
+				AF15BE4916255C25009B46FB /* APiCloudAdapter.m in Sources */,
+				AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +523,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				40A206BE15F67791004BE2E1 /* AmbientPlayerTests.m in Sources */,
-				AF15BE4A16255C25009B46FB /* APICloudAdapter.m in Sources */,
+				AF15BE4A16255C25009B46FB /* APiCloudAdapter.m in Sources */,
+				AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

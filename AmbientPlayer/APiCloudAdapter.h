@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface APICloudAdapter : NSObject
-+ (APICloudAdapter *) sharedAdapter;
+@interface APiCloudAdapter : NSObject
++ (APiCloudAdapter *) sharedAdapter;
 + (void) prepareiCloudAccess;
 @end

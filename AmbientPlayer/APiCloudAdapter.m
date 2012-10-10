@@ -6,15 +6,15 @@
 //  Copyright (c) 2012年 Veronica Software. All rights reserved.
 //
 
-#import "APICloudAdapter.h"
+#import "APiCloudAdapter.h"
 
-@implementation APICloudAdapter
+@implementation APiCloudAdapter
 
-+ (APICloudAdapter*)sharedAdapter {
-    static APICloudAdapter* sharedAdapter_ = nil;
++ (APiCloudAdapter*)sharedAdapter {
+    static APiCloudAdapter* sharedAdapter_ = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedAdapter_ = [[APICloudAdapter alloc] init];
+        sharedAdapter_ = [[APiCloudAdapter alloc] init];
     });
     
     return sharedAdapter_;

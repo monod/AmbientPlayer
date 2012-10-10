@@ -9,13 +9,13 @@
 #import "APAppDelegate.h"
 
 #import "APViewController.h"
-#import "APICloudAdapter.h"
+#import "APiCloudAdapter.h"
 
 @implementation APAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [APICloudAdapter prepareiCloudAccess];
+    [APiCloudAdapter prepareiCloudAccess];
     return YES;
 }
 

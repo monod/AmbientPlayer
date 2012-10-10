@@ -82,8 +82,8 @@ SYNTHESIZE(preset);
 void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID inID, UInt32 dataSize, const void *inData) {
     CFDictionaryRef dict = (CFDictionaryRef) inData;
     CFNumberRef reason = CFDictionaryGetValue(dict, kAudioSession_RouteChangeKey_Reason);
-//    CFDictionaryRef oldRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_PreviousRouteDescription);
-//    CFDictionaryRef newRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_CurrentRouteDescription);
+    //    CFDictionaryRef oldRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_PreviousRouteDescription);
+    //    CFDictionaryRef newRoute = CFDictionaryGetValue(dict, kAudioSession_AudioRouteChangeKey_CurrentRouteDescription);
     
     SInt32 routeChangeReason;
     CFNumberGetValue (reason, kCFNumberSInt32Type, &routeChangeReason);
@@ -121,7 +121,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     _playingItemInRecordedFlipped = NO;
     
     self.player = [APCrossFadePlayer new];
-
+    
     self.routeView.showsRouteButton = YES;
     self.routeView.showsVolumeSlider = NO;
     CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
@@ -162,7 +162,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
                                     audioRouteChangeListenerCallback,
                                     (__bridge void *)(self)
                                     );
-
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -341,7 +341,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         [self updatePlayState];
         [self performSegueWithIdentifier:@"toRecord" sender:self];
     } else {
-        [self toggleCellInView:collectionView withIndexPath:indexPath];        
+        [self toggleCellInView:collectionView withIndexPath:indexPath];
     }
 }
 
@@ -355,7 +355,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             if (!_playingItemInPresetFlipped) {
                 // unless the cell is flipped
                 cell.playing = NO;
-                _playingItemPathInPreset = nil;                
+                _playingItemPathInPreset = nil;
             }
         } else {
             if (_playingItemPathInPreset) {
@@ -481,12 +481,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (IBAction)changePage:(id)sender
 {
     int page = self.pageControl.currentPage;
-	    
+    
 	// update the scroll view to the appropriate page
     CGRect frame = self.pageScrollView.frame;
     frame.origin.x = frame.size.width * page;
     frame.origin.y = 0;
-    [self.pageScrollView scrollRectToVisible:frame animated:YES];    
+    [self.pageScrollView scrollRectToVisible:frame animated:YES];
 }
 
 - (void)showBackView:(id)sender {
@@ -521,7 +521,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [alert show];
 }
 
-#pragma mark - UIAlertViewDelegate 
+#pragma mark - UIAlertViewDelegate
 
 -(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (alertView.tag) {
