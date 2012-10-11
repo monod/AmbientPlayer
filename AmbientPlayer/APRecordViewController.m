@@ -104,7 +104,8 @@ PlayState _state;
     [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
     [recordSetting setValue:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
     
-    NSURL *recordedTmpFile = [NSURL fileURLWithPath:[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:[NSDate date]], @"m4a"]]];
+    self.sessionTime = [NSDate date];
+    NSURL *recordedTmpFile = [NSURL fileURLWithPath:[self createTmpFilePathWithExt:@"m4a"]];
     
     self.recorder = [[AVAudioRecorder alloc] initWithURL:recordedTmpFile settings:recordSetting error:&error];
     if (error) {
@@ -190,6 +191,67 @@ PlayState _state;
             break;
     }
 }
+
+-(IBAction)thumbPickButtonPressed:(id)sender {
+    NSLog(@"BUTTON PRESSED");
+    
+    UIActionSheet * sheet;
+    sheet = [[UIActionSheet alloc]
+             initWithTitle:@""
+             delegate:self
+             cancelButtonTitle:@"Cancel"
+             destructiveButtonTitle:nil
+             otherButtonTitles:@"Photo Library", @"Camera", nil];
+    [sheet showInView:self.view];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UIImagePickerControllerSourceType sourceType = 0;
+    switch (buttonIndex) {
+        case 0:
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            break;
+        case 1:
+            sourceType = UIImagePickerControllerSourceTypeCamera;
+            break;
+        default:
+            NSLog(@"Image picker source index out of range");
+            return;
+    }
+    
+    if (![UIImagePickerController isSourceTypeAvailable:sourceType]) {
+        NSLog(@"Image picker source unavailable");
+        return; // just ignore
+    }
+
+    UIImagePickerController * thumbPicker;
+    thumbPicker = [[UIImagePickerController alloc] init];
+    thumbPicker.sourceType = sourceType;
+    thumbPicker.delegate = self;
+    
+    [self presentViewController:thumbPicker animated:YES completion:NULL];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    for (NSObject* key in info.allKeys) { // for debugging
+        NSLog(@"%@ => %@", key, [info objectForKey:key]);
+    }
+
+    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
+    NSLog(@"%f, %f", image.size.width, image.size.height); // for debugging
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    NSData *pngImage = UIImagePNGRepresentation(image); // should decrease the size?
+    NSString *thumbTmpFile = [self createTmpFilePathWithExt:@"png"];
+    if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
+        NSLog(@"Saving a thumbnail failed"); // TODO: display an error dialog
+    }
+    [self.thumbImage setImage:image];
+}
+
+- (NSString *)createTmpFilePathWithExt:(NSString *)ext {
+    return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
+}
+
 
 #pragma mark - AVAudioRecorderDelegate
 
