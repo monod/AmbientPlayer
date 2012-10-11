@@ -28,6 +28,7 @@
 
 - (IBAction)changeVolume:(id)sender;
 - (IBAction)changePage:(id)sender;
+- (IBAction)showShareSheet:(id)sender;
 
 - (void)deselectAll;
 - (void)updatePlayState;

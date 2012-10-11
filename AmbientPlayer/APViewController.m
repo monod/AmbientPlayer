@@ -9,6 +9,8 @@
 #import "APViewController.h"
 
 #import <iAd/iAd.h>
+#import <MediaPlayer/MediaPlayer.h>
+
 #import "AudioToolbox/AudioToolbox.h"
 #import "APCrossFadePlayer.h"
 #import "APSoundEntry.h"
@@ -277,9 +279,12 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
     cell.title.text = entry.title;
     cell.backView.title.text = entry.title;
+    
+    // Event handlers
     [cell.info addTarget:self action:@selector(showBackView:) forControlEvents:UIControlEventTouchUpInside];
     [cell.backView.doneButton addTarget:self action:@selector(hideBackView:) forControlEvents:UIControlEventTouchUpInside];
     [cell.backView.deleteButton addTarget:self action:@selector(showDeleteConfirmAlert) forControlEvents:UIControlEventTouchUpInside];
+    [cell.backView.shareButton addTarget:self action:@selector(showShareSheet:) forControlEvents:UIControlEventTouchUpInside];
     
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
@@ -510,6 +515,31 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
 }
 
+- (void)showShareSheet:(id)sender {
+    NSMutableString *text = [NSMutableString string];
+    UIImage *img = nil;
+    if (_playingItemPathInPreset) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+        [text appendString:cell.title.text];
+        img = cell.preview.image;
+    } else if (_playingItemPathInRecorded) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+        [text appendString:cell.title.text];
+        img = cell.preview.image;
+    }
+    
+    MPMediaItem *nowplaying = [MPMusicPlayerController iPodMusicPlayer].nowPlayingItem;
+    if (nowplaying) {
+        NSString *track = (NSString *)[nowplaying valueForProperty:MPMediaItemPropertyTitle];
+        NSString *artist = (NSString *)[nowplaying valueForProperty:MPMediaItemPropertyArtist];
+        [text appendFormat:@" with %@ / %@", track, artist];
+    }
+    [text appendString:@" #AmbientPlayer"];
+    NSArray *items = @[text, img];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems: items applicationActivities:@[]];
+    [self presentViewController:activityVC animated:YES completion:nil];
+}
+
 - (void)showDeleteConfirmAlert {
     UIAlertView *alert = [[UIAlertView alloc]
                           initWithTitle:@"Delete"
@@ -521,7 +551,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [alert show];
 }
 
-#pragma mark - UIAlertViewDelegate 
+#pragma mark - UIAlertViewDelegate
 
 -(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     switch (alertView.tag) {

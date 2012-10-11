@@ -17,6 +17,7 @@
 		405E061A15FB3F5200C93E26 /* stream.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 405E061715FB3F5200C93E26 /* stream.jpg */; };
 		405E062715FB4D9C00C93E26 /* crickets.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 405E062615FB4D9C00C93E26 /* crickets.jpg */; };
 		405E062A15FB4E7100C93E26 /* crickets.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 405E062915FB4E7100C93E26 /* crickets.m4a */; };
+		407DB503162721850075D935 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 407DB502162721850075D935 /* Social.framework */; };
 		409D4F011605B36A00261E70 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409D4F001605B36900261E70 /* Default-568h@2x.png */; };
 		409D4F0D1608314E00261E70 /* APSoundSelectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */; };
 		40A2069015F67790004BE2E1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A2068F15F67790004BE2E1 /* UIKit.framework */; };
@@ -95,6 +96,7 @@
 		405E061715FB3F5200C93E26 /* stream.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stream.jpg; sourceTree = "<group>"; };
 		405E062615FB4D9C00C93E26 /* crickets.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crickets.jpg; sourceTree = "<group>"; };
 		405E062915FB4E7100C93E26 /* crickets.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = crickets.m4a; sourceTree = "<group>"; };
+		407DB502162721850075D935 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		409D4F001605B36900261E70 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		409D4F0B1608314D00261E70 /* APSoundSelectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundSelectViewCell.h; sourceTree = "<group>"; };
 		409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundSelectViewCell.m; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				407DB503162721850075D935 /* Social.framework in Frameworks */,
 				7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */,
 				7EC929BC15FB475200A5C4A7 /* AudioToolbox.framework in Frameworks */,
 				AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */,
@@ -270,6 +273,7 @@
 		40A2068E15F67790004BE2E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				407DB502162721850075D935 /* Social.framework */,
 				40B6FA54161BCA730051FD8B /* QuartzCore.framework */,
 				40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */,
 				7EC929BB15FB475200A5C4A7 /* AudioToolbox.framework */,

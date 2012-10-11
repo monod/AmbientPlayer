@@ -14,5 +14,6 @@
 @property (nonatomic, strong) IBOutlet UILabel *description;
 @property (nonatomic, strong) IBOutlet UIButton *doneButton;
 @property (nonatomic, strong) IBOutlet UIButton *deleteButton;
+@property (nonatomic, strong) IBOutlet UIButton *shareButton;
 
 @end
