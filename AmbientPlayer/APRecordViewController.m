@@ -21,7 +21,7 @@
 
 const int kMaxRecordSeconds = 120;
 const int kMinRecordSeconds = 2;
-typedef enum PlayState { kPlayStateStop, kPlayStateRecording, kPlayStatePause } PlayState;
+typedef enum PlayState { kPlayStateStop, kPlayStateRecording } PlayState;
 
 PlayState _state;
 
@@ -128,10 +128,7 @@ PlayState _state;
             label = @"REC";
             break;
         case kPlayStateRecording:
-            label = @"PAUSE";
-            break;
-        case kPlayStatePause:
-            label = @"RESUME";
+            label = @"STOP";
             break;
     }
     if (label) {
@@ -143,27 +140,15 @@ PlayState _state;
     [self.recorder recordForDuration:(NSTimeInterval)kMaxRecordSeconds];
     _state = kPlayStateRecording;
     [self updateButtonLabel];
+    [self.waveForm showBoundingBox:NO];
     NSLog(@"[REC][START]");
-}
-
-- (void)pauseRecording {
-    [self.recorder pause];
-    _state = kPlayStatePause;
-    [self updateButtonLabel];
-    NSLog(@"[REC][PAUSE]");
-}
-
-- (void)resumeRecording {
-    [self.recorder record];
-    _state = kPlayStateRecording;
-    [self updateButtonLabel];
-    NSLog(@"[REC][RESUME]");
 }
 
 - (void)stopRecording {
     [self.recorder stop];
     _state = kPlayStateStop;
     [self updateButtonLabel];
+    [self.waveForm showBoundingBox:YES];
     NSLog(@"[REC][STOP]");
 }
 
@@ -184,10 +169,7 @@ PlayState _state;
             [self startRecording];
             break;
         case kPlayStateRecording:
-            [self pauseRecording];
-            break;
-        case kPlayStatePause:
-            [self resumeRecording];
+            [self stopRecording];
             break;
     }
 }
@@ -228,6 +210,7 @@ PlayState _state;
     thumbPicker = [[UIImagePickerController alloc] init];
     thumbPicker.sourceType = sourceType;
     thumbPicker.delegate = self;
+    thumbPicker.allowsEditing = YES;
     
     [self presentViewController:thumbPicker animated:YES completion:NULL];
 }
@@ -258,6 +241,7 @@ PlayState _state;
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
     _state = kPlayStateStop;
     [self updateButtonLabel];
+    [self.waveForm showBoundingBox:YES];
 }
 
 @end
