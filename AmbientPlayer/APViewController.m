@@ -77,7 +77,8 @@ SYNTHESIZE(preset);
                    [[APSoundEntry alloc] initWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
                    [[APSoundEntry alloc] initWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
                    [[APSoundEntry alloc] initWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
-                   [[APSoundEntry alloc] initWithTitle:@"Airport" withFileName:@"airport_in" andImageFileName:@"airport_in"],
+                   [[APSoundEntry alloc] initWithTitle:@"Terminal" withFileName:@"airport_in" andImageFileName:@"airport_in"],
+                   [[APSoundEntry alloc] initWithTitle:@"Deck" withFileName:@"airport_deck" andImageFileName:@"airport_deck"],
                    nil];
 }
 
@@ -550,6 +551,13 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [text appendString:@" #AmbientPlayer"];
     NSArray *items = @[text, img];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems: items applicationActivities:@[]];
+    activityVC.excludedActivityTypes = @[
+        UIActivityTypeAssignToContact,
+        UIActivityTypePrint,
+        UIActivityTypeSaveToCameraRoll,
+        UIActivityTypeMail,
+        UIActivityTypeCopyToPasteboard
+    ];
     [self presentViewController:activityVC animated:YES completion:nil];
 }
 
