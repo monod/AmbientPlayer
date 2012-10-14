@@ -10,7 +10,7 @@
 #import "APLevelMeterView.h"
 #import "APWaveFormView.h"
 
-@interface APRecordViewController : UIViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate> {
+@interface APRecordViewController : UIViewController<UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate> {
     CADisplayLink *_updateTimer;
     NSDateFormatter *_formatter;
     NSTimeInterval _duration;
