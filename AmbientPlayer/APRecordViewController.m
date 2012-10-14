@@ -245,7 +245,7 @@ PlayState _state;
     if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
         NSLog(@"Saving a thumbnail failed"); // TODO: display an error dialog
     }
-    [self.thumbImage setImage:image];
+    [self.thumbPickButton setImage:image forState:UIControlStateNormal];
 }
 
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {

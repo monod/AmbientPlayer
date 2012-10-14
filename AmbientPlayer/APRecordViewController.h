@@ -29,5 +29,4 @@
 @property (nonatomic, strong) IBOutlet UILabel *maxTime;
 
 @property (nonatomic, strong) IBOutlet UIButton *thumbPickButton;
-@property (nonatomic, strong) IBOutlet UIImageView *thumbImage;
 @end
