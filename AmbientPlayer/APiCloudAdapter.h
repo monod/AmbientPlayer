@@ -11,4 +11,6 @@
 @interface APiCloudAdapter : NSObject
 + (APiCloudAdapter *) sharedAdapter;
 + (void) prepareiCloudAccess;
++ (BOOL) isiCloudAvailable;
++ (NSString *) iCloudDocumentDirectory;
 @end

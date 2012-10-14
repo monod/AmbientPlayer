@@ -28,4 +28,15 @@
             NSLog(@"This application requires iCloud, but it is not available.\n");
         });
 }
+
+//このメソッドを呼ぶ前に、少なくとも一回はprepareiCloudAccessが呼ばれている必要がある。
+//呼ばれていなかった場合処理が遅くなるが、動作はする。
++ (BOOL)isiCloudAvailable {
+    return ([[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] != nil);
+}
+
++ (NSString*) iCloudDocumentDirectory {
+    return @"Documents";
+}
+
 @end

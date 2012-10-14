@@ -8,6 +8,7 @@
 
 #import "APRecordViewController.h"
 #import "APSoundEntry.h"
+#import "APiCloudAdapter.h"
 
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
@@ -165,6 +166,32 @@ PlayState _state;
     _state = kPlayStateStop;
     [self updateButtonLabel];
     NSLog(@"[REC][STOP]");
+    
+    //新規録音済ファイルをiCloudに保存する処理
+    [self moveRecordedFileToiCloud];
+}
+
+- (void) moveRecordedFileToiCloud {
+    NSURL* fileURL = [self.recorder.url copy];
+    NSString* fileName = fileURL.lastPathComponent;
+
+    //iCloudが使えるかどうかを判定する処理
+    if ([APiCloudAdapter isiCloudAvailable]){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSURL *iCloudDocumentURL = [fm URLForUbiquityContainerIdentifier:nil];
+            iCloudDocumentURL = [iCloudDocumentURL
+                              URLByAppendingPathComponent:[APiCloudAdapter iCloudDocumentDirectory]
+                              isDirectory:YES];
+            iCloudDocumentURL =[iCloudDocumentURL URLByAppendingPathComponent:fileName];
+            NSLog(@"[iCloud URL] %@", iCloudDocumentURL);
+            
+            NSError* error = nil;
+            [fm setUbiquitous:YES itemAtURL:fileURL destinationURL:iCloudDocumentURL error:&error];
+            
+        });
+    }
+    
 }
 
 -(IBAction)donePushed:(id)sender {
