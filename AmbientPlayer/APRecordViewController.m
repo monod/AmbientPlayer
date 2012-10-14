@@ -254,6 +254,7 @@ PlayState _state;
     UIImagePickerController * thumbPicker;
     thumbPicker = [[UIImagePickerController alloc] init];
     thumbPicker.sourceType = sourceType;
+    thumbPicker.allowsEditing = YES;
     thumbPicker.delegate = self;
     
     [self presentViewController:thumbPicker animated:YES completion:NULL];
@@ -264,10 +265,10 @@ PlayState _state;
         NSLog(@"%@ => %@", key, [info objectForKey:key]);
     }
 
-    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
     NSLog(@"%f, %f", image.size.width, image.size.height); // for debugging
     [self dismissViewControllerAnimated:YES completion:NULL];
-    NSData *pngImage = UIImagePNGRepresentation(image); // should decrease the size?
+    NSData *pngImage = UIImagePNGRepresentation(image);
     NSString *thumbTmpFile = [self createTmpFilePathWithExt:@"png"];
     if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
         NSLog(@"Saving a thumbnail failed"); // TODO: display an error dialog
