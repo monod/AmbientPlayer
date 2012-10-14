@@ -248,6 +248,10 @@ PlayState _state;
     [self.thumbPickButton setImage:image forState:UIControlStateNormal];
 }
 
+-(IBAction)locSaveButtonPressed:(id)sender {
+    NSLog(@"locSaveButtonPressed: stub"); // FIXME: Implement!
+}
+
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {
     return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
 }
