@@ -39,4 +39,25 @@
     return @"Documents";
 }
 
++ (void) uploadLocalFileToiCloud:(NSURL*) localFileURL {
+    //iCloudが使えるかどうかを判定する処理
+    if ([APiCloudAdapter isiCloudAvailable]){
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSString* fileName = localFileURL.lastPathComponent;
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSURL *iCloudDocumentURL = [fm URLForUbiquityContainerIdentifier:nil];
+            iCloudDocumentURL = [iCloudDocumentURL
+                                 URLByAppendingPathComponent:[APiCloudAdapter iCloudDocumentDirectory]
+                                 isDirectory:YES];
+            iCloudDocumentURL =[iCloudDocumentURL URLByAppendingPathComponent:fileName];
+            NSLog(@"[iCloud URL] %@", iCloudDocumentURL);
+            
+            NSError* error = nil;
+            [fm setUbiquitous:YES itemAtURL:localFileURL destinationURL:iCloudDocumentURL error:&error];
+            
+        });
+    }
+}
+
 @end
