@@ -32,6 +32,7 @@
     _path = [UIBezierPath bezierPath];
     self.duration = 0;
     _prevX = 0;
+    _maxValue = 0;
     
     _minDecibels = -80.0;
     _tableSize = 400;
@@ -64,17 +65,21 @@
     }
     
     CGFloat x = (float)time / self.duration * self.frame.size.width;
-    CGFloat y = (1.0 - [self dBToLinearValue:value]) * self.frame.size.height;
-
     if (_prevX < (int)x) {
-        if (CGPointEqualToPoint(_path.currentPoint, CGPointZero)) {
-            [_path moveToPoint:CGPointMake(x, y)];
-        } else {
-            [_path addLineToPoint:CGPointMake(x, y)];
-        }
+        float linearVal = [self dBToLinearValue:value];
+        CGFloat h = MAX(2.0, linearVal * self.frame.size.height);
+        CGFloat y = (self.frame.size.height - h) / 2.0;
+        [_path moveToPoint:CGPointMake(x, y)];
+        [_path addLineToPoint:CGPointMake(x, y + h)];
         _prevX = (int)x;
+        _maxValue = MAX(_maxValue, linearVal);
         [self setNeedsDisplay];
     }
+}
+
+- (void)showBoundingBox:(BOOL)show {
+    _showBoundingBox = show;
+    [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -83,6 +88,15 @@
     UIColor *color = [UIColor whiteColor];
     [color setStroke];
     [_path stroke];
+    
+    if (_showBoundingBox) {
+        color = [UIColor yellowColor];
+        [color setStroke];
+        CGFloat h = MAX(2.0, _maxValue * self.frame.size.height);
+        CGFloat y = (self.frame.size.height - h) / 2.0;
+        UIBezierPath *bb = [UIBezierPath bezierPathWithRect:CGRectMake(0, y, _prevX, h)];
+        [bb stroke];
+    }
 }
 
 - (float)dBToLinearValue:(float)db {

@@ -17,10 +17,13 @@
     NSMutableArray *_table;
     UIBezierPath *_path;
     int _prevX;
+    float _maxValue;
+    BOOL _showBoundingBox;
 }
 
 - (void)resetSample;
 - (void)addSampleAt:(NSTimeInterval)time withValue:(float)value;
+- (void)showBoundingBox:(BOOL)show;
 
 @property (nonatomic) int duration;
 
