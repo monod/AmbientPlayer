@@ -14,4 +14,5 @@
 + (BOOL) isiCloudAvailable;
 + (NSString *) iCloudDocumentDirectory;
 + (void) uploadLocalFileToiCloud:(NSURL*) localFileURL;
++ (void) removeCorrespondingFileFromiCloud:(NSURL*) localFileURL;
 @end
