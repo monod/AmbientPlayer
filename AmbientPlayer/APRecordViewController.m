@@ -8,6 +8,7 @@
 
 #import "APRecordViewController.h"
 #import "APSoundEntry.h"
+#import "APiCloudAdapter.h"
 
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
@@ -150,6 +151,32 @@ PlayState _state;
     [self updateButtonLabel];
     [self.waveForm showBoundingBox:YES];
     NSLog(@"[REC][STOP]");
+    
+    //新規録音済ファイルをiCloudに保存する処理
+    [self moveRecordedFileToiCloud];
+}
+
+- (void) moveRecordedFileToiCloud {
+    NSURL* fileURL = [self.recorder.url copy];
+    NSString* fileName = fileURL.lastPathComponent;
+
+    //iCloudが使えるかどうかを判定する処理
+    if ([APiCloudAdapter isiCloudAvailable]){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSURL *iCloudDocumentURL = [fm URLForUbiquityContainerIdentifier:nil];
+            iCloudDocumentURL = [iCloudDocumentURL
+                              URLByAppendingPathComponent:[APiCloudAdapter iCloudDocumentDirectory]
+                              isDirectory:YES];
+            iCloudDocumentURL =[iCloudDocumentURL URLByAppendingPathComponent:fileName];
+            NSLog(@"[iCloud URL] %@", iCloudDocumentURL);
+            
+            NSError* error = nil;
+            [fm setUbiquitous:YES itemAtURL:fileURL destinationURL:iCloudDocumentURL error:&error];
+            
+        });
+    }
+    
 }
 
 -(IBAction)donePushed:(id)sender {
@@ -209,6 +236,7 @@ PlayState _state;
     UIImagePickerController * thumbPicker;
     thumbPicker = [[UIImagePickerController alloc] init];
     thumbPicker.sourceType = sourceType;
+    thumbPicker.allowsEditing = YES;
     thumbPicker.delegate = self;
     thumbPicker.allowsEditing = YES;
     
@@ -220,15 +248,19 @@ PlayState _state;
         NSLog(@"%@ => %@", key, [info objectForKey:key]);
     }
 
-    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
     NSLog(@"%f, %f", image.size.width, image.size.height); // for debugging
     [self dismissViewControllerAnimated:YES completion:NULL];
-    NSData *pngImage = UIImagePNGRepresentation(image); // should decrease the size?
+    NSData *pngImage = UIImagePNGRepresentation(image);
     NSString *thumbTmpFile = [self createTmpFilePathWithExt:@"png"];
     if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
         NSLog(@"Saving a thumbnail failed"); // TODO: display an error dialog
     }
     [self.thumbPickButton setImage:image forState:UIControlStateNormal];
+}
+
+-(IBAction)locSaveButtonPressed:(id)sender {
+    NSLog(@"locSaveButtonPressed: stub"); // FIXME: Implement!
 }
 
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {

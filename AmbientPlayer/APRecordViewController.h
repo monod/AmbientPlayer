@@ -19,6 +19,7 @@
 -(IBAction)donePushed:(id)sender;
 -(IBAction)recordPushed:(id)sender;
 -(IBAction)thumbPickButtonPressed:(id)sender;
+-(IBAction)locSaveButtonPressed:(id)sender;
 
 @property (nonatomic, strong) NSDate *sessionTime;
 
@@ -29,4 +30,5 @@
 @property (nonatomic, strong) IBOutlet UILabel *maxTime;
 
 @property (nonatomic, strong) IBOutlet UIButton *thumbPickButton;
+@property (nonatomic, strong) IBOutlet UIButton *locSaveButton;
 @end
