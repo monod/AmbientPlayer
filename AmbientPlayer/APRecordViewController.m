@@ -153,12 +153,12 @@ PlayState _state;
     NSLog(@"[REC][STOP]");
     
     //新規録音済ファイルをiCloudに保存する処理
-//    [self moveRecordedFileToiCloud];
+    [self copyRecordedFileToiCloud];
 }
 
-- (void) moveRecordedFileToiCloud {
+- (void) copyRecordedFileToiCloud {
     NSURL* fileURL = [self.recorder.url copy];
-    [APiCloudAdapter uploadLocalFileToiCloud:fileURL];
+    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
 -(IBAction)donePushed:(id)sender {

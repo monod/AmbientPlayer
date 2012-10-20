@@ -39,8 +39,29 @@
     return @"Documents";
 }
 
-+ (void) uploadLocalFileToiCloud:(NSURL*) localFileURL {
++ (void) moveLocalFileToiCloud:(NSURL*) localFileURL {
     [APiCloudAdapter updateLocalFileInfoWithiCloud:YES localFileURL:localFileURL];
+}
+
++ (void) copyLocalFileToiCloud:(NSURL *)localFileURL {
+    //まずは、localFileURLのファイルをTEMPORARYフォルダに移動
+    NSURL *tmpFileURL = [APiCloudAdapter copyLocalFileToTemporaryDirectory:localFileURL];
+    if (tmpFileURL) {
+        //TMPフォルダのファイルをicloudにmoveする
+        [APiCloudAdapter moveLocalFileToiCloud:tmpFileURL];
+    }
+    
+}
+
++ (NSURL *) copyLocalFileToTemporaryDirectory:(NSURL *)localFileURL {
+    NSString * fileName = localFileURL.lastPathComponent;
+    NSURL * tempFileURL = [[NSURL URLWithString:NSTemporaryDirectory()] URLByAppendingPathComponent:fileName];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError* error = nil;
+    if ([fm copyItemAtPath:localFileURL.path toPath:tempFileURL.path error:&error]) {
+        return tempFileURL;
+    }
+    return nil;
 }
 
 + (void) removeCorrespondingFileFromiCloud:(NSURL*) localFileURL {
