@@ -65,28 +65,48 @@
 }
 
 + (void) removeCorrespondingFileFromiCloud:(NSURL*) localFileURL {
-    [APiCloudAdapter updateLocalFileInfoWithiCloud:NO localFileURL:localFileURL];
+    
+    if ([APiCloudAdapter isiCloudAvailable]) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSURL *iCloudDocumentURL = [APiCloudAdapter buildCorrespoindingiCloudFileURL:localFileURL];
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSError* error = nil;
+            [fm removeItemAtURL:iCloudDocumentURL error:&error];
+            
+            if (error) {
+                NSLog(@"%@", error);
+            }
+        });
+    }
 }
 
+//YES のときは、ローカルからiCloudへ、NOのときは、iCloudからローカルへ
 + (void) updateLocalFileInfoWithiCloud:(BOOL)flg localFileURL:(NSURL*)localFileURL {
         //iCloudが使えるかどうかを判定する処理
         if ([APiCloudAdapter isiCloudAvailable]){
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString* fileName = localFileURL.lastPathComponent;
-            NSFileManager *fm = [NSFileManager defaultManager];
-            NSURL *iCloudDocumentURL = [fm URLForUbiquityContainerIdentifier:nil];
-            iCloudDocumentURL = [iCloudDocumentURL
-                                 URLByAppendingPathComponent:[APiCloudAdapter iCloudDocumentDirectory]
-                                 isDirectory:YES];
-            iCloudDocumentURL =[iCloudDocumentURL URLByAppendingPathComponent:fileName];
-            NSLog(@"[iCloud URL] %@", iCloudDocumentURL);
+            NSURL *iCloudDocumentURL = [APiCloudAdapter buildCorrespoindingiCloudFileURL:localFileURL];
             
+            NSFileManager *fm = [NSFileManager defaultManager];
             NSError* error = nil;
             [fm setUbiquitous:flg itemAtURL:localFileURL destinationURL:iCloudDocumentURL error:&error];
             
         });
     }
     
+}
+
++ (NSURL *) buildCorrespoindingiCloudFileURL:(NSURL*) localFileURL {
+    NSString* fileName = localFileURL.lastPathComponent;
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *iCloudDocumentURL = [fm URLForUbiquityContainerIdentifier:nil];
+    iCloudDocumentURL = [iCloudDocumentURL
+                         URLByAppendingPathComponent:[APiCloudAdapter iCloudDocumentDirectory]
+                         isDirectory:YES];
+    iCloudDocumentURL =[iCloudDocumentURL URLByAppendingPathComponent:fileName];
+    NSLog(@"[iCloud URL] %@", iCloudDocumentURL);
+    
+    return iCloudDocumentURL;
 }
 @end

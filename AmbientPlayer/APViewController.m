@@ -462,6 +462,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 - (void)deleteSelectedItem {
     if (_playingItemPathInRecorded) {
+        
+        //削除処理をする前にplayerを停止しておく
+        [self.player stop];
+        
         // Remove entry from array
         APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
         [self.recordedSoundEntries removeObjectAtIndex:_playingItemPathInRecorded.row];
