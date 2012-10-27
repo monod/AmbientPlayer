@@ -26,6 +26,9 @@
 @property (nonatomic, strong) IBOutlet MPVolumeView *routeView;
 @property (nonatomic, strong) IBOutlet UISlider *volumeSlider;
 
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 - (IBAction)changeVolume:(id)sender;
 - (IBAction)changePage:(id)sender;
 - (IBAction)showShareSheet:(id)sender;

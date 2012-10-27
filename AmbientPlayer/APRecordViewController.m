@@ -50,6 +50,10 @@ PlayState _state;
     self.maxTime.text = [NSString stringWithFormat:@"%02d:%02d.0", m, s];
     self.waveForm.duration = kMaxRecordSeconds;
     self.waveForm.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+    
+    self.managedObjectContext = [APAppDelegate sharedManagedObjectContext];
+    
+    self.addingSoundEntry = (APCustomSoundEntryModel *)[NSEntityDescription insertNewObjectForEntityForName:@"APCustomSoundEntryModel"                                                                      inManagedObjectContext:self.managedObjectContext];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -152,13 +156,7 @@ PlayState _state;
     [self.waveForm showHandle:YES];
     NSLog(@"[REC][STOP]");
     
-    //新規録音済ファイルをiCloudに保存する処理
-    [self copyRecordedFileToiCloud];
-}
 
-- (void) copyRecordedFileToiCloud {
-    NSURL* fileURL = [self.recorder.url copy];
-    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
 -(IBAction)donePushed:(id)sender {
@@ -168,7 +166,36 @@ PlayState _state;
         [self.recorder deleteRecording];
         NSLog(@"[REC][DELETE] File deleted");
     }
+    
+    //CoreDataに録音したファイル名を保存する処理
+    [self saveRecordedSoundFileInfoToDB];
+    
+    //新規録音済ファイルをiCloudに保存する処理
+    [self copyRecordedFileToiCloud];
+    
+    if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
+        //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
+        [self.managedObjectContext deleteObject:self.addingSoundEntry];
+    }
+    
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
+    
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    
+    
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) saveRecordedSoundFileInfoToDB {
+    NSString* filePath = self.recorder.url.path;
+}
+
+- (void) copyRecordedFileToiCloud {
+    NSURL* fileURL = [self.recorder.url copy];
+    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
 -(IBAction)recordPushed:(id)sender {

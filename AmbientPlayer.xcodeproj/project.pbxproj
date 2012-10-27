@@ -78,8 +78,10 @@
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
 		AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF57FF3F15FB114000D8040A /* iAd.framework */; };
 		AF5B0632163BA264000ABBBA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF5B0631163BA264000ABBBA /* CoreData.framework */; };
-		AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
-		AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */; };
+		AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
+		AFC37ECB163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
+		AFC37ECE163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */; };
+		AFC37ECF163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,8 +181,9 @@
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF57FF3F15FB114000D8040A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		AF5B0631163BA264000ABBBA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APiCloudSoundDocument.h; sourceTree = "<group>"; };
-		AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APiCloudSoundDocument.m; sourceTree = "<group>"; };
+		AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCustomSoundEntryModels.xcdatamodel; sourceTree = "<group>"; };
+		AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCustomSoundEntryModel.h; sourceTree = "<group>"; };
+		AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCustomSoundEntryModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,7 +272,6 @@
 		40A2068015F67790004BE2E1 = {
 			isa = PBXGroup;
 			children = (
-				AF5B0631163BA264000ABBBA /* CoreData.framework */,
 				40B6FA46161A64B20051FD8B /* icon.png */,
 				40B6FA44161A64AD0051FD8B /* icon@2x.png */,
 				409D4F001605B36900261E70 /* Default-568h@2x.png */,
@@ -294,6 +296,7 @@
 		40A2068E15F67790004BE2E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AF5B0631163BA264000ABBBA /* CoreData.framework */,
 				407DB502162721850075D935 /* Social.framework */,
 				40B6FA54161BCA730051FD8B /* QuartzCore.framework */,
 				40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */,
@@ -313,6 +316,9 @@
 			isa = PBXGroup;
 			children = (
 				40B6FA2F161A51830051FD8B /* AmbientPlayer.entitlements */,
+				AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */,
+				AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */,
+				AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */,
 				40A2069E15F67790004BE2E1 /* APAppDelegate.h */,
 				40A2069F15F67790004BE2E1 /* APAppDelegate.m */,
 				7EDE0C0215FB108200789400 /* APCrossFadePlayer.h */,
@@ -337,8 +343,6 @@
 				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
 				AF15BE4716255C25009B46FB /* APiCloudAdapter.h */,
 				AF15BE4816255C25009B46FB /* APiCloudAdapter.m */,
-				AFA8705D16256E6800AC45A4 /* APiCloudSoundDocument.h */,
-				AFA8705E16256E6800AC45A4 /* APiCloudSoundDocument.m */,
 				40A2069615F67790004BE2E1 /* Supporting Files */,
 			);
 			path = AmbientPlayer;
@@ -534,7 +538,8 @@
 				403270FF1621056600E44DDB /* APWaveFormView.m in Sources */,
 				40DB23E416229C640015CD81 /* APSoundCellBackView.m in Sources */,
 				AF15BE4916255C25009B46FB /* APiCloudAdapter.m in Sources */,
-				AFA8705F16256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
+				AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */,
+				AFC37ECE163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,7 +549,8 @@
 			files = (
 				40A206BE15F67791004BE2E1 /* AmbientPlayerTests.m in Sources */,
 				AF15BE4A16255C25009B46FB /* APiCloudAdapter.m in Sources */,
-				AFA8706016256E6800AC45A4 /* APiCloudSoundDocument.m in Sources */,
+				AFC37ECB163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */,
+				AFC37ECF163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,6 +727,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */,
+			);
+			currentVersion = AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */;
+			path = APCustomSoundEntryModels.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 40A2068215F67790004BE2E1 /* Project object */;
 }
