@@ -184,17 +184,38 @@ PlayState _state;
     if (error) {
         NSLog(@"%@", error);
     }
-    
-    
+        
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) saveRecordedSoundFileInfoToDB {
-    NSString* filePath = self.recorder.url.path;
+
+    if ([self isRecordedFileExists]) {
+        APCustomSoundEntryModel *model = self.addingSoundEntry;
+        
+        [model setSound_file:self.recorder.url.path];
+
+    }
+}
+
+- (BOOL) isRecordedFileExists {
+
+    if(self.recorder.url) {
+        NSString* filePath = self.recorder.url.path;
+        NSLog(@"%@", filePath);
+        NSFileManager * fm = [NSFileManager defaultManager];
+        if ([fm fileExistsAtPath:filePath]) {
+            NSLog(@"file really exists");
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (void) copyRecordedFileToiCloud {
     NSURL* fileURL = [self.recorder.url copy];
+    //iCloudのAPIはローカルにファイルがなければ、何もしないのでこのままでOK
     [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
