@@ -45,17 +45,21 @@
 
 + (void) copyLocalFileToiCloud:(NSURL *)localFileURL {
     //まずは、localFileURLのファイルをTEMPORARYフォルダに移動
-    NSURL *tmpFileURL = [APiCloudAdapter copyLocalFileToTemporaryDirectory:localFileURL];
-    if (tmpFileURL) {
-        //TMPフォルダのファイルをicloudにmoveする
-        [APiCloudAdapter moveLocalFileToiCloud:tmpFileURL];
+    
+    if ([APiCloudAdapter isiCloudAvailable]){
+        NSURL *tmpFileURL = [APiCloudAdapter copyLocalFileToTemporaryDirectory:localFileURL];
+        if (tmpFileURL) {
+            //TMPフォルダのファイルをicloudにmoveする
+            [APiCloudAdapter moveLocalFileToiCloud:tmpFileURL];
+        }
     }
     
 }
 
 + (NSURL *) copyLocalFileToTemporaryDirectory:(NSURL *)localFileURL {
     NSString * fileName = localFileURL.lastPathComponent;
-    NSURL * tempFileURL = [[NSURL URLWithString:NSTemporaryDirectory()] URLByAppendingPathComponent:fileName];
+    NSURL *baseURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    NSURL *tempFileURL = [baseURL URLByAppendingPathComponent:fileName];
     NSFileManager *fm = [NSFileManager defaultManager];
     NSError* error = nil;
     if ([fm copyItemAtPath:localFileURL.path toPath:tempFileURL.path error:&error]) {
