@@ -22,6 +22,7 @@
 -(IBAction)recordPushed:(id)sender;
 -(IBAction)thumbPickButtonPressed:(id)sender;
 -(IBAction)locSaveButtonPressed:(id)sender;
+- (IBAction)closeKeybord:(id)sender;
 
 @property (nonatomic, strong) NSDate *sessionTime;
 
@@ -33,6 +34,7 @@
 
 @property (nonatomic, strong) IBOutlet UIButton *thumbPickButton;
 @property (nonatomic, strong) IBOutlet UIButton *locSaveButton;
+@property (weak, nonatomic) IBOutlet UITextField *soundTitle;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

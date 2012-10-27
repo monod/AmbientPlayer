@@ -167,8 +167,8 @@ PlayState _state;
         NSLog(@"[REC][DELETE] File deleted");
     }
     
-    //CoreDataに録音したファイル名を保存する処理
-    [self saveRecordedSoundFileInfoToDB];
+    //CoreDataに録音したファイル名とタイトルを保存する処理
+    [self saveRecordedSoundInfoToDB];
     
     //新規録音済ファイルをiCloudに保存する処理
     [self copyRecordedFileToiCloud];
@@ -188,12 +188,19 @@ PlayState _state;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) saveRecordedSoundFileInfoToDB {
+- (void) saveRecordedSoundInfoToDB {
 
     if ([self isRecordedFileExists]) {
         APCustomSoundEntryModel *model = self.addingSoundEntry;
         
         [model setSound_file:self.recorder.url.path];
+        
+        if (self.soundTitle.text) {
+            [model setName:self.soundTitle.text];
+        }else {
+            NSString *name = self.recorder.url.lastPathComponent.stringByDeletingPathExtension;
+            [model setName:name];
+        }
 
     }
 }
@@ -293,6 +300,10 @@ PlayState _state;
     NSLog(@"locSaveButtonPressed: stub"); // FIXME: Implement!
 }
 
+- (IBAction)closeKeybord:(id)sender {
+    [self.soundTitle resignFirstResponder];
+}
+
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {
     return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
 }
@@ -306,4 +317,8 @@ PlayState _state;
     [self.waveForm showBoundingBox:YES];
 }
 
+- (void)viewDidUnload {
+    [self setSoundTitle:nil];
+    [super viewDidUnload];
+}
 @end
