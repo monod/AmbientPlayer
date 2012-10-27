@@ -138,6 +138,16 @@
     return _persistentStoreCoordinator;
 }
 
++ (NSManagedObjectContext *) sharedManagedObjectContext
+{
+    APAppDelegate * appDelegate = (APAppDelegate *) [[UIApplication sharedApplication] delegate];
+    if(appDelegate) {
+        return appDelegate.managedObjectContext;
+    } else {
+        return nil;
+    }        
+}
+
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
@@ -145,6 +155,5 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
-
 
 @end

@@ -50,6 +50,8 @@ PlayState _state;
     self.maxTime.text = [NSString stringWithFormat:@"%02d:%02d.0", m, s];
     self.waveForm.duration = kMaxRecordSeconds;
     self.waveForm.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+    
+    self.managedObjectContext = [APAppDelegate sharedManagedObjectContext];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "APLevelMeterView.h"
 #import "APWaveFormView.h"
+#import "APAppDelegate.h"
 
 @interface APRecordViewController : UIViewController<UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate> {
     CADisplayLink *_updateTimer;
@@ -31,4 +32,8 @@
 
 @property (nonatomic, strong) IBOutlet UIButton *thumbPickButton;
 @property (nonatomic, strong) IBOutlet UIButton *locSaveButton;
+
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 @end
