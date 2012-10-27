@@ -18,4 +18,6 @@
 @property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSString * name;
 
+
+- (BOOL) soundRecorded;
 @end

@@ -17,4 +17,13 @@
 @dynamic longitude;
 @dynamic name;
 
+- (BOOL) soundRecorded
+{
+    if (self.sound_file != nil) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 @end

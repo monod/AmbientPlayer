@@ -52,6 +52,8 @@ PlayState _state;
     self.waveForm.backgroundColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
     
     self.managedObjectContext = [APAppDelegate sharedManagedObjectContext];
+    
+    self.addingSoundEntry = (APCustomSoundEntryModel *)[NSEntityDescription insertNewObjectForEntityForName:@"APCustomSoundEntryModel"                                                                      inManagedObjectContext:self.managedObjectContext];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -170,6 +172,20 @@ PlayState _state;
         [self.recorder deleteRecording];
         NSLog(@"[REC][DELETE] File deleted");
     }
+    
+    if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
+        //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
+        [self.managedObjectContext deleteObject:self.addingSoundEntry];
+    }
+    
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
+    
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
