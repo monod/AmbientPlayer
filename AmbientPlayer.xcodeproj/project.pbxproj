@@ -269,7 +269,6 @@
 		40A2068015F67790004BE2E1 = {
 			isa = PBXGroup;
 			children = (
-				AF5B0631163BA264000ABBBA /* CoreData.framework */,
 				40B6FA46161A64B20051FD8B /* icon.png */,
 				40B6FA44161A64AD0051FD8B /* icon@2x.png */,
 				409D4F001605B36900261E70 /* Default-568h@2x.png */,
@@ -294,6 +293,7 @@
 		40A2068E15F67790004BE2E1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AF5B0631163BA264000ABBBA /* CoreData.framework */,
 				407DB502162721850075D935 /* Social.framework */,
 				40B6FA54161BCA730051FD8B /* QuartzCore.framework */,
 				40E50C9B160CD88200AEE0B5 /* MediaPlayer.framework */,
