@@ -145,7 +145,7 @@ PlayState _state;
     [self.recorder recordForDuration:(NSTimeInterval)kMaxRecordSeconds];
     _state = kPlayStateRecording;
     [self updateButtonLabel];
-    [self.waveForm showBoundingBox:NO];
+    [self.waveForm showHandle:NO];
     NSLog(@"[REC][START]");
 }
 
@@ -153,7 +153,7 @@ PlayState _state;
     [self.recorder stop];
     _state = kPlayStateStop;
     [self updateButtonLabel];
-    [self.waveForm showBoundingBox:YES];
+    [self.waveForm showHandle:YES];
     NSLog(@"[REC][STOP]");
     
 
@@ -314,7 +314,8 @@ PlayState _state;
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
     _state = kPlayStateStop;
     [self updateButtonLabel];
-    [self.waveForm showBoundingBox:YES];
+    [self.waveForm showHandle:YES];
+    [self.waveForm expandToFit];
 }
 
 - (void)viewDidUnload {

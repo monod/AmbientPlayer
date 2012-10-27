@@ -18,12 +18,13 @@
     UIBezierPath *_path;
     int _prevX;
     float _maxValue;
-    BOOL _showBoundingBox;
+    BOOL _showHandle;
 }
 
 - (void)resetSample;
 - (void)addSampleAt:(NSTimeInterval)time withValue:(float)value;
-- (void)showBoundingBox:(BOOL)show;
+- (void)expandToFit;
+- (void)showHandle:(BOOL)show;
 
 @property (nonatomic) int duration;
 
