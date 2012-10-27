@@ -156,13 +156,7 @@ PlayState _state;
     [self.waveForm showBoundingBox:YES];
     NSLog(@"[REC][STOP]");
     
-    //新規録音済ファイルをiCloudに保存する処理
-    [self copyRecordedFileToiCloud];
-}
 
-- (void) copyRecordedFileToiCloud {
-    NSURL* fileURL = [self.recorder.url copy];
-    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
 -(IBAction)donePushed:(id)sender {
@@ -172,6 +166,12 @@ PlayState _state;
         [self.recorder deleteRecording];
         NSLog(@"[REC][DELETE] File deleted");
     }
+    
+    //CoreDataに録音したファイル名を保存する処理
+    [self saveRecordedSoundFileInfoToDB];
+    
+    //新規録音済ファイルをiCloudに保存する処理
+    [self copyRecordedFileToiCloud];
     
     if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
         //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
@@ -187,6 +187,15 @@ PlayState _state;
     
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) saveRecordedSoundFileInfoToDB {
+    NSString* filePath = self.recorder.url.path;
+}
+
+- (void) copyRecordedFileToiCloud {
+    NSURL* fileURL = [self.recorder.url copy];
+    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
 }
 
 -(IBAction)recordPushed:(id)sender {
