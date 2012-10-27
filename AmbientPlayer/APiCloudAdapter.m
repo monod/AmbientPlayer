@@ -86,16 +86,16 @@
 
 //YES のときは、ローカルからiCloudへ、NOのときは、iCloudからローカルへ
 + (void) updateLocalFileInfoWithiCloud:(BOOL)flg localFileURL:(NSURL*)localFileURL {
-        //iCloudが使えるかどうかを判定する処理
-        if ([APiCloudAdapter isiCloudAvailable]){
+    //iCloudが使えるかどうかを判定する処理
+    if ([APiCloudAdapter isiCloudAvailable]){
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSURL *iCloudDocumentURL = [APiCloudAdapter buildCorrespoindingiCloudFileURL:localFileURL];
-            
+                
             NSFileManager *fm = [NSFileManager defaultManager];
             NSError* error = nil;
             [fm setUbiquitous:flg itemAtURL:localFileURL destinationURL:iCloudDocumentURL error:&error];
-            
+                
         });
     }
     
