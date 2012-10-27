@@ -10,6 +10,21 @@
 
 @implementation APWaveFormView
 
+const float kTouchAreaSize = 16;
+const float kSelectedEdgeWidth = 4;
+
+typedef enum edgeType {
+    EdgeNone,
+    EdgeLeft,
+    EdgeTop,
+    EdgeRight,
+    EdgeBottom
+} EdgeType;
+
+CGRect _boundingBox;
+EdgeType _selectedEdge;
+UIBezierPath *_selectedPath;
+
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -31,7 +46,7 @@
 - (void)setup {
     _path = [UIBezierPath bezierPath];
     self.duration = 0;
-    _prevX = 0;
+    _prevX = kTouchAreaSize;
     _maxValue = 0;
     
     _minDecibels = -80.0;
@@ -52,11 +67,15 @@
         float adjAmp = (amp - minAmp) * invAmpRange;
         [_table addObject: [NSNumber numberWithFloat:powf(adjAmp, rroot)]];
     }
+    
+    _boundingBox = CGRectMake(kTouchAreaSize, kTouchAreaSize, 0, 0);
+    _selectedEdge = EdgeNone;
 }
 
 - (void)resetSample {
-    [_path removeAllPoints];
-    _prevX = 0;
+    _path = [UIBezierPath bezierPath];
+    _boundingBox = CGRectMake(kTouchAreaSize, kTouchAreaSize, 0, 0);
+    _prevX = kTouchAreaSize;
 }
 
 - (void)addSampleAt:(NSTimeInterval)time withValue:(float)value {
@@ -64,39 +83,168 @@
         return;
     }
     
-    CGFloat x = (float)time / self.duration * self.frame.size.width;
-    if (_prevX < (int)x) {
-        float linearVal = [self dBToLinearValue:value];
-        CGFloat h = MAX(2.0, linearVal * self.frame.size.height);
-        CGFloat y = (self.frame.size.height - h) / 2.0;
-        [_path moveToPoint:CGPointMake(x, y)];
-        [_path addLineToPoint:CGPointMake(x, y + h)];
-        _prevX = (int)x;
-        _maxValue = MAX(_maxValue, linearVal);
+    CGFloat x = (float)time / self.duration * (self.bounds.size.width - kTouchAreaSize * 2) + kTouchAreaSize;
+    
+    float linearVal = [self dBToLinearValue:value];
+    CGFloat h = MAX(2.0, linearVal * self.bounds.size.height);
+    CGFloat y = (self.bounds.size.height - h) / 2.0;
+    [_path moveToPoint:CGPointMake(x, y)];
+    [_path addLineToPoint:CGPointMake(x, y + h)];
+    _prevX = (int)x;
+    _maxValue = MAX(_maxValue, linearVal);
+    
+    _boundingBox.size.height = MAX(kTouchAreaSize, _maxValue * self.bounds.size.height);
+    _boundingBox.origin.y = (self.frame.size.height - _boundingBox.size.height) / 2.0;
+    [self setNeedsDisplay];
+}
+
+- (void)expandToFit {
+    CGFloat sx = (self.bounds.size.width - kTouchAreaSize * 2) / (_prevX - kTouchAreaSize);
+    CGAffineTransform at = CGAffineTransformMakeTranslation(-_boundingBox.origin.x, -_boundingBox.origin.y);
+    [_path applyTransform:at];
+    at = CGAffineTransformMakeScale(sx, 1.0);
+    [_path applyTransform:at];
+    at = CGAffineTransformMakeTranslation(_boundingBox.origin.x, _boundingBox.origin.y);
+    [_path applyTransform:at];
+    _boundingBox.size.width = self.bounds.size.width - kTouchAreaSize * 2;
+    [self setNeedsDisplay];
+}
+
+- (void)showHandle:(BOOL)show {
+    _showHandle = show;
+    [self setNeedsDisplay];
+}
+
+# pragma mark Touch Events
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = (UITouch *)[touches anyObject];
+    CGPoint p = [touch locationInView:self];
+    
+    if (ABS(_boundingBox.origin.y - p.y) < kTouchAreaSize) {
+        // Top edge
+        _selectedEdge = EdgeTop;
+        [self setNeedsDisplay];
+    } else if (ABS(_boundingBox.origin.y + _boundingBox.size.height - p.y) < kTouchAreaSize) {
+        // Bottom edge
+        _selectedEdge = EdgeBottom;
+        [self setNeedsDisplay];
+    } else if (ABS(_boundingBox.origin.x - p.x) < kTouchAreaSize) {
+        // Left edge
+        _selectedEdge = EdgeLeft;
+        [self setNeedsDisplay];
+    } else if (ABS(_boundingBox.origin.x + _boundingBox.size.width - p.x) < kTouchAreaSize) {
+        // Right edge
+        _selectedEdge = EdgeRight;
         [self setNeedsDisplay];
     }
 }
 
-- (void)showBoundingBox:(BOOL)show {
-    _showBoundingBox = show;
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = (UITouch *)[touches anyObject];
+    CGPoint p = [touch locationInView:self];
+
+    if (_selectedEdge == EdgeLeft) {
+        CGFloat right = _boundingBox.origin.x + _boundingBox.size.width;
+        if (kTouchAreaSize < p.x && p.x < right) {
+            _boundingBox.origin.x = p.x;
+            _boundingBox.size.width = right - p.x;
+            [self setNeedsDisplay];
+        }
+    } else if (_selectedEdge == EdgeRight) {
+        if (_boundingBox.origin.x < p.x && p.x < self.bounds.size.width - kTouchAreaSize) {
+            _boundingBox.size.width = p.x - _boundingBox.origin.x;
+            [self setNeedsDisplay];
+        }
+    } else if (_selectedEdge == EdgeTop) {
+        CGFloat bottom = _boundingBox.origin.y + _boundingBox.size.height;
+        if (kTouchAreaSize < p.y && p.y < bottom) {
+            _boundingBox.origin.y = p.y;
+            _boundingBox.size.height = bottom - p.y;
+            [self setNeedsDisplay];
+        }
+    } else if (_selectedEdge == EdgeBottom) {
+        if (_boundingBox.origin.y < p.y && p.y < self.bounds.size.height - kTouchAreaSize) {
+            _boundingBox.size.height = p.y - _boundingBox.origin.y;
+            [self setNeedsDisplay];
+        }
+    }
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    _selectedEdge = EdgeNone;
     [self setNeedsDisplay];
 }
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    _selectedEdge = EdgeNone;
+    [self setNeedsDisplay];
+}
+
+#pragma mark Draw method
+
+- (void)drawRect:(CGRect)rect {
     // Drawing code
-    UIColor *color = [UIColor whiteColor];
-    [color setStroke];
-    [_path stroke];
-    
-    if (_showBoundingBox) {
-        color = [UIColor yellowColor];
-        [color setStroke];
-        CGFloat h = MAX(2.0, _maxValue * self.frame.size.height);
-        CGFloat y = (self.frame.size.height - h) / 2.0;
-        UIBezierPath *bb = [UIBezierPath bezierPathWithRect:CGRectMake(0, y, _prevX, h)];
-        [bb stroke];
+    if (_showHandle) {
+        [[UIColor grayColor] setFill];
+        UIBezierPath *bg = [UIBezierPath bezierPathWithRect:_boundingBox];
+        [bg fill];
+        
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        _selectedPath = nil;
+        
+        // Left
+        CGPoint p1 = CGPointMake(_boundingBox.origin.x, self.bounds.origin.y);
+        CGPoint p2 = CGPointMake(_boundingBox.origin.x, self.bounds.origin.y + self.bounds.size.height);
+        [path moveToPoint:p1];
+        [path addLineToPoint:p2];
+        if (_selectedEdge == EdgeLeft) {
+            _selectedPath = [UIBezierPath bezierPath];
+            [_selectedPath moveToPoint:p1];
+            [_selectedPath addLineToPoint:p2];
+        }
+        
+        // Right
+        p1 = CGPointMake(_boundingBox.origin.x + _boundingBox.size.width, self.bounds.origin.y);
+        p2 = CGPointMake(_boundingBox.origin.x + _boundingBox.size.width, self.bounds.origin.y + self.bounds.size.height);
+        [path moveToPoint:p1];
+        [path addLineToPoint:p2];
+        if (_selectedEdge == EdgeRight) {
+            _selectedPath = [UIBezierPath bezierPath];
+            [_selectedPath moveToPoint:p1];
+            [_selectedPath addLineToPoint:p2];
+        }
+        
+        // Top
+        p1 = CGPointMake(self.bounds.origin.x, _boundingBox.origin.y);
+        p2 = CGPointMake(self.bounds.origin.x + self.bounds.size.width, _boundingBox.origin.y);
+        [path moveToPoint:p1];
+        [path addLineToPoint:p2];
+        if (_selectedEdge == EdgeTop) {
+            _selectedPath = [UIBezierPath bezierPath];
+            [_selectedPath moveToPoint:p1];
+            [_selectedPath addLineToPoint:p2];
+        }
+        
+        // Bottom
+        p1 = CGPointMake(self.bounds.origin.x, _boundingBox.origin.y + _boundingBox.size.height);
+        p2 = CGPointMake(self.bounds.origin.x + self.bounds.size.width, _boundingBox.origin.y + _boundingBox.size.height);
+        [path moveToPoint:p1];
+        [path addLineToPoint:p2];
+        if (_selectedEdge == EdgeBottom) {
+            _selectedPath = [UIBezierPath bezierPath];
+            [_selectedPath moveToPoint:p1];
+            [_selectedPath addLineToPoint:p2];
+        }
+        
+        [[UIColor yellowColor] setStroke];
+        [path stroke];
+        _selectedPath.lineWidth = 4.0;
+        [_selectedPath stroke];
     }
+    
+    [[UIColor whiteColor] setStroke];
+    [_path stroke];
 }
 
 - (float)dBToLinearValue:(float)db {
