@@ -14,7 +14,7 @@
 SYNTHESIZE(title);
 SYNTHESIZE(fileName);
 
--(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName {
+-(id)initWithTitle:(NSString *)title fileName:(NSString *)fileName {
     self = [self init];
     if (self) {
         self.title = title;
@@ -23,10 +23,11 @@ SYNTHESIZE(fileName);
     return self;
 }
 
-- (id) initWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName {
-    self = [self initWithTitle:title withFileName:fileName];
+- (id) initWithTitle:(NSString *)title fileName:(NSString *)fileName image:(NSString *)imageFileName description:(NSString *)description {
+    self = [self initWithTitle:title fileName:fileName];
     if (self) {
         self.imageFileName = imageFileName;
+        self.description = description;
     }
     return self;
 }

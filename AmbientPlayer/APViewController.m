@@ -74,14 +74,14 @@ SYNTHESIZE(preset);
 
 -(void)initPreset {
     self.preset = [NSArray arrayWithObjects:
-                   [[APSoundEntry alloc] initWithTitle:@"Forest" withFileName:@"forest" andImageFileName:@"forest"],
-                   [[APSoundEntry alloc] initWithTitle:@"Ocean" withFileName:@"ocean" andImageFileName:@"ocean"],
-                   [[APSoundEntry alloc] initWithTitle:@"Rain" withFileName:@"rain" andImageFileName:@"rain"],
-                   [[APSoundEntry alloc] initWithTitle:@"Seagull" withFileName:@"sea" andImageFileName:@"sea"],
-                   [[APSoundEntry alloc] initWithTitle:@"Stream" withFileName:@"stream" andImageFileName:@"stream"],
-                   [[APSoundEntry alloc] initWithTitle:@"Crickets" withFileName:@"crickets" andImageFileName:@"crickets"],
-                   [[APSoundEntry alloc] initWithTitle:@"Terminal" withFileName:@"airport_in" andImageFileName:@"airport_in"],
-                   [[APSoundEntry alloc] initWithTitle:@"Deck" withFileName:@"airport_deck" andImageFileName:@"airport_deck"],
+                   [[APSoundEntry alloc] initWithTitle:@"Forest" fileName:@"forest" image:@"forest" description:NSLocalizedString(@"DescForest", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Ocean" fileName:@"ocean" image:@"ocean" description:NSLocalizedString(@"DescOcean", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Rain" fileName:@"rain" image:@"rain" description:NSLocalizedString(@"DescRain", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Stream" fileName:@"stream" image:@"stream" description:NSLocalizedString(@"DescStream", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Fire" fileName:@"fire" image:@"fire" description:NSLocalizedString(@"DescFire", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Crickets" fileName:@"crickets" image:@"crickets" description:NSLocalizedString(@"DescCrickets", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Terminal" fileName:@"airport_in" image:@"airport_in" description:NSLocalizedString(@"DescTerminal", nil)],
+                   [[APSoundEntry alloc] initWithTitle:@"Deck" fileName:@"airport_deck" image:@"airport_deck" description:NSLocalizedString(@"DescDeck", nil)],
                    nil];
 }
 
@@ -289,6 +289,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
         cell.backView.deleteButton.hidden = YES;
+        cell.backView.description.text = entry.description;
+        
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInPreset]) {
             cell.playing = YES;
@@ -311,6 +313,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
         cell.backView.deleteButton.hidden = NO;
+        cell.backView.description.text = entry.description;
         // check wheter it is now playing
         if ([indexPath isEqual:_playingItemPathInRecorded]) {
             cell.playing = YES;
