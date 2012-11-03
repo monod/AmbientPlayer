@@ -61,7 +61,6 @@ PlayState _state;
 - (void)viewWillAppear:(BOOL)animated {
     [_updateTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [super viewWillAppear:animated];
-    [self setupAudioSession];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -144,6 +143,7 @@ PlayState _state;
 }
 
 - (void)startRecording {
+    [self setupAudioSession];
     [self.recorder recordForDuration:(NSTimeInterval)kMaxRecordSeconds];
     _state = kPlayStateRecording;
     [self updateButtonLabel];
@@ -279,7 +279,7 @@ PlayState _state;
     sheet = [[UIActionSheet alloc]
              initWithTitle:@""
              delegate:self
-             cancelButtonTitle:NSLocalizedString(@"CancelButtonLabel", nil)
+             cancelButtonTitle:NSLocalizedString(@"CancelButtonLabel", nil) 
              destructiveButtonTitle:nil
              otherButtonTitles:NSLocalizedString(@"TakePhotoButtonLabel",nil), NSLocalizedString(@"ChoosePhotoButtonLabel", nil), nil];
     [sheet showInView:self.view];
