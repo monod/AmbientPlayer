@@ -190,6 +190,7 @@ PlayState _state;
 
 - (IBAction)cancelButtonPressed:(id)sender {
     [self cancelRecording];
+    self.recorder = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -206,6 +207,11 @@ PlayState _state;
         if (error) {
             NSLog(@"when deleting image error occured %@", error);
         }
+    }
+    
+    if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
+        //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
+        [self.managedObjectContext deleteObject:self.addingSoundEntry];
     }
 }
 
