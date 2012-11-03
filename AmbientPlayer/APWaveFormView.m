@@ -189,6 +189,9 @@ const float kMarkSize = 6;
 - (void)drawRect:(CGRect)rect {
     // Drawing code
     if (_showHandle) {
+        
+        // NOTE: Commented out for the time being
+        /*
         [[UIColor grayColor] setFill];
         UIBezierPath *bg = [UIBezierPath bezierPathWithRect:_boundingBox];
         [bg fill];
@@ -282,6 +285,7 @@ const float kMarkSize = 6;
         [path fill];
         _selectedPath.lineWidth = 4.0;
         [_selectedPath stroke];
+         */
     }
     
     [[UIColor whiteColor] setStroke];
