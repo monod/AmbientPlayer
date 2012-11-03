@@ -28,7 +28,6 @@ SYNTHESIZE(fileName);
     if (self) {
         self.imageFileName = imageFileName;
         self.description = description;
-        NSLog(@"%@", description);
     }
     return self;
 }
