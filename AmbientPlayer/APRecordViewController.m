@@ -165,20 +165,7 @@ PlayState _state;
     [self stopRecording];
     NSLog(@"[REC][DONE] %4.1f", _duration);
     if (_duration < kMinRecordSeconds) {
-        [self.recorder deleteRecording];
-        NSLog(@"[REC][DELETE] Sound File deleted");
-        
-        //画像ファイルがある場合は、消しておく。
-        if (self.imageFilePath) {
-            NSFileManager *fm = [NSFileManager defaultManager];
-            NSError* error = nil;
-            NSLog(@"imageFileURL is %@", self.imageFilePath);
-            [fm removeItemAtPath:self.imageFilePath error:&error];
-            if (error) {
-                NSLog(@"when deleting image error occured %@", error);
-            }
-        }
-        
+        [self cancelRecording];        
     }
         
     //CoreDataに録音したファイル名とタイトルを保存する処理
@@ -203,6 +190,24 @@ PlayState _state;
 }
 
 - (IBAction)cancelButtonPressed:(id)sender {
+    [self cancelRecording];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) cancelRecording {
+    [self.recorder deleteRecording];
+    NSLog(@"[REC][DELETE] Sound File deleted");
+    
+    //画像ファイルがある場合は、消しておく。
+    if (self.imageFilePath) {
+        NSFileManager *fm = [NSFileManager defaultManager];
+        NSError* error = nil;
+        NSLog(@"imageFileURL is %@", self.imageFilePath);
+        [fm removeItemAtPath:self.imageFilePath error:&error];
+        if (error) {
+            NSLog(@"when deleting image error occured %@", error);
+        }
+    }
 }
 
 - (void) saveRecordedSoundInfoToDB {
