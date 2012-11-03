@@ -65,4 +65,26 @@
     return recordedSoundEntries;
 }
 
++ (BOOL) removeAPCustomSoundEntryModel:(NSManagedObjectID *)objectID inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext {
+    
+    NSError *error = nil;
+    APCustomSoundEntryModel *toDelete = (APCustomSoundEntryModel *)[managedObjectContext existingObjectWithID:objectID error:&error];
+    if(error) {
+        NSLog(@"%@", error);
+        return NO;
+    }
+    
+    if (toDelete) {
+        [managedObjectContext deleteObject:toDelete];
+        
+        NSError *error = nil;
+        [managedObjectContext save:&error];
+        if(error) {
+            NSLog(@"%@", error);
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end

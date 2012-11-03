@@ -27,4 +27,5 @@
 - (BOOL) soundRecorded;
 
 + (NSMutableArray*) getAllSoundEntriesIn:(NSManagedObjectContext *) managedObjectContext;
++ (BOOL) removeAPCustomSoundEntryModel:(NSManagedObjectID *)objectID inManagedObjectContext:(NSManagedObjectContext *) managedObjectContext;
 @end

@@ -453,15 +453,23 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         // Remove entry from array
         APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
         [self.recordedSoundEntries removeObjectAtIndex:_playingItemPathInRecorded.row];
+
+        //Remove From CoreData
+        if (entry.moID) {
+            [APCustomSoundEntryModel removeAPCustomSoundEntryModel:entry.moID inManagedObjectContext:self.managedObjectContext];
+        }
         
         //Remove From iCloud
         NSString *path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
         NSURL* fileURL = [NSURL fileURLWithPath:path];
         [APiCloudAdapter removeCorrespondingFileFromiCloud:fileURL];
-        
-        // Remove file
+
+        // Remove Localfile
         NSFileManager *fileMgr = [NSFileManager defaultManager];
         [fileMgr removeItemAtPath:path error:nil];
+
+        
+        
         
         // Update UI
         [self.recordedCollectionView deleteItemsAtIndexPaths:@[_playingItemPathInRecorded]];
