@@ -39,6 +39,8 @@ PlayState _state;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    self.tempImageFilePath = nil; //nilに初期化しておく。
+  
     // Update timer for level meter
     _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
     
@@ -193,7 +195,7 @@ PlayState _state;
     if ([self isRecordedFileExists]) {
         APCustomSoundEntryModel *model = self.addingSoundEntry;
 
-        //絶対パスではなく、soundディレクトリに保存されている前提で、ファイル名だけ保存する
+        //絶対パスではなく、Documentsディレクトリに保存されている前提で、ファイル名だけ保存する
         [model setSound_file:self.recorder.url.lastPathComponent];
         
         if (self.soundTitle.text) {
@@ -291,13 +293,28 @@ PlayState _state;
     [self dismissViewControllerAnimated:YES completion:NULL];
     NSData *pngImage = UIImagePNGRepresentation(image);
     NSString *thumbTmpFile = [self createTmpFilePathWithExt:@"png"];
-    if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
-        NSLog(@"Saving a thumbnail failed"); // TODO: display an error dialog
-    }
-    [self.thumbPickButton setImage:image forState:UIControlStateNormal];
+    
+    //ファイルの保存処理は、非同期バックグラウンド処理で行う。
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (![pngImage writeToFile:thumbTmpFile atomically:YES]) {
+            NSLog(@"Saving a thumbnail failed");
+        }
+        
+        //保存に成功したらファイルのパスをcontrollerにもたせておく。
+        self.tempImageFilePath = thumbTmpFile;
+        
+        //ボタン背景の設定はmain_queueで行う。
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.thumbPickButton setImage:image forState:UIControlStateNormal];
+        });
+        
+    });
+    
+
 }
 
 -(IBAction)locSaveButtonPressed:(id)sender {
+    //位置情報の保存
     NSLog(@"locSaveButtonPressed: stub"); // FIXME: Implement!
 }
 
@@ -306,7 +323,11 @@ PlayState _state;
 }
 
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {
-    return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
+    
+    NSString *tempFilePath =[NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
+    
+
+    return tempFilePath;
 }
 
 
