@@ -39,7 +39,7 @@ PlayState _state;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.tempImageFilePath = nil; //nilに初期化しておく。
+    self.imageFilePath = nil; //nilに初期化しておく。
   
     // Update timer for level meter
     _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
@@ -166,35 +166,26 @@ PlayState _state;
     NSLog(@"[REC][DONE] %4.1f", _duration);
     if (_duration < kMinRecordSeconds) {
         [self.recorder deleteRecording];
-        NSLog(@"[REC][DELETE] File deleted");
-    }
-    
-    //tempFileの画像ファイルをDocumentsフォルダに正式に移動しておく。
-    if (self.tempImageFilePath) {
-        NSURL *baseURL = [NSURL fileURLWithPath:[APSoundEntry recordedFileDirectory] isDirectory:YES];
-        NSURL *imageFileURL = [baseURL URLByAppendingPathComponent:self.tempImageFilePath.lastPathComponent];
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSError* error = nil;
-        NSLog(@"srcFileURL is %@", self.tempImageFilePath);
-        NSLog(@"imageFileURL is %@", imageFileURL);
-
+        NSLog(@"[REC][DELETE] Sound File deleted");
         
-        [fm copyItemAtPath:self.tempImageFilePath toPath:imageFileURL.path error:&error];
-        
-        if (error) {
-            NSLog(@"when copying tempImage to Documents folder error occured %@", error);
+        //画像ファイルがある場合は、消しておく。
+        if (self.imageFilePath) {
+            NSFileManager *fm = [NSFileManager defaultManager];
+            NSError* error = nil;
+            NSLog(@"imageFileURL is %@", self.imageFilePath);
+            [fm removeItemAtPath:self.imageFilePath error:&error];
+            if (error) {
+                NSLog(@"when deleting image error occured %@", error);
+            }
         }
         
-        if ([fm fileExistsAtPath:imageFileURL.path]) {
-            NSLog(@"image file really exists");
-        }
     }
-    
+        
     //CoreDataに録音したファイル名とタイトルを保存する処理
     [self saveRecordedSoundInfoToDB];
     
     //新規録音済ファイルをiCloudに保存する処理
-    [self copyRecordedFileToiCloud];
+    [self copyRecordedFileAndImageToiCloud];
     
     if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
         //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
@@ -226,9 +217,9 @@ PlayState _state;
             [model setName:name];
         }
         
-        if (self.tempImageFilePath) {
-            NSLog(@"CoreData image_file is %@", self.tempImageFilePath.lastPathComponent);
-            [model setImage_file:self.tempImageFilePath.lastPathComponent];
+        if (self.imageFilePath) {
+            NSLog(@"CoreData image_file is %@", self.imageFilePath.lastPathComponent);
+            [model setImage_file:self.imageFilePath.lastPathComponent];
             NSLog(@"Model image_file is %@", model.image_file);
         }
 
@@ -250,10 +241,17 @@ PlayState _state;
     return NO;
 }
 
-- (void) copyRecordedFileToiCloud {
-    NSURL* fileURL = [self.recorder.url copy];
+- (void) copyRecordedFileAndImageToiCloud {
+    NSURL* soundFileURL = [self.recorder.url copy];
     //iCloudのAPIはローカルにファイルがなければ、何もしないのでこのままでOK
-    [APiCloudAdapter copyLocalFileToiCloud:fileURL];
+    [APiCloudAdapter copyLocalFileToiCloud:soundFileURL];
+    
+    //画像ファイルがある場合は、それもiCloudにあげておく
+    if (self.imageFilePath) {                
+        [APiCloudAdapter copyLocalFileToiCloud:[NSURL fileURLWithPath:self.imageFilePath]];
+    }
+
+    
 }
 
 -(IBAction)recordPushed:(id)sender {
@@ -328,7 +326,7 @@ PlayState _state;
         }
         
         //保存に成功したらファイル名をcontrollerにもたせておく。
-        self.tempImageFilePath = thumbTmpFile;
+        self.imageFilePath = thumbTmpFile;
         
         //ボタン背景の設定はmain_queueで行う。
         dispatch_async(dispatch_get_main_queue(), ^{

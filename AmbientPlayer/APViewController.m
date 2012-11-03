@@ -469,16 +469,25 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         }
         
         //Remove From iCloud
-        NSString *path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
-        NSURL* fileURL = [NSURL fileURLWithPath:path];
-        [APiCloudAdapter removeCorrespondingFileFromiCloud:fileURL];
-
-        // Remove Localfile
+        NSString *soundPath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
+        NSURL* soundFileURL = [NSURL fileURLWithPath:soundPath];
+        [APiCloudAdapter removeCorrespondingFileFromiCloud:soundFileURL];
+        
+        if (entry.imageFileName) {
+            NSString *imagePath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
+            NSURL* imageFileURL = [NSURL fileURLWithPath:imagePath];
+            [APiCloudAdapter removeCorrespondingFileFromiCloud:imageFileURL];
+        }
+        
+        // Remove Localfiles
         NSFileManager *fileMgr = [NSFileManager defaultManager];
-        [fileMgr removeItemAtPath:path error:nil];
+        [fileMgr removeItemAtPath:soundPath error:nil];
 
-        
-        
+        // 画像ファイルがある場合は、画像をローカルから消す。
+        if (entry.imageFileName) {
+            NSString *imagePath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
+            [fileMgr removeItemAtPath:imagePath error:nil];
+        }
         
         // Update UI
         [self.recordedCollectionView deleteItemsAtIndexPaths:@[_playingItemPathInRecorded]];
