@@ -142,6 +142,11 @@
                                 <rect key="frame" x="0.0" y="-6" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
+                                    <barButtonItem systemItem="cancel" id="gce-ZC-aCc">
+                                        <connections>
+                                            <action selector="cancelButtonPressed:" destination="u9a-S0-9Ye" id="xBQ-ke-8D2"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem systemItem="flexibleSpace" id="vuR-6B-dYP"/>
                                     <barButtonItem style="done" systemItem="done" id="4NO-4P-sZf">
                                         <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -196,12 +201,12 @@
                                     <action selector="thumbPickButtonPressed:" destination="u9a-S0-9Ye" eventType="touchUpInside" id="mvG-0G-Z57"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Untitled" borderStyle="bezel" placeholder="enter this sound's title" minimumFontSize="17" id="zLS-X7-lux">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Untitled" borderStyle="bezel" placeholder="Sound name" minimumFontSize="17" clearButtonMode="whileEditing" id="zLS-X7-lux">
                                 <rect key="frame" x="92" y="66" width="208" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="28"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                 <connections>
                                     <action selector="closeKeybord:" destination="u9a-S0-9Ye" eventType="editingDidEndOnExit" id="fVk-No-5Qk"/>
                                 </connections>
@@ -234,6 +239,7 @@
         <class className="APRecordViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/APRecordViewController.h"/>
             <relationships>
+                <relationship kind="action" name="cancelButtonPressed:"/>
                 <relationship kind="action" name="closeKeybord:"/>
                 <relationship kind="action" name="donePushed:"/>
                 <relationship kind="action" name="locSaveButtonPressed:"/>

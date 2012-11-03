@@ -198,8 +198,11 @@ PlayState _state;
     if (error) {
         NSLog(@"%@", error);
     }
-        
+    
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)cancelButtonPressed:(id)sender {
 }
 
 - (void) saveRecordedSoundInfoToDB {
@@ -250,8 +253,6 @@ PlayState _state;
     if (self.imageFilePath) {                
         [APiCloudAdapter copyLocalFileToiCloud:[NSURL fileURLWithPath:self.imageFilePath]];
     }
-
-    
 }
 
 -(IBAction)recordPushed:(id)sender {
@@ -273,9 +274,9 @@ PlayState _state;
     sheet = [[UIActionSheet alloc]
              initWithTitle:@""
              delegate:self
-             cancelButtonTitle:@"Cancel"
+             cancelButtonTitle:NSLocalizedString(@"CancelButtonLabel", nil)
              destructiveButtonTitle:nil
-             otherButtonTitles:@"Photo Library", @"Camera", nil];
+             otherButtonTitles:NSLocalizedString(@"TakePhotoButtonLabel",nil), NSLocalizedString(@"ChoosePhotoButtonLabel", nil), nil];
     [sheet showInView:self.view];
 }
 
@@ -283,10 +284,10 @@ PlayState _state;
     UIImagePickerControllerSourceType sourceType = 0;
     switch (buttonIndex) {
         case 0:
-            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            sourceType = UIImagePickerControllerSourceTypeCamera;
             break;
         case 1:
-            sourceType = UIImagePickerControllerSourceTypeCamera;
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             break;
         default:
             NSLog(@"Image picker source index out of range");

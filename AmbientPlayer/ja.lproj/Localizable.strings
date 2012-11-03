@@ -13,3 +13,7 @@
 "CancelButtonLabel" = "キャンセル";
 
 "OKButtonLabel" = "OK";
+
+"TakePhotoButtonLabel" = "写真を撮る";
+
+"ChoosePhotoButtonLabel" = "写真を選択";

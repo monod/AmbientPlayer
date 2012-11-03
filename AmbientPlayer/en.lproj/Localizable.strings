@@ -14,6 +14,10 @@
 
 "OKButtonLabel" = "OK";
 
+"TakePhotoButtonLabel" = "Take Photo";
+
+"ChoosePhotoButtonLabel" = "Choose Photo";
+
 "DescForest" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
 
 "DescOcean" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";

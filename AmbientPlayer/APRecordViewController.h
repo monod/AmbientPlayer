@@ -18,6 +18,7 @@
     NSTimeInterval _duration;
 }
 
+- (IBAction)cancelButtonPressed:(id)sender;
 -(IBAction)donePushed:(id)sender;
 -(IBAction)recordPushed:(id)sender;
 -(IBAction)thumbPickButtonPressed:(id)sender;
