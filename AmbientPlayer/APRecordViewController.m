@@ -169,6 +169,27 @@ PlayState _state;
         NSLog(@"[REC][DELETE] File deleted");
     }
     
+    //tempFileの画像ファイルをDocumentsフォルダに正式に移動しておく。
+    if (self.tempImageFilePath) {
+        NSURL *baseURL = [NSURL fileURLWithPath:[APSoundEntry recordedFileDirectory] isDirectory:YES];
+        NSURL *imageFileURL = [baseURL URLByAppendingPathComponent:self.tempImageFilePath.lastPathComponent];
+        NSFileManager *fm = [NSFileManager defaultManager];
+        NSError* error = nil;
+        NSLog(@"srcFileURL is %@", self.tempImageFilePath);
+        NSLog(@"imageFileURL is %@", imageFileURL);
+
+        
+        [fm copyItemAtPath:self.tempImageFilePath toPath:imageFileURL.path error:&error];
+        
+        if (error) {
+            NSLog(@"when copying tempImage to Documents folder error occured %@", error);
+        }
+        
+        if ([fm fileExistsAtPath:imageFileURL.path]) {
+            NSLog(@"image file really exists");
+        }
+    }
+    
     //CoreDataに録音したファイル名とタイトルを保存する処理
     [self saveRecordedSoundInfoToDB];
     
@@ -198,11 +219,17 @@ PlayState _state;
         //絶対パスではなく、Documentsディレクトリに保存されている前提で、ファイル名だけ保存する
         [model setSound_file:self.recorder.url.lastPathComponent];
         
-        if (self.soundTitle.text) {
+        if (self.soundTitle.text != nil && ![self.soundTitle.text isEqualToString:@""]) {
             [model setName:self.soundTitle.text];
         }else {
             NSString *name = self.recorder.url.lastPathComponent.stringByDeletingPathExtension;
             [model setName:name];
+        }
+        
+        if (self.tempImageFilePath) {
+            NSLog(@"CoreData image_file is %@", self.tempImageFilePath.lastPathComponent);
+            [model setImage_file:self.tempImageFilePath.lastPathComponent];
+            NSLog(@"Model image_file is %@", model.image_file);
         }
 
     }
@@ -300,7 +327,7 @@ PlayState _state;
             NSLog(@"Saving a thumbnail failed");
         }
         
-        //保存に成功したらファイルのパスをcontrollerにもたせておく。
+        //保存に成功したらファイル名をcontrollerにもたせておく。
         self.tempImageFilePath = thumbTmpFile;
         
         //ボタン背景の設定はmain_queueで行う。
