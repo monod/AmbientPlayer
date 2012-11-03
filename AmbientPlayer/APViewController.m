@@ -304,9 +304,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         if (entry.imageFileName == nil)
             path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
         else {
-            NSLog(@"entry's image file for view cell is %@  -----------------", entry.imageFileName);
+            //NSLog(@"entry's image file for view cell is %@  -----------------", entry.imageFileName);
             path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
-            NSLog(@"custom image file for view cell is %@  -----------------", path);
+            //NSLog(@"custom image file for view cell is %@  -----------------", path);
         }
         
         
