@@ -7,6 +7,7 @@
 //
 
 #import "APViewController.h"
+#import "APAppDelegate.h"
 
 #import <iAd/iAd.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -16,6 +17,7 @@
 #import "APSoundEntry.h"
 #import "APSoundSelectViewCell.h"
 #import "APiCloudAdapter.h"
+#import "APCustomSoundEntryModel.h"
 
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString * const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
@@ -102,6 +104,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //set CoreData managedObjectContext
+    self.managedObjectContext = [APAppDelegate sharedManagedObjectContext];
+    
 	// Do any additional setup after loading the view, typically from a nib.
     [self.view addSubview:_bannerView];
     
@@ -183,30 +189,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 }
 
 - (NSMutableArray *)findRecordedSoundEntries {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:[APSoundEntry recordedFileDirectory] error:nil];
-    
-    //サムネイル検索処理が少し重いので、1エントリごとに.m4aと.pngを含む1ディレクトリというファイル構造にした方がよくない？
-    NSPredicate *fltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.m4a'"];
-    NSPredicate *thumbFltr = [NSPredicate predicateWithFormat:@"self ENDSWITH '.png'"];
-    NSArray *thumbs = [dirContents filteredArrayUsingPredicate:thumbFltr];
-
-    //保存した.m4aファイルからAPSoundEntryを生成する処理
-    NSMutableArray *recordedSoundEntries = [NSMutableArray array];
-    id recordedFileName;
-    for (recordedFileName in [dirContents filteredArrayUsingPredicate:fltr]) {
-        NSLog(@"fileName is %@",recordedFileName);
-        NSString *thumbFileName = [recordedFileName stringByReplacingOccurrencesOfString:@".m4a" withString:@".png"]; // know that ".m4a" occurs only in the extension?
-        APSoundEntry *recordedSountEntry;
-        if ([thumbs containsObject:thumbFileName])
-            recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName andImageFileName:thumbFileName];
-        else
-            recordedSountEntry = [[APSoundEntry alloc] initWithTitle:recordedFileName withFileName:recordedFileName];
-        [recordedSoundEntries addObject:recordedSountEntry];
-    }
-    
-    //return [dirContents filteredArrayUsingPredicate:fltr];
-    return recordedSoundEntries;
+    return [APCustomSoundEntryModel getAllSoundEntriesIn:self.managedObjectContext];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

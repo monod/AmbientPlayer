@@ -20,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [APiCloudAdapter prepareiCloudAccess];
-    self.viewController.managedObjectContext = [self managedObjectContext];
+//    self.viewController.managedObjectContext = [self managedObjectContext];
     return YES;
 }
 

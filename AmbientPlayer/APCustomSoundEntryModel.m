@@ -7,6 +7,7 @@
 //
 
 #import "APCustomSoundEntryModel.h"
+#import "APSoundEntry.h"
 
 
 @implementation APCustomSoundEntryModel
@@ -30,6 +31,38 @@
     } else {
         return NO;
     }
+}
+
++ (NSMutableArray *) getAllSoundEntriesIn:(NSManagedObjectContext *)managedObjectContext
+{
+    //保存した.m4aファイルからAPSoundEntryを生成する処理
+    NSMutableArray *recordedSoundEntries = [NSMutableArray array];
+    
+    NSLog(@"manegedObjectContext is %@", managedObjectContext);
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCustomSoundEntryModel"                                inManagedObjectContext:managedObjectContext];
+    [request setEntity:entity];
+    
+    NSError *error = nil;
+    NSArray *mutableFetchResults = [managedObjectContext
+                                    executeFetchRequest:request error:&error];
+    if (mutableFetchResults == nil || error) {
+        // エラーを処理する
+        NSLog(@"%@", error);
+        //空の配列を返しておく。
+        return recordedSoundEntries;
+    }
+    
+    //APCustomSoundEntryModelからビュー表示用のAPSoundEntryに変換する
+    
+    for (APCustomSoundEntryModel *soundModelInDB in mutableFetchResults){
+        APSoundEntry *newEntry = [[APSoundEntry alloc] initWithTitle:soundModelInDB.name withFileName:soundModelInDB.sound_file];
+        newEntry.moID = soundModelInDB.objectID;
+        [recordedSoundEntries addObject:newEntry];
+    }
+    
+    return recordedSoundEntries;
 }
 
 @end

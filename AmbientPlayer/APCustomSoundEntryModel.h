@@ -25,4 +25,6 @@
 
 
 - (BOOL) soundRecorded;
+
++ (NSMutableArray*) getAllSoundEntriesIn:(NSManagedObjectContext *) managedObjectContext;
 @end

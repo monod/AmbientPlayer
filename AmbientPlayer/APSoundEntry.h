@@ -12,6 +12,7 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *imageFileName;
+@property (nonatomic, copy) NSManagedObjectID *moID; //CoreDataのデータを操作するために対応するデータのキー情報だけは持たせておく
 
 -(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName;
 -(id)initWithTitle:(NSString *)title withFileName:(NSString *)fileName andImageFileName:(NSString *)imageFileName;
