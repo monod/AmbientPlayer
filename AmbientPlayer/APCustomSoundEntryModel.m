@@ -16,6 +16,12 @@
 @dynamic latitude;
 @dynamic longitude;
 @dynamic name;
+@dynamic desc;
+@dynamic user_name;
+@dynamic attribution;
+@dynamic option1;
+@dynamic option2;
+
 
 - (BOOL) soundRecorded
 {

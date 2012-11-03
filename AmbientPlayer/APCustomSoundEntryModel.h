@@ -17,6 +17,11 @@
 @property (nonatomic, retain) NSNumber * latitude;
 @property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * desc;
+@property (nonatomic, retain) NSString * user_name;
+@property (nonatomic, retain) NSString * attribution;
+@property (nonatomic, retain) NSString * option1;
+@property (nonatomic, retain) NSString * option2;
 
 
 - (BOOL) soundRecorded;

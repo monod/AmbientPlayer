@@ -192,8 +192,9 @@ PlayState _state;
 
     if ([self isRecordedFileExists]) {
         APCustomSoundEntryModel *model = self.addingSoundEntry;
-        
-        [model setSound_file:self.recorder.url.lastPathComponent];//絶対パスではなく、soundディレクトリに保存されている前提で、ファイル名だけ保存する
+
+        //絶対パスではなく、soundディレクトリに保存されている前提で、ファイル名だけ保存する
+        [model setSound_file:self.recorder.url.lastPathComponent];
         
         if (self.soundTitle.text) {
             [model setName:self.soundTitle.text];
