@@ -249,8 +249,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         }
         case kTagRecordedSoundCollectionView:
         {
-            if ([collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
-                // last item in the section: "Add" button
+            if (indexPath.section == 0 && indexPath.row == 0) {
+                // first item in the section: "Add" button
                 APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddCellIdentifier forIndexPath:indexPath];
                 cell.title.text = @"Add...";
                 NSString *path = [[NSBundle mainBundle] pathForResource:@"add" ofType:@"png"];
@@ -269,6 +269,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 - (UICollectionViewCell *) setUpCollectionViewCell:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *) soundEntries {
     NSInteger index = indexPath.row;
+    if (collectionView.tag == kTagRecordedSoundCollectionView) {
+        index--;
+    }
     APSoundEntry *entry = [soundEntries objectAtIndex:index];
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
     
@@ -339,7 +342,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == kTagRecordedSoundCollectionView && [collectionView numberOfItemsInSection:0] == indexPath.row + 1) {
+    if (collectionView.tag == kTagRecordedSoundCollectionView && indexPath.section == 0 && indexPath.row
+         == 0) {
         // 「追加」のセルだった場合、録音用画面を呼び出すようにする
         [self deselectAll];
         [self updatePlayState];
@@ -436,7 +440,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         [self.player setVolume:self.volumeSlider.value];
         [self.player play:entry rootDirectory:nil];
     } else if (_playingItemPathInRecorded) {
-        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
+        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row - 1];
         [self.player setVolume:self.volumeSlider.value];
         [self.player play:entry rootDirectory:[APSoundEntry recordedFileDirectory]];
     } else {
@@ -564,10 +568,10 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 
 - (void)showDeleteConfirmAlert {
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:@"Delete"
-                          message:@"Are you sure you want to delete the playing sound?"
+                          initWithTitle:NSLocalizedString(@"DeleteAlertTitle", nil)
+                          message:NSLocalizedString(@"DeleteAlertMessage", nil)
                           delegate:self
-                          cancelButtonTitle:@"Cancel"
+                          cancelButtonTitle:NSLocalizedString(@"CancelButtonLabel", nil)
                           otherButtonTitles:@"OK", nil];
     alert.tag = kTagAlertDeleteSound;
     [alert show];

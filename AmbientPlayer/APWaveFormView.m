@@ -93,8 +93,8 @@ UIBezierPath *_selectedPath;
     _prevX = (int)x;
     _maxValue = MAX(_maxValue, linearVal);
     
-    _boundingBox.size.height = MAX(kTouchAreaSize, _maxValue * self.bounds.size.height);
-    _boundingBox.origin.y = (self.frame.size.height - _boundingBox.size.height) / 2.0;
+    _boundingBox.size.height = MAX(kTouchAreaSize, _maxValue * (self.bounds.size.height - kTouchAreaSize * 2));
+    _boundingBox.origin.y = (self.bounds.size.height - _boundingBox.size.height) / 2.0;
     [self setNeedsDisplay];
 }
 
@@ -121,21 +121,21 @@ UIBezierPath *_selectedPath;
     UITouch *touch = (UITouch *)[touches anyObject];
     CGPoint p = [touch locationInView:self];
     
-    if (ABS(_boundingBox.origin.y - p.y) < kTouchAreaSize) {
-        // Top edge
-        _selectedEdge = EdgeTop;
-        [self setNeedsDisplay];
-    } else if (ABS(_boundingBox.origin.y + _boundingBox.size.height - p.y) < kTouchAreaSize) {
-        // Bottom edge
-        _selectedEdge = EdgeBottom;
-        [self setNeedsDisplay];
-    } else if (ABS(_boundingBox.origin.x - p.x) < kTouchAreaSize) {
+    if (ABS(_boundingBox.origin.x - p.x) < kTouchAreaSize) {
         // Left edge
         _selectedEdge = EdgeLeft;
         [self setNeedsDisplay];
     } else if (ABS(_boundingBox.origin.x + _boundingBox.size.width - p.x) < kTouchAreaSize) {
         // Right edge
         _selectedEdge = EdgeRight;
+        [self setNeedsDisplay];
+    } else if (ABS(_boundingBox.origin.y - p.y) < kTouchAreaSize) {
+        // Top edge
+        _selectedEdge = EdgeTop;
+        [self setNeedsDisplay];
+    } else if (ABS(_boundingBox.origin.y + _boundingBox.size.height - p.y) < kTouchAreaSize) {
+        // Bottom edge
+        _selectedEdge = EdgeBottom;
         [self setNeedsDisplay];
     }
 }
@@ -160,12 +160,13 @@ UIBezierPath *_selectedPath;
         CGFloat bottom = _boundingBox.origin.y + _boundingBox.size.height;
         if (kTouchAreaSize < p.y && p.y < bottom) {
             _boundingBox.origin.y = p.y;
-            _boundingBox.size.height = bottom - p.y;
+            _boundingBox.size.height = self.bounds.size.height - p.y * 2;
             [self setNeedsDisplay];
         }
     } else if (_selectedEdge == EdgeBottom) {
         if (_boundingBox.origin.y < p.y && p.y < self.bounds.size.height - kTouchAreaSize) {
-            _boundingBox.size.height = p.y - _boundingBox.origin.y;
+            _boundingBox.origin.y = self.bounds.size.height - p.y;
+            _boundingBox.size.height = self.bounds.size.height - _boundingBox.origin.y * 2;
             [self setNeedsDisplay];
         }
     }
@@ -183,6 +184,8 @@ UIBezierPath *_selectedPath;
 
 #pragma mark Draw method
 
+const float kMarkSize = 6;
+
 - (void)drawRect:(CGRect)rect {
     // Drawing code
     if (_showHandle) {
@@ -194,10 +197,19 @@ UIBezierPath *_selectedPath;
         _selectedPath = nil;
         
         // Left
+        CGPoint q1 = CGPointMake(_boundingBox.origin.x, self.bounds.origin.y + kMarkSize);
+        CGPoint q2 = CGPointMake(q1.x - kMarkSize, q1.y - kMarkSize);
         CGPoint p1 = CGPointMake(_boundingBox.origin.x, self.bounds.origin.y);
         CGPoint p2 = CGPointMake(_boundingBox.origin.x, self.bounds.origin.y + self.bounds.size.height);
-        [path moveToPoint:p1];
+        CGPoint q3 = CGPointMake(_boundingBox.origin.x - kMarkSize, p2.y);
+        CGPoint q4 = CGPointMake(_boundingBox.origin.x, q3.y - kMarkSize);
+        
+        [path moveToPoint:q1];
+        [path addLineToPoint:q2];
+        [path addLineToPoint:p1];
         [path addLineToPoint:p2];
+        [path addLineToPoint:q3];
+        [path addLineToPoint:q4];
         if (_selectedEdge == EdgeLeft) {
             _selectedPath = [UIBezierPath bezierPath];
             [_selectedPath moveToPoint:p1];
@@ -205,10 +217,19 @@ UIBezierPath *_selectedPath;
         }
         
         // Right
+        q1 = CGPointMake(_boundingBox.origin.x + _boundingBox.size.width, self.bounds.origin.y + kMarkSize);
+        q2 = CGPointMake(q1.x + kMarkSize, q1.y - kMarkSize);
         p1 = CGPointMake(_boundingBox.origin.x + _boundingBox.size.width, self.bounds.origin.y);
         p2 = CGPointMake(_boundingBox.origin.x + _boundingBox.size.width, self.bounds.origin.y + self.bounds.size.height);
-        [path moveToPoint:p1];
+        q3 = CGPointMake(p2.x + kMarkSize, p2.y);
+        q4 = CGPointMake(q3.x - kMarkSize, q3.y - kMarkSize);
+
+        [path moveToPoint:q1];
+        [path addLineToPoint:q2];
+        [path addLineToPoint:p1];
         [path addLineToPoint:p2];
+        [path addLineToPoint:q3];
+        [path addLineToPoint:q4];
         if (_selectedEdge == EdgeRight) {
             _selectedPath = [UIBezierPath bezierPath];
             [_selectedPath moveToPoint:p1];
@@ -216,10 +237,19 @@ UIBezierPath *_selectedPath;
         }
         
         // Top
+        q1 = CGPointMake(self.bounds.origin.x + kMarkSize, _boundingBox.origin.y);
+        q2 = CGPointMake(q1.x - kMarkSize, q1.y - kMarkSize);
         p1 = CGPointMake(self.bounds.origin.x, _boundingBox.origin.y);
         p2 = CGPointMake(self.bounds.origin.x + self.bounds.size.width, _boundingBox.origin.y);
-        [path moveToPoint:p1];
+        q3 = CGPointMake(p2.x, p2.y - kMarkSize);
+        q4 = CGPointMake(q3.x - kMarkSize, q3.y + kMarkSize);
+
+        [path moveToPoint:q1];
+        [path addLineToPoint:q2];
+        [path addLineToPoint:p1];
         [path addLineToPoint:p2];
+        [path addLineToPoint:q3];
+        [path addLineToPoint:q4];
         if (_selectedEdge == EdgeTop) {
             _selectedPath = [UIBezierPath bezierPath];
             [_selectedPath moveToPoint:p1];
@@ -227,10 +257,19 @@ UIBezierPath *_selectedPath;
         }
         
         // Bottom
+        q1 = CGPointMake(self.bounds.origin.x + kMarkSize, _boundingBox.origin.y + _boundingBox.size.height);
+        q2 = CGPointMake(q1.x - kMarkSize, q1.y + kMarkSize);
         p1 = CGPointMake(self.bounds.origin.x, _boundingBox.origin.y + _boundingBox.size.height);
         p2 = CGPointMake(self.bounds.origin.x + self.bounds.size.width, _boundingBox.origin.y + _boundingBox.size.height);
-        [path moveToPoint:p1];
+        q3 = CGPointMake(p2.x, p2.y + kMarkSize);
+        q4 = CGPointMake(q3.x - kMarkSize, q3.y - kMarkSize);
+        
+        [path moveToPoint:q1];
+        [path addLineToPoint:q2];
+        [path addLineToPoint:p1];
         [path addLineToPoint:p2];
+        [path addLineToPoint:q3];
+        [path addLineToPoint:q4];
         if (_selectedEdge == EdgeBottom) {
             _selectedPath = [UIBezierPath bezierPath];
             [_selectedPath moveToPoint:p1];
@@ -238,7 +277,9 @@ UIBezierPath *_selectedPath;
         }
         
         [[UIColor yellowColor] setStroke];
+        [[UIColor yellowColor] setFill];
         [path stroke];
+        [path fill];
         _selectedPath.lineWidth = 4.0;
         [_selectedPath stroke];
     }
