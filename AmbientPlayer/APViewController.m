@@ -195,6 +195,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     NSMutableArray *recordedSoundEntries = [NSMutableArray array];
     id recordedFileName;
     for (recordedFileName in [dirContents filteredArrayUsingPredicate:fltr]) {
+        NSLog(@"fileName is %@",recordedFileName);
         NSString *thumbFileName = [recordedFileName stringByReplacingOccurrencesOfString:@".m4a" withString:@".png"]; // know that ".m4a" occurs only in the extension?
         APSoundEntry *recordedSountEntry;
         if ([thumbs containsObject:thumbFileName])
