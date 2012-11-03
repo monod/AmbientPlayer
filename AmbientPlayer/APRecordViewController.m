@@ -234,9 +234,9 @@ PlayState _state;
         }
         
         if (self.imageFilePath) {
-            NSLog(@"CoreData image_file is %@", self.imageFilePath.lastPathComponent);
+            //NSLog(@"CoreData image_file is %@", self.imageFilePath.lastPathComponent);
             [model setImage_file:self.imageFilePath.lastPathComponent];
-            NSLog(@"Model image_file is %@", model.image_file);
+            //NSLog(@"Model image_file is %@", model.image_file);
         }
 
     }
@@ -246,10 +246,10 @@ PlayState _state;
 
     if(self.recorder.url) {
         NSString* filePath = self.recorder.url.path;
-        NSLog(@"%@", filePath);
+        //NSLog(@"%@", filePath);
         NSFileManager * fm = [NSFileManager defaultManager];
         if ([fm fileExistsAtPath:filePath]) {
-            NSLog(@"file really exists");
+            //NSLog(@"file really exists");
             return YES;
         }
     }
@@ -376,7 +376,7 @@ PlayState _state;
 
 -(IBAction)locSaveButtonPressed:(id)sender {
     //位置情報の保存
-    NSLog(@"locSaveButtonPressed: stub"); // FIXME: Implement!
+    //NSLog(@"locSaveButtonPressed: stub"); //Implement!
 }
 
 - (IBAction)closeKeybord:(id)sender {
