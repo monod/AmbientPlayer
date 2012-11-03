@@ -313,9 +313,13 @@ PlayState _state;
         NSLog(@"%@ => %@", key, [info objectForKey:key]);
     }
 
-    UIImage *image = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
-    NSLog(@"%f, %f", image.size.width, image.size.height); // for debugging
+    UIImage *originalImage = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
+    NSLog(@"%f, %f", originalImage.size.width, originalImage.size.height); // for debugging
     [self dismissViewControllerAnimated:YES completion:NULL];
+    
+    //ここに画像リサイズ処理を挟む
+    UIImage *image = [self resizedImage:originalImage size:CGSizeMake(320, 320)];
+    
     NSData *pngImage = UIImagePNGRepresentation(image);
     NSString *thumbTmpFile = [self createTmpFilePathWithExt:@"png"];
     
@@ -337,6 +341,24 @@ PlayState _state;
     
 
 }
+
+- (UIImage*)resizedImage:(UIImage *)img size:(CGSize)size
+{
+    CGFloat widthRatio  = size.width  / img.size.width;
+    CGFloat heightRatio = size.height / img.size.height;
+    CGFloat ratio = (widthRatio < heightRatio) ? widthRatio : heightRatio;
+    CGSize resizedSize = CGSizeMake(img.size.width*ratio, img.size.height*ratio);
+    
+    UIGraphicsBeginImageContext(resizedSize);
+    
+    [img drawInRect:CGRectMake(0, 0, resizedSize.width, resizedSize.height)];
+    UIImage* resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return resizedImage;
+}
+
 
 -(IBAction)locSaveButtonPressed:(id)sender {
     //位置情報の保存
