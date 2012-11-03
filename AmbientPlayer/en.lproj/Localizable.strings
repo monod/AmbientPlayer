@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  AmbientPlayer
+
+  Created by OHKI Yoshihito on 2012/11/03.
+  Copyright (c) 2012 Veronica Software. All rights reserved.
+*/
+
+"DeleteAlertTitle" = "Delete";
+
+"DeleteAlertMessage" = "Are you sure you want to delete the playing sound?";
+
+"CancelButtonLabel" = "Cancel";
+
+"OKButtonLabel" = "OK";

@@ -20,6 +20,7 @@
         
         // Image
         self.preview = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, frame.size.width, frame.size.height)];
+        self.backgroundColor = [UIColor darkGrayColor];
         //self.backgroundView = self.preview;
         [self.contentView addSubview:self.preview];
         

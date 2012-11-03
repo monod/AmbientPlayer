@@ -25,7 +25,10 @@
         // Initialization code
         UINib *nib = [UINib nibWithNibName:@"APSoundCellBackView" bundle:[NSBundle mainBundle]];
         NSArray *array = [nib instantiateWithOwner:self options:nil];
-        [self addSubview:[array objectAtIndex:0]];
+        UIView *view = [array objectAtIndex:0];
+        UIImage *backgroundImage = [UIImage imageNamed:@"paper"];
+        view.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
+        [self addSubview:view];
     }
     return self;
 }
