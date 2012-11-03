@@ -57,7 +57,7 @@
     //APCustomSoundEntryModelからビュー表示用のAPSoundEntryに変換する
     
     for (APCustomSoundEntryModel *soundModelInDB in mutableFetchResults){
-        APSoundEntry *newEntry = [[APSoundEntry alloc] initWithTitle:soundModelInDB.name withFileName:soundModelInDB.sound_file];
+        APSoundEntry *newEntry = [[APSoundEntry alloc] initWithTitle:soundModelInDB.name fileName:soundModelInDB.sound_file];
         newEntry.moID = soundModelInDB.objectID;
         [recordedSoundEntries addObject:newEntry];
     }

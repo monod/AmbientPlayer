@@ -10,10 +10,10 @@
 
 @interface APSoundCellBackView : UIView
 
-@property (nonatomic, strong) IBOutlet UILabel *title;
-@property (nonatomic, strong) IBOutlet UITextView *description;
-@property (nonatomic, strong) IBOutlet UIButton *doneButton;
-@property (nonatomic, strong) IBOutlet UIButton *deleteButton;
-@property (nonatomic, strong) IBOutlet UIButton *shareButton;
+@property (nonatomic, weak) IBOutlet UILabel *title;
+@property (nonatomic, weak) IBOutlet UIButton *doneButton;
+@property (nonatomic, weak) IBOutlet UIButton *deleteButton;
+@property (nonatomic, weak) IBOutlet UIButton *shareButton;
+@property (nonatomic, weak) IBOutlet UITextView *description;
 
 @end
