@@ -38,7 +38,7 @@
     //保存した.m4aファイルからAPSoundEntryを生成する処理
     NSMutableArray *recordedSoundEntries = [NSMutableArray array];
     
-    NSLog(@"manegedObjectContext is %@", managedObjectContext);
+    //NSLog(@"manegedObjectContext is %@", managedObjectContext);
     
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"APCustomSoundEntryModel"                                inManagedObjectContext:managedObjectContext];
@@ -61,6 +61,10 @@
         newEntry.moID = soundModelInDB.objectID;
         if (soundModelInDB.image_file) {
             newEntry.imageFileName = soundModelInDB.image_file;
+        }
+        
+        if (soundModelInDB.desc) {
+            newEntry.description = soundModelInDB.desc;
         }
         [recordedSoundEntries addObject:newEntry];
     }

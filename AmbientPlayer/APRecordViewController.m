@@ -214,6 +214,14 @@ PlayState _state;
 
     if ([self isRecordedFileExists]) {
         APCustomSoundEntryModel *model = self.addingSoundEntry;
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"M dd yyyy HH:mm:ss";
+        
+        NSString *descDate =  [formatter stringFromDate:self.sessionTime];
+        
+        NSString *desc = [@"Recorded on " stringByAppendingString:descDate];
+        [model setDesc:desc];
 
         //絶対パスではなく、Documentsディレクトリに保存されている前提で、ファイル名だけ保存する
         [model setSound_file:self.recorder.url.lastPathComponent];
