@@ -303,8 +303,13 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         NSString *path = nil;
         if (entry.imageFileName == nil)
             path = [[NSBundle mainBundle] pathForResource:@"sound" ofType:@"png"];
-        else
+        else {
+            NSLog(@"entry's image file for view cell is %@  -----------------", entry.imageFileName);
             path = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
+            NSLog(@"custom image file for view cell is %@  -----------------", path);
+        }
+        
+        
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
         cell.backView.deleteButton.hidden = NO;

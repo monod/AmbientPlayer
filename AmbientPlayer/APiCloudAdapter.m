@@ -62,9 +62,13 @@
     NSURL *tempFileURL = [baseURL URLByAppendingPathComponent:fileName];
     NSFileManager *fm = [NSFileManager defaultManager];
     NSError* error = nil;
-    if ([fm copyItemAtPath:localFileURL.path toPath:tempFileURL.path error:&error]) {
+    if ([fm copyItemAtURL:localFileURL toURL:tempFileURL error:&error]) {
         return tempFileURL;
     }
+    if (error) {
+        NSLog(@"%@", error);
+    }
+    
     return nil;
 }
 

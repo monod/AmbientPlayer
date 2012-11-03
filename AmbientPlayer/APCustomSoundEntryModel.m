@@ -59,6 +59,9 @@
     for (APCustomSoundEntryModel *soundModelInDB in mutableFetchResults){
         APSoundEntry *newEntry = [[APSoundEntry alloc] initWithTitle:soundModelInDB.name fileName:soundModelInDB.sound_file];
         newEntry.moID = soundModelInDB.objectID;
+        if (soundModelInDB.image_file) {
+            newEntry.imageFileName = soundModelInDB.image_file;
+        }
         [recordedSoundEntries addObject:newEntry];
     }
     
