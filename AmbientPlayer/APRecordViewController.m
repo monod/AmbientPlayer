@@ -157,8 +157,6 @@ PlayState _state;
     [self updateButtonLabel];
     [self.waveForm showHandle:YES];
     NSLog(@"[REC][STOP]");
-    
-
 }
 
 -(IBAction)donePushed:(id)sender {
@@ -199,6 +197,7 @@ PlayState _state;
         NSLog(@"%@", error);
     }
     
+    self.recorder = nil;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

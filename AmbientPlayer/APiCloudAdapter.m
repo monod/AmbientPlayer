@@ -57,6 +57,9 @@
 }
 
 + (NSURL *) copyLocalFileToTemporaryDirectory:(NSURL *)localFileURL {
+    if (!localFileURL) {
+        return nil;
+    }
     NSString * fileName = localFileURL.lastPathComponent;
     NSURL *baseURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
     NSURL *tempFileURL = [baseURL URLByAppendingPathComponent:fileName];
