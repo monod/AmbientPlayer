@@ -172,10 +172,8 @@ PlayState _state;
     //新規録音済ファイルをiCloudに保存する処理
     [self copyRecordedFileAndImageToiCloud];
     
-    if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
-        //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
-        [self.managedObjectContext deleteObject:self.addingSoundEntry];
-    }
+    //CoreDataに一時データがあるか調べて、残っていたら消す処理
+    [self checkTempCoreDataEntry];
     
     NSError *error = nil;
     [self.managedObjectContext save:&error];
@@ -188,9 +186,17 @@ PlayState _state;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void) checkTempCoreDataEntry {
+    if (self.addingSoundEntry && !(self.addingSoundEntry.soundRecorded)) {
+        //何も録音されていなかったら、managedObjectContextからaddingSoundEntryを削除しておく。
+        [self.managedObjectContext deleteObject:self.addingSoundEntry];
+    }
+}
+
 - (IBAction)cancelButtonPressed:(id)sender {
     [self cancelRecording];
     self.recorder = nil;
+    [self checkTempCoreDataEntry];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -202,7 +208,7 @@ PlayState _state;
     if (self.imageFilePath) {
         NSFileManager *fm = [NSFileManager defaultManager];
         NSError* error = nil;
-        NSLog(@"imageFileURL is %@", self.imageFilePath);
+        //NSLog(@"imageFileURL is %@", self.imageFilePath);
         [fm removeItemAtPath:self.imageFilePath error:&error];
         if (error) {
             NSLog(@"when deleting image error occured %@", error);
@@ -223,7 +229,7 @@ PlayState _state;
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"M dd yyyy HH:mm:ss";
         
-        NSString *descDate =  [formatter stringFromDate:self.sessionTime];
+        NSString *descDate =  [formatter stringFromDate:[NSDate date]];
         
         NSString *desc = [@"Recorded on " stringByAppendingString:descDate];
         [model setDesc:desc];
@@ -390,7 +396,7 @@ PlayState _state;
 
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {
     
-    NSString *tempFilePath =[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
+    NSString *tempFilePath =[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:[NSDate date]], ext]];
     
 
     return tempFilePath;
