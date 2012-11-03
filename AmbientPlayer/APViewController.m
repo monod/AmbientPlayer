@@ -463,8 +463,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
         [self.player stop];
         
         // Remove entry from array
-        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row];
-        [self.recordedSoundEntries removeObjectAtIndex:_playingItemPathInRecorded.row];
+        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:_playingItemPathInRecorded.row - 1];
+        [self.recordedSoundEntries removeObject:entry];
 
         //Remove From CoreData
         if (entry.moID) {

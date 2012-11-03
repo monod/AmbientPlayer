@@ -52,6 +52,7 @@ SYNTHESIZE(soundEntry);
     self.player2 = [self newPlayer];
     
     self.duration = self.player1.duration;
+       
     NSAssert(self.duration > kCrossFadeDuration, @"Sound duration %f should > %f", self.duration, kCrossFadeDuration);
     
     BOOL playSucc = [self.player1 play];

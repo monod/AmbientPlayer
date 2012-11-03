@@ -351,7 +351,7 @@ PlayState _state;
 
 - (NSString *)createTmpFilePathWithExt:(NSString *)ext {
     
-    NSString *tempFilePath =[NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
+    NSString *tempFilePath =[[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent: [NSString stringWithFormat:@"%@.%@", [_formatter stringFromDate:self.sessionTime], ext]];
     
 
     return tempFilePath;
