@@ -164,7 +164,9 @@ PlayState _state;
     if (_duration < kMinRecordSeconds) {
         [self cancelRecording];        
     }
-        
+
+    //CoreDataに録音したファイル名とタイトルを保存する処理
+    [self saveRecordedSoundInfoToDB];
      
     //CoreDataに一時データがあるか調べて、録音していないのに一時データが残っていたら消す処理
     [self checkTempCoreDataEntry];
