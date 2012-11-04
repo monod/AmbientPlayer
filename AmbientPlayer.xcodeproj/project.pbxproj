@@ -167,7 +167,6 @@
 		40B6FA281619040A0051FD8B /* airport_in.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = airport_in.m4a; sourceTree = "<group>"; };
 		40B6FA2B161904210051FD8B /* airport_in.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = airport_in.jpg; sourceTree = "<group>"; };
 		40B6FA2C161904210051FD8B /* airport_in@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "airport_in@2x.jpg"; sourceTree = "<group>"; };
-		40B6FA2F161A51830051FD8B /* AmbientPlayer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AmbientPlayer.entitlements; sourceTree = "<group>"; };
 		40B6FA44161A64AD0051FD8B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		40B6FA46161A64B20051FD8B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		40B6FA48161A69060051FD8B /* sound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sound.png; sourceTree = "<group>"; };
@@ -359,7 +358,6 @@
 		40A2069515F67790004BE2E1 /* AmbientPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				40B6FA2F161A51830051FD8B /* AmbientPlayer.entitlements */,
 				AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */,
 				AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */,
 				AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */,
@@ -710,7 +708,6 @@
 		40A206C215F67791004BE2E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = AmbientPlayer/AmbientPlayer.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
@@ -723,7 +720,6 @@
 		40A206C315F67791004BE2E1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = AmbientPlayer/AmbientPlayer.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
