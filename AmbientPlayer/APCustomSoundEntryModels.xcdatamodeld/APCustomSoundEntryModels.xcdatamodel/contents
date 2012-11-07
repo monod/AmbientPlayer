@@ -4,7 +4,7 @@
         <attribute name="attribution" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="desc" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image_file" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="is_sound_cloud_file" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="is_sound_cloud_file" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>

@@ -22,6 +22,7 @@
 @dynamic attribution;
 @dynamic option1;
 @dynamic option2;
+@dynamic is_sound_cloud_file;
 
 
 - (BOOL) soundRecorded
