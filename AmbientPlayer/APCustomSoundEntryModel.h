@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSString * attribution;
 @property (nonatomic, retain) NSString * option1;
 @property (nonatomic, retain) NSString * option2;
+@property (nonatomic) BOOL is_sound_cloud_file;
 
 
 - (BOOL) soundRecorded;
