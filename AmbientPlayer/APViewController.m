@@ -153,6 +153,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     path = [[NSBundle mainBundle] pathForResource:@"max" ofType:@"png"];
     img = [UIImage imageWithContentsOfFile:path];
     [self.volumeSlider setMaximumTrackImage:img forState:UIControlStateNormal];
+    
+    // Init CALayer
+    [self initLayersAndViewsForAnimation];
 }
 
 - (void)setupAudioSession {
@@ -608,6 +611,125 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     }
 }
 
+#pragma mark UIGestureRecognizer
+
+- (IBAction)onSwipeLeft:(id)sender {
+    int index = self.pageControl.currentPage;
+    if (index == 0) {
+        [self turnFace:1];
+    }
+}
+
+- (IBAction)onSwipeRight:(id)sender {
+    int index = self.pageControl.currentPage;
+    if (index == 1) {
+        [self turnFace:0];
+    }
+}
+
+#pragma mark Cubic transition
+
+CALayer *_parent;
+__weak CALayer *_layers[2];
+__weak UIView *_views[2];
+
+- (void)initLayersAndViewsForAnimation {
+    
+    CGFloat viewWidth = self.presetCollectionView.frame.size.width;
+    CGFloat viewHeight = self.presetCollectionView.frame.size.height;
+    
+    CATransform3D r;
+    CATransform3D t;
+    
+    CATransform3D front = CATransform3DMakeTranslation(0, 0, 0);
+    
+    r = CATransform3DMakeRotation(M_PI * 0.5, 0, 1, 0);
+    t = CATransform3DMakeTranslation(viewWidth / 2, 0, -viewWidth / 2);
+    CATransform3D right = CATransform3DConcat(r, t);
+    
+    if (_parent == nil) {
+        _parent = [CALayer layer];
+        _parent.bounds = CGRectMake(0, 0, viewWidth, viewHeight);
+        _parent.position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        
+        [self initParentTransform];
+        [self.view.layer insertSublayer:_parent atIndex:0];
+    }
+    if (_layers[0] == nil) {
+        _layers[0] = [CALayer layer];
+        _layers[0].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
+        _layers[0].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        //_layers[0].backgroundColor = [UIColor redColor].CGColor;
+        _layers[0].transform = front;
+        [_parent addSublayer:_layers[0]];
+    }
+    
+    if (_layers[1] == nil) {
+        _layers[1] = [CALayer layer];
+        _layers[1].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
+        _layers[1].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        //_layers[1].backgroundColor = [UIColor blueColor].CGColor;
+        _layers[1].transform = right;
+        [_parent addSublayer:_layers[1]];
+    }
+    
+    _views[0] = self.presetCollectionView;
+    _views[1] = self.recordedCollectionView;
+}
+
+- (void)turnFace:(int)newIndex {
+    [self initParentTransform];
+    int index = self.pageControl.currentPage;
+    CGFloat viewWidth = self.presetCollectionView.frame.size.width;
+    CGFloat viewHeight = self.presetCollectionView.frame.size.height;
+    
+    // Update current view to layer
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    if (_layers[index].contents == nil) {
+        // Get image from parent view in case view has been scrolled
+        [self setContentToLayer:_layers[index] fromView:self.collectionParent];
+    }
+    if (_layers[newIndex].contents == nil) {
+        [self setContentToLayer:_layers[newIndex] fromView:_views[newIndex]];
+    }
+    [CATransaction commit];
+    
+    // Hide current view
+    _views[index].frame = CGRectMake(-viewWidth, 0, viewWidth, viewHeight);
+    
+    // Begin animation
+    CGFloat rad = (0 - newIndex) * M_PI * 0.5;
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0.5];
+    [CATransaction setCompletionBlock:^(void) {
+        // Show next view
+        _views[newIndex].frame = CGRectMake(0, 0, viewWidth, viewHeight);
+        // update page control
+        self.pageControl.currentPage = newIndex;
+        // delete layer contents
+        _layers[newIndex].contents = nil;
+    }];
+    _parent.sublayerTransform = CATransform3DTranslate(_parent.sublayerTransform, 0, 0, -viewWidth / 2);
+    _parent.sublayerTransform = CATransform3DRotate(_parent.sublayerTransform, rad, 0, 1, 0);
+    _parent.sublayerTransform = CATransform3DTranslate(_parent.sublayerTransform, 0, 0, viewWidth / 2);
+    [CATransaction commit];
+}
+
+- (void)initParentTransform {
+    CATransform3D perspective = CATransform3DIdentity;
+    perspective.m34 = -1.0 / 800;
+    _parent.sublayerTransform = perspective;
+}
+
+- (void)setContentToLayer:(CALayer *)layer fromView:(UIView *)view {
+    UIGraphicsBeginImageContext(view.frame.size);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage* viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    layer.contents = (__bridge id)viewImage.CGImage;
+}
+
 #pragma mark - iAd
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
@@ -637,4 +759,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionDidFinish object:self];
 }
 
+- (void)viewDidUnload {
+    [self setCollectionParent:nil];
+    [super viewDidUnload];
+}
 @end

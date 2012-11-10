@@ -19,12 +19,13 @@
     BOOL _playingItemInRecordedFlipped;
 }
 
-@property (nonatomic, strong) IBOutlet UIScrollView *pageScrollView;
-@property (nonatomic, strong) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, strong) IBOutlet UICollectionView *presetCollectionView;
-@property (nonatomic, strong) IBOutlet UICollectionView *recordedCollectionView;
-@property (nonatomic, strong) IBOutlet MPVolumeView *routeView;
-@property (nonatomic, strong) IBOutlet UISlider *volumeSlider;
+@property (weak, nonatomic) IBOutlet UIScrollView *pageScrollView;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+@property (weak, nonatomic) IBOutlet UICollectionView *presetCollectionView;
+@property (weak, nonatomic) IBOutlet UICollectionView *recordedCollectionView;
+@property (weak, nonatomic) IBOutlet MPVolumeView *routeView;
+@property (weak, nonatomic) IBOutlet UISlider *volumeSlider;
+@property (weak, nonatomic) IBOutlet UIView *collectionParent;
 
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -35,6 +36,9 @@
 
 - (void)deselectAll;
 - (void)updatePlayState;
+
+- (IBAction)onSwipeLeft:(id)sender;
+- (IBAction)onSwipeRight:(id)sender;
 
 @end
 

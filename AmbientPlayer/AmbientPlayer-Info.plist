@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIFileSharingEnabled</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -41,6 +39,8 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<false/>
 	<key>UIMainStoryboardFile</key>
 	<string>iPhone</string>
 	<key>UIMainStoryboardFile~ipad</key>
@@ -49,6 +49,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<false/>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleDefault</string>
 	<key>UIStatusBarTintParameters</key>
@@ -57,6 +59,15 @@
 		<dict>
 			<key>Style</key>
 			<string>UIBarStyleDefault</string>
+			<key>TintColor</key>
+			<dict>
+				<key>Blue</key>
+				<real>0.10159400105476379</real>
+				<key>Green</key>
+				<real>0.10159400105476379</real>
+				<key>Red</key>
+				<real>0.10159400105476379</real>
+			</dict>
 			<key>Translucent</key>
 			<false/>
 		</dict>
