@@ -97,9 +97,6 @@
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" id="AzL-Pf-gWo">
                                 <rect key="frame" x="0.0" y="468" width="320" height="36"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <connections>
-                                    <action selector="changePage:" destination="gbk-65-ZVs" eventType="valueChanged" id="8ZO-gm-rk5"/>
-                                </connections>
                             </pageControl>
                         </subviews>
                     </view>

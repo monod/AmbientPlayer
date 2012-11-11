@@ -17,19 +17,23 @@
 "TakePhotoButtonLabel" = "Take Photo";
 
 "ChoosePhotoButtonLabel" = "Choose Photo";
-// FIXME
-"DescForest" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
-// FIXME
-"DescOcean" = "Original sound by Luftrum, http://www.freesound.org/people/Luftrum/sounds/48412/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
-// FIXME
-"DescRain" = "Original sound by RHumphries, http://www.freesound.org/people/RHumphries/sounds/2521/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
-// FIXME
-"DescStream" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
+
+"DescForest" = "Original sound by dobroide, http://www.freesound.org/people/dobroide/sounds/22384/ \nOriginal thumbnail image by Ruben Holthuijsen, http://www.flickr.com/photos/rubenholthuijsen/7430874638/\n";
+
+"DescOcean" = "Original sound by Luftrum, http://www.freesound.org/people/Luftrum/sounds/48412/ \nOriginal thumbnail image by aliwest44, http://www.flickr.com/photos/alismith44/662190091/\n";
+
+"DescRain" = "Original sound by RHumphries, http://www.freesound.org/people/RHumphries/sounds/2521/ \nOriginal thumbnail image by mxgirl85, http://www.flickr.com/photos/13013135@N00/5879848337/\n";
+
+"DescStream" = "Original sound by mystiscool, http://www.freesound.org/people/mystiscool/sounds/7138/ \nOriginal thumbnail image by audreyjm529, http://www.flickr.com/photos/98799884@N00/235458062\n";
 
 "DescFire" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
-// FIXME
-"DescCrickets" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
 
-"DescTerminal" = "Recorded at Narita Airport, Chiba Japan. Original sound is available at SoundCloud under Creative Commons License.";
+"DescCrickets" = "Original sound by martypinso, http://www.freesound.org/people/martypinso/sounds/22604/\nOriginal thumbnail image by vortistic, http://www.flickr.com/photos/63094832@N00/2438889059\n";
 
-"DescDeck" = "Recorded at Haneda Airport, Tokyo Japan. Original sound is available at SoundCloud under Creative Commons License.";
+"DescTerminal" = "Recorded at Narita Airport, Chiba Japan. Original sound is available at https://soundcloud.com/veronicasoft/narita-terminal-2-arrival under Creative Commons License.";
+
+"DescDeck" = "Recorded at Haneda Airport, Tokyo Japan. Original sound is available at http://soundcloud.com/veronicasoft/haneda-airport-terminal-2-deck under Creative Commons License.";
+
+"DateFormat" = "dd/MM, yyyy HH:mm:ss";
+
+"RecordDesc" = "Recorded on: ";

@@ -228,16 +228,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     [self deselectAll];
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)sender {
-	
-    // Switch the indicator when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = self.pageScrollView.frame.size.width;
-    int page = floor((self.pageScrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    self.pageControl.currentPage = page;
-}
-
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -510,17 +500,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 - (IBAction)changeVolume:(id)sender {
     UISlider *slider = (UISlider*)sender;
     [self.player setVolume:slider.value];
-}
-
-- (IBAction)changePage:(id)sender
-{
-    int page = self.pageControl.currentPage;
-    
-	// update the scroll view to the appropriate page
-    CGRect frame = self.pageScrollView.frame;
-    frame.origin.x = frame.size.width * page;
-    frame.origin.y = 0;
-    [self.pageScrollView scrollRectToVisible:frame animated:YES];
 }
 
 - (void)showBackView:(id)sender {

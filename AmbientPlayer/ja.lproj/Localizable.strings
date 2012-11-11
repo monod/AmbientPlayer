@@ -17,3 +17,23 @@
 "TakePhotoButtonLabel" = "写真を撮る";
 
 "ChoosePhotoButtonLabel" = "写真を選択";
+
+"DescForest" = "Original sound by dobroide, http://www.freesound.org/people/dobroide/sounds/22384/ \nOriginal thumbnail image by Ruben Holthuijsen, http://www.flickr.com/photos/rubenholthuijsen/7430874638/\n";
+
+"DescOcean" = "Original sound by Luftrum, http://www.freesound.org/people/Luftrum/sounds/48412/ \nOriginal thumbnail image by aliwest44, http://www.flickr.com/photos/alismith44/662190091/\n";
+
+"DescRain" = "Original sound by RHumphries, http://www.freesound.org/people/RHumphries/sounds/2521/ \nOriginal thumbnail image by mxgirl85, http://www.flickr.com/photos/13013135@N00/5879848337/\n";
+
+"DescStream" = "Original sound by mystiscool, http://www.freesound.org/people/mystiscool/sounds/7138/ \nOriginal thumbnail image by audreyjm529, http://www.flickr.com/photos/98799884@N00/235458062\n";
+
+"DescFire" = "Original sound by pcaeldries, http://www.freesound.org/people/pcaeldries/sounds/30322/ \nOriginal thumbnail image by DrPete, http://www.flickr.com/photos/dr_pete/80464938/\n";
+
+"DescCrickets" = "Original sound by martypinso, http://www.freesound.org/people/martypinso/sounds/22604/\nOriginal thumbnail image by vortistic, http://www.flickr.com/photos/63094832@N00/2438889059\n";
+
+"DescTerminal" = "成田空港第2ターミナル（千葉県）にて録音。オリジナルサウンドは下記よりクリエイティブ・コモンズライセンスにて入手可能です。 https://soundcloud.com/veronicasoft/narita-terminal-2-arrival";
+
+"DescDeck" = "羽田空港第2ターミナル（東京都）にて録音。オリジナルサウンドは下記よりクリエイティブ・コモンズライセンスにて入手可能です。 http://soundcloud.com/veronicasoft/haneda-airport-terminal-2-deck";
+
+"DateFormat" = "yyyy/MM/dd HH:mm:ss";
+
+"RecordDesc" = "録音日時：";

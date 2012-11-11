@@ -223,11 +223,11 @@ PlayState _state;
         APCustomSoundEntryModel *model = self.addingSoundEntry;
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"M dd yyyy HH:mm:ss";
+        formatter.dateFormat = NSLocalizedString(@"DateFormat", nil);
         
         NSString *descDate =  [formatter stringFromDate:[NSDate date]];
         
-        NSString *desc = [@"Recorded on " stringByAppendingString:descDate];
+        NSString *desc = [NSLocalizedString(@"RecordDesc", nil) stringByAppendingString:descDate];
         [model setDesc:desc];
 
         //絶対パスではなく、Documentsディレクトリに保存されている前提で、ファイル名だけ保存する

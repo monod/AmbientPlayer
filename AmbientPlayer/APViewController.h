@@ -11,7 +11,7 @@
 #import <MediaPlayer/MPVolumeView.h>
 #import "APSoundCellBackView.h"
 
-@interface APViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, AVAudioPlayerDelegate> {
+@interface APViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, AVAudioPlayerDelegate> {
     CADisplayLink *_updateTimer;
     NSIndexPath *_playingItemPathInPreset;
     BOOL _playingItemInPresetFlipped;
