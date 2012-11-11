@@ -33,12 +33,11 @@ const NSInteger kTagRecordedSoundCollectionView = 2;
 
 const NSInteger kTagAlertDeleteSound = 1;
 
-@interface APViewController () <ADBannerViewDelegate>
+@interface APViewController ()
 
 @property (nonatomic, strong) AVAudioSession* session;
 @property (nonatomic, strong) APCrossFadePlayer *player;
 @property (nonatomic, copy) NSArray *preset;
-@property (nonatomic, strong) ADBannerView *bannerView;
 @property (nonatomic, strong) NSMutableArray *recordedSoundEntries;
 
 @end
@@ -106,10 +105,7 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     
     //set CoreData managedObjectContext
     self.managedObjectContext = [APAppDelegate sharedManagedObjectContext];
-    
-	// Do any additional setup after loading the view, typically from a nib.
-    [self.view addSubview:_bannerView];
-    
+
     // PageScroll
     self.pageScrollView.contentSize = CGSizeMake(self.pageScrollView.frame.size.width * 2, self.pageScrollView.frame.size.height);
     
@@ -201,24 +197,6 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
     } else {
         return YES;
     }
-}
-
-- (void)viewDidLayoutSubviews
-{
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
-    } else {
-        self.bannerView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
-    }
-    CGRect contentFrame = self.view.bounds;
-    CGRect bannerFrame = self.bannerView.frame;
-    if (self.bannerView.bannerLoaded) {
-        contentFrame.size.height -= self.bannerView.frame.size.height;
-        bannerFrame.origin.y = contentFrame.size.height;
-    } else {
-        bannerFrame.origin.y = contentFrame.size.height;
-    }
-    self.bannerView.frame = bannerFrame;
 }
 
 #pragma mark - AVAudioPlayerDelegate
@@ -709,35 +687,6 @@ UIView *_views[2];
     UIImage* viewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     layer.contents = (__bridge id)viewImage.CGImage;
-}
-
-#pragma mark - iAd
-
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner
-{
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.view setNeedsLayout];
-        [self.view layoutIfNeeded];
-    }];
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
-{
-    [UIView animateWithDuration:0.25 animations:^{
-        [self.view setNeedsLayout];
-        [self.view layoutIfNeeded];
-    }];
-}
-
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionWillBegin object:self];
-    return YES;
-}
-
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:BannerViewActionDidFinish object:self];
 }
 
 - (void)viewDidUnload {

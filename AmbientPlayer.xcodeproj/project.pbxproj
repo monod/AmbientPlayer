@@ -88,7 +88,6 @@
 		7EDE0C1215FB2C4300789400 /* APSoundEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C1115FB2C4300789400 /* APSoundEntry.m */; };
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
-		AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF57FF3F15FB114000D8040A /* iAd.framework */; };
 		AF5B0632163BA264000ABBBA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF5B0631163BA264000ABBBA /* CoreData.framework */; };
 		AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
 		AFC37ECB163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
@@ -221,7 +220,6 @@
 				407DB503162721850075D935 /* Social.framework in Frameworks */,
 				7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */,
 				7EC929BC15FB475200A5C4A7 /* AudioToolbox.framework in Frameworks */,
-				AF57FF4015FB114000D8040A /* iAd.framework in Frameworks */,
 				40A2069015F67790004BE2E1 /* UIKit.framework in Frameworks */,
 				40A2069215F67790004BE2E1 /* Foundation.framework in Frameworks */,
 				40A2069415F67790004BE2E1 /* CoreGraphics.framework in Frameworks */,
@@ -682,6 +680,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yoshihito Ohki (Q42KBSQ6LD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -691,6 +690,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "D378BF6A-B813-43BD-B164-FD634CBEB65B";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
