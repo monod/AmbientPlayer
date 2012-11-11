@@ -620,8 +620,8 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 #pragma mark Cubic transition
 
 CALayer *_parent;
-__weak CALayer *_layers[2];
-__weak UIView *_views[2];
+__strong CALayer *_layers[2];
+__strong UIView *_views[2];
 
 - (void)initLayersAndViewsForAnimation {
     
