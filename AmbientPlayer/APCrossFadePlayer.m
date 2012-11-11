@@ -121,7 +121,7 @@ SYNTHESIZE(soundEntry);
     } else {
         self.player1.volume -= 0.1;
         self.player2.volume = MIN(self.player2.volume + 0.2, self.targetVolume);
-        NSLog(@"[Volume] #1:%4.2f #2:%4.2f", self.player1.volume, self.player2.volume);
+        //NSLog(@"[Volume] #1:%4.2f #2:%4.2f", self.player1.volume, self.player2.volume);
         [self performSelector:@selector(stepCrossFade) withObject:nil afterDelay:kCrossFadeStep];
     }
 }

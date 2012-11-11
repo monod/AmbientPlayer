@@ -524,26 +524,38 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
 }
 
 - (void)showShareSheet:(id)sender {
-    NSMutableString *text = [NSMutableString string];
-    UIImage *img = nil;
-    if (_playingItemPathInPreset) {
-        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
-        [text appendString:cell.title.text];
-        img = cell.preview.image;
-    } else if (_playingItemPathInRecorded) {
-        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
-        [text appendString:cell.title.text];
-        img = cell.preview.image;
-    }
-    
+    NSMutableString *text = [NSMutableString stringWithString:@"#NowPlaying "];
     MPMediaItem *nowplaying = [MPMusicPlayerController iPodMusicPlayer].nowPlayingItem;
     if (nowplaying) {
         NSString *track = (NSString *)[nowplaying valueForProperty:MPMediaItemPropertyTitle];
         NSString *artist = (NSString *)[nowplaying valueForProperty:MPMediaItemPropertyArtist];
-        [text appendFormat:@" with %@ / %@", track, artist];
+        [text appendFormat:@" %@ / %@ + ", track, artist];
     }
+    
+    UIImage *img = nil;
+    if (_playingItemPathInPreset) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
+        [text appendString:@"\""];
+        [text appendString:cell.title.text];
+        [text appendString:@"\""];
+        img = cell.preview.image;
+    } else if (_playingItemPathInRecorded) {
+        APSoundSelectViewCell *cell = (APSoundSelectViewCell *)[self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
+        [text appendString:@"\""];
+        [text appendString:cell.title.text];
+        [text appendString:@"\""];
+        img = cell.preview.image;
+    }
+    if (img) {
+        UIGraphicsBeginImageContext(CGSizeMake(160, 160));
+        [img drawInRect:CGRectMake(0, 0, 160, 160)];
+        img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    NSURL *url = [NSURL URLWithString:@"http://www.veronicasoft.com/AmbientPlayer"];
+
     [text appendString:@" #AmbientPlayer"];
-    NSArray *items = @[text, img];
+    NSArray *items = @[text, img, url];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc]initWithActivityItems: items applicationActivities:@[]];
     activityVC.excludedActivityTypes = @[
         UIActivityTypeAssignToContact,
