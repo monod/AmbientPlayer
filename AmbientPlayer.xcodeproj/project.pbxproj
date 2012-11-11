@@ -204,7 +204,6 @@
 		7EE380801605A69F006647C8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
-		AF57FF3F15FB114000D8040A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		AF5B0631163BA264000ABBBA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCustomSoundEntryModels.xcdatamodel; sourceTree = "<group>"; };
 		AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCustomSoundEntryModel.h; sourceTree = "<group>"; };
@@ -342,7 +341,6 @@
 				7EE380801605A69F006647C8 /* CoreAudio.framework */,
 				40A2069315F67790004BE2E1 /* CoreGraphics.framework */,
 				40A2069115F67790004BE2E1 /* Foundation.framework */,
-				AF57FF3F15FB114000D8040A /* iAd.framework */,
 				40A206B015F67791004BE2E1 /* SenTestingKit.framework */,
 				40A2068F15F67790004BE2E1 /* UIKit.framework */,
 			);
