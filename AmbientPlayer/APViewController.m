@@ -16,7 +16,6 @@
 #import "APCrossFadePlayer.h"
 #import "APSoundEntry.h"
 #import "APSoundSelectViewCell.h"
-#import "APiCloudAdapter.h"
 #import "APCustomSoundEntryModel.h"
 
 NSString * const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
@@ -474,18 +473,9 @@ void audioRouteChangeListenerCallback (void *clientData, AudioSessionPropertyID 
             [APCustomSoundEntryModel removeAPCustomSoundEntryModel:entry.moID inManagedObjectContext:self.managedObjectContext];
         }
         
-        //Remove From iCloud
-        NSString *soundPath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
-        NSURL* soundFileURL = [NSURL fileURLWithPath:soundPath];
-        [APiCloudAdapter removeCorrespondingFileFromiCloud:soundFileURL];
-        
-        if (entry.imageFileName) {
-            NSString *imagePath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.imageFileName];
-            NSURL* imageFileURL = [NSURL fileURLWithPath:imagePath];
-            [APiCloudAdapter removeCorrespondingFileFromiCloud:imageFileURL];
-        }
-        
+       
         // Remove Localfiles
+        NSString *soundPath = [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:entry.fileName];
         NSFileManager *fileMgr = [NSFileManager defaultManager];
         [fileMgr removeItemAtPath:soundPath error:nil];
 
