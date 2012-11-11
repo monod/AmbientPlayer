@@ -8,7 +8,6 @@
 
 #import "APRecordViewController.h"
 #import "APSoundEntry.h"
-#import "APiCloudAdapter.h"
 
 #import <CoreAudio/CoreAudioTypes.h>
 #import <AVFoundation/AVFoundation.h>
@@ -165,14 +164,11 @@ PlayState _state;
     if (_duration < kMinRecordSeconds) {
         [self cancelRecording];        
     }
-        
+
     //CoreDataに録音したファイル名とタイトルを保存する処理
     [self saveRecordedSoundInfoToDB];
-    
-    //新規録音済ファイルをiCloudに保存する処理
-    [self copyRecordedFileAndImageToiCloud];
-    
-    //CoreDataに一時データがあるか調べて、残っていたら消す処理
+     
+    //CoreDataに一時データがあるか調べて、録音していないのに一時データが残っていたら消す処理
     [self checkTempCoreDataEntry];
     
     NSError *error = nil;
@@ -266,17 +262,6 @@ PlayState _state;
     }
     
     return NO;
-}
-
-- (void) copyRecordedFileAndImageToiCloud {
-    NSURL* soundFileURL = [self.recorder.url copy];
-    //iCloudのAPIはローカルにファイルがなければ、何もしないのでこのままでOK
-    [APiCloudAdapter copyLocalFileToiCloud:soundFileURL];
-    
-    //画像ファイルがある場合は、それもiCloudにあげておく
-    if (self.imageFilePath) {                
-        [APiCloudAdapter copyLocalFileToiCloud:[NSURL fileURLWithPath:self.imageFilePath]];
-    }
 }
 
 -(IBAction)recordPushed:(id)sender {

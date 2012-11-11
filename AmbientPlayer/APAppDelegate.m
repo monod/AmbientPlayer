@@ -9,7 +9,6 @@
 #import "APAppDelegate.h"
 
 #import "APViewController.h"
-#import "APiCloudAdapter.h"
 
 @implementation APAppDelegate
 
@@ -19,7 +18,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [APiCloudAdapter prepareiCloudAccess];
     self.viewController.managedObjectContext = [self managedObjectContext];
     return YES;
 }
