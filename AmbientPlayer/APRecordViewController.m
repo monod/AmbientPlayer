@@ -152,9 +152,6 @@ PlayState _state;
 
 - (void)stopRecording {
     [self.recorder stop];
-    _state = kPlayStateStop;
-    [self updateButtonLabel];
-    [self.waveForm showHandle:YES];
     NSLog(@"[REC][STOP]");
 }
 
@@ -387,6 +384,15 @@ PlayState _state;
     return tempFilePath;
 }
 
+- (void)showRecordingTooShortAlert {
+    UIAlertView *alert = [[UIAlertView alloc]
+                          initWithTitle:nil
+                          message:NSLocalizedString(@"TooShortAlertMessage", nil)
+                          delegate:self
+                          cancelButtonTitle:nil
+                          otherButtonTitles:@"OK", nil];
+    [alert show];
+}
 
 #pragma mark - AVAudioRecorderDelegate
 
@@ -395,6 +401,9 @@ PlayState _state;
     [self updateButtonLabel];
     [self.waveForm showHandle:YES];
     [self.waveForm expandToFit];
+    if (_duration < kMinRecordSeconds) {
+        [self showRecordingTooShortAlert];
+    }
 }
 
 - (void)viewDidUnload {

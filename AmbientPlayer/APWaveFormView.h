@@ -16,7 +16,7 @@
     float _root;
     NSMutableArray *_table;
     UIBezierPath *_path;
-    int _prevX;
+    float _prevX;
     float _maxValue;
     BOOL _showHandle;
 }

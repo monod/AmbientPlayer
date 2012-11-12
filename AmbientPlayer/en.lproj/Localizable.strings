@@ -37,3 +37,5 @@
 "DateFormat" = "dd/MM, yyyy HH:mm:ss";
 
 "RecordDesc" = "Recorded on: ";
+
+"TooShortAlertMessage" = "Recording time must be longer than 2 seconds.";

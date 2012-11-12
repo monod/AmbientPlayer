@@ -37,6 +37,8 @@
 		407DB589162AAB6E0075D935 /* airport_deck.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 407DB588162AAB6E0075D935 /* airport_deck.m4a */; };
 		409D4F011605B36A00261E70 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409D4F001605B36900261E70 /* Default-568h@2x.png */; };
 		409D4F0D1608314E00261E70 /* APSoundSelectViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */; };
+		409DC1A0164FFAA40083C092 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 409DC19F164FFAA40083C092 /* Default@2x.png */; };
+		409DC1A2164FFD960083C092 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 409DC1A1164FFD960083C092 /* Default.png */; };
 		40A2069015F67790004BE2E1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A2068F15F67790004BE2E1 /* UIKit.framework */; };
 		40A2069215F67790004BE2E1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A2069115F67790004BE2E1 /* Foundation.framework */; };
 		40A2069415F67790004BE2E1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A2069315F67790004BE2E1 /* CoreGraphics.framework */; };
@@ -141,6 +143,8 @@
 		409D4F001605B36900261E70 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		409D4F0B1608314D00261E70 /* APSoundSelectViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundSelectViewCell.h; sourceTree = "<group>"; };
 		409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundSelectViewCell.m; sourceTree = "<group>"; };
+		409DC19F164FFAA40083C092 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		409DC1A1164FFD960083C092 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		40A2068B15F67790004BE2E1 /* AmbientPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmbientPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40A2068F15F67790004BE2E1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		40A2069115F67790004BE2E1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -311,6 +315,8 @@
 			children = (
 				40B6FA46161A64B20051FD8B /* icon.png */,
 				40B6FA44161A64AD0051FD8B /* icon@2x.png */,
+				409DC1A1164FFD960083C092 /* Default.png */,
+				409DC19F164FFAA40083C092 /* Default@2x.png */,
 				409D4F001605B36900261E70 /* Default-568h@2x.png */,
 				405E060515FB37EA00C93E26 /* images */,
 				4018F06315F6AA0300DB5B15 /* sounds */,
@@ -542,6 +548,8 @@
 				406A52FB16451188003CA38D /* fire.m4a in Resources */,
 				406A5300164530AA003CA38D /* addimage@2x.png in Resources */,
 				406A5301164530AE003CA38D /* addimage.png in Resources */,
+				409DC1A0164FFAA40083C092 /* Default@2x.png in Resources */,
+				409DC1A2164FFD960083C092 /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,8 +688,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yoshihito Ohki (Q42KBSQ6LD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yoshihito Ohki";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -690,7 +698,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "D378BF6A-B813-43BD-B164-FD634CBEB65B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "492CA779-9C60-45AA-A564-77AF624844FB";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

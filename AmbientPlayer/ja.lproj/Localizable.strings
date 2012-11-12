@@ -37,3 +37,6 @@
 "DateFormat" = "yyyy/MM/dd HH:mm:ss";
 
 "RecordDesc" = "録音日時：";
+
+"TooShortAlertMessage" = "録音時間は2秒以上にする必要があります。";
+

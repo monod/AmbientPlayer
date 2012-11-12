@@ -90,7 +90,7 @@ UIBezierPath *_selectedPath;
     CGFloat y = (self.bounds.size.height - h) / 2.0;
     [_path moveToPoint:CGPointMake(x, y)];
     [_path addLineToPoint:CGPointMake(x, y + h)];
-    _prevX = (int)x;
+    _prevX = x;
     _maxValue = MAX(_maxValue, linearVal);
     
     _boundingBox.size.height = MAX(kTouchAreaSize, _maxValue * (self.bounds.size.height - kTouchAreaSize * 2));
@@ -107,6 +107,7 @@ UIBezierPath *_selectedPath;
     at = CGAffineTransformMakeTranslation(_boundingBox.origin.x, _boundingBox.origin.y);
     [_path applyTransform:at];
     _boundingBox.size.width = self.bounds.size.width - kTouchAreaSize * 2;
+    NSLog(@"self.bounds=%f, bb.width=%f, scale=%f, lastX=%f", self.bounds.size.width, _boundingBox.size.width, sx, _prevX);
     [self setNeedsDisplay];
 }
 
