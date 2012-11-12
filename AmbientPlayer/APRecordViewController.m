@@ -151,7 +151,9 @@ PlayState _state;
 }
 
 - (void)stopRecording {
-    [self.recorder stop];
+    if (self.recorder.isRecording) {
+        [self.recorder stop];
+    }
     NSLog(@"[REC][STOP]");
 }
 
@@ -274,8 +276,6 @@ PlayState _state;
 }
 
 -(IBAction)thumbPickButtonPressed:(id)sender {
-    NSLog(@"BUTTON PRESSED");
-    
     UIActionSheet * sheet;
     sheet = [[UIActionSheet alloc]
              initWithTitle:@""
@@ -316,12 +316,12 @@ PlayState _state;
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    for (NSObject* key in info.allKeys) { // for debugging
-        NSLog(@"%@ => %@", key, [info objectForKey:key]);
-    }
+    //for (NSObject* key in info.allKeys) { // for debugging
+    //    NSLog(@"%@ => %@", key, [info objectForKey:key]);
+    //}
 
     UIImage *originalImage = (UIImage *)[info objectForKey:UIImagePickerControllerEditedImage];
-    NSLog(@"%f, %f", originalImage.size.width, originalImage.size.height); // for debugging
+    //NSLog(@"%f, %f", originalImage.size.width, originalImage.size.height); // for debugging
     [self dismissViewControllerAnimated:YES completion:NULL];
     
     //ここに画像リサイズ処理を挟む

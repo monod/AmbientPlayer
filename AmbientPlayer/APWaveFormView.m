@@ -107,7 +107,6 @@ UIBezierPath *_selectedPath;
     at = CGAffineTransformMakeTranslation(_boundingBox.origin.x, _boundingBox.origin.y);
     [_path applyTransform:at];
     _boundingBox.size.width = self.bounds.size.width - kTouchAreaSize * 2;
-    NSLog(@"self.bounds=%f, bb.width=%f, scale=%f, lastX=%f", self.bounds.size.width, _boundingBox.size.width, sx, _prevX);
     [self setNeedsDisplay];
 }
 
