@@ -91,6 +91,7 @@
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
 		AF5B0632163BA264000ABBBA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF5B0631163BA264000ABBBA /* CoreData.framework */; };
+		AFB57AA5166F051400294FE0 /* SoundCloud.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */; };
 		AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
 		AFC37ECB163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
 		AFC37ECE163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */; };
@@ -317,6 +318,7 @@
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF5B0631163BA264000ABBBA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SoundCloud.bundle; path = AmbientPlayer/SoundCloud.bundle; sourceTree = "<group>"; };
 		AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCustomSoundEntryModels.xcdatamodel; sourceTree = "<group>"; };
 		AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCustomSoundEntryModel.h; sourceTree = "<group>"; };
 		AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APCustomSoundEntryModel.m; sourceTree = "<group>"; };
@@ -450,6 +452,7 @@
 				409DC1A1164FFD960083C092 /* Default.png */,
 				409DC19F164FFAA40083C092 /* Default@2x.png */,
 				409D4F001605B36900261E70 /* Default-568h@2x.png */,
+				AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */,
 				40A2069515F67790004BE2E1 /* AmbientPlayer */,
 				40A206B615F67791004BE2E1 /* AmbientPlayerTests */,
 				40A2068E15F67790004BE2E1 /* Frameworks */,
@@ -823,6 +826,7 @@
 				406A5301164530AE003CA38D /* addimage.png in Resources */,
 				409DC1A0164FFAA40083C092 /* Default@2x.png in Resources */,
 				409DC1A2164FFD960083C092 /* Default.png in Resources */,
+				AFB57AA5166F051400294FE0 /* SoundCloud.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

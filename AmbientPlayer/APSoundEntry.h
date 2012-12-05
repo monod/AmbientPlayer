@@ -18,4 +18,10 @@
 -(id)initWithTitle:(NSString *)title fileName:(NSString *)fileName;
 -(id)initWithTitle:(NSString *)title fileName:(NSString *)fileName image:(NSString *)imageFileName description:(NSString *)description;
 +(NSString *) recordedFileDirectory;
+
+-(NSURL *) getRecordedFileURL;
+-(NSURL *) getRecordedImageFileURL;
+-(NSString *) getRecordedFilePath;
+-(NSString *) getRecordedImageFilePath;
+-(UIImage *) getRecordedImage;
 @end

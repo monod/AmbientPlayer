@@ -15,5 +15,6 @@
 @property (nonatomic, weak) IBOutlet UIButton *deleteButton;
 @property (nonatomic, weak) IBOutlet UIButton *shareButton;
 @property (nonatomic, weak) IBOutlet UITextView *description;
+@property (nonatomic, weak) IBOutlet UIButton *uploadButton;
 
 @end

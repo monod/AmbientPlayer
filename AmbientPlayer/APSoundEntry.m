@@ -39,4 +39,25 @@ SYNTHESIZE(fileName);
     return 	[arrayPaths objectAtIndex:0];
 }
 
+- (NSURL *)getRecordedFileURL {
+    return [NSURL fileURLWithPath:[self getRecordedFilePath]];
+}
+
+- (NSString *)getRecordedFilePath {
+    return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:self.fileName];
+}
+
+- (NSString *) getRecordedImageFilePath {
+    return [[APSoundEntry recordedFileDirectory] stringByAppendingPathComponent:self.imageFileName];
+}
+
+- (NSURL *) getRecordedImageFileURL {
+    return [NSURL fileURLWithPath:[self getRecordedImageFilePath]];
+}
+
+- (UIImage *)getRecordedImage {
+    return [UIImage imageWithContentsOfFile:[self getRecordedImageFilePath]];
+}
+
+
 @end

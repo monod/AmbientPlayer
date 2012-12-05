@@ -6,6 +6,7 @@
 //  Copyright (c) 2012年 InteractionPlus. All rights reserved.
 //
 
+#import <SoundCloudAPI/SCAPI.h>
 #import "APAppDelegate.h"
 
 #import "APViewController.h"
@@ -15,6 +16,12 @@
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
++ (void)initialize {
+    [SCSoundCloud setClientID:@"afa36f24c0d67bf5f47bc75f9da60c19"
+                       secret:@"faf743a7487d687fb78fe41e1006b501"
+                  redirectURL:[NSURL URLWithString:@"ambientplayer://oauth"]];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.viewController.managedObjectContext = [self managedObjectContext];
