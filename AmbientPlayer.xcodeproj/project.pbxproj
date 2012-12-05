@@ -89,6 +89,8 @@
 		7EDE0C0C15FB234C00789400 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDE0C0B15FB234C00789400 /* iPhone.storyboard */; };
 		7EDE0C1215FB2C4300789400 /* APSoundEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EDE0C1115FB2C4300789400 /* APSoundEntry.m */; };
 		7EE380811605A69F006647C8 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE380801605A69F006647C8 /* CoreAudio.framework */; };
+		AF05D61C166F1FE1008C6342 /* scshare@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AF05D61A166F1FE1008C6342 /* scshare@2x.png */; };
+		AF05D61D166F1FE1008C6342 /* scshare.png in Resources */ = {isa = PBXBuildFile; fileRef = AF05D61B166F1FE1008C6342 /* scshare.png */; };
 		AF4E5D0B15FB376A001438B3 /* APRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */; };
 		AF5B0632163BA264000ABBBA /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF5B0631163BA264000ABBBA /* CoreData.framework */; };
 		AFB57AA5166F051400294FE0 /* SoundCloud.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */; };
@@ -315,6 +317,8 @@
 		7EDE0C1015FB2C4300789400 /* APSoundEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundEntry.h; sourceTree = "<group>"; };
 		7EDE0C1115FB2C4300789400 /* APSoundEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundEntry.m; sourceTree = "<group>"; };
 		7EE380801605A69F006647C8 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		AF05D61A166F1FE1008C6342 /* scshare@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scshare@2x.png"; sourceTree = "<group>"; };
+		AF05D61B166F1FE1008C6342 /* scshare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scshare.png; sourceTree = "<group>"; };
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF5B0631163BA264000ABBBA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -395,6 +399,8 @@
 		405E060515FB37EA00C93E26 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				AF05D61A166F1FE1008C6342 /* scshare@2x.png */,
+				AF05D61B166F1FE1008C6342 /* scshare.png */,
 				406A52FC1645309F003CA38D /* addimage.png */,
 				406A52FD1645309F003CA38D /* addimage@2x.png */,
 				406A52F416451050003CA38D /* fire.jpg */,
@@ -827,6 +833,8 @@
 				409DC1A0164FFAA40083C092 /* Default@2x.png in Resources */,
 				409DC1A2164FFD960083C092 /* Default.png in Resources */,
 				AFB57AA5166F051400294FE0 /* SoundCloud.bundle in Resources */,
+				AF05D61C166F1FE1008C6342 /* scshare@2x.png in Resources */,
+				AF05D61D166F1FE1008C6342 /* scshare.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
