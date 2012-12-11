@@ -322,6 +322,7 @@
 		AF4E5D0915FB376A001438B3 /* APRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRecordViewController.h; sourceTree = "<group>"; };
 		AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRecordViewController.m; sourceTree = "<group>"; };
 		AF5B0631163BA264000ABBBA /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		AF8288781676CA7A0022B1AA /* APCustomSoundEntryModels 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "APCustomSoundEntryModels 2.xcdatamodel"; sourceTree = "<group>"; };
 		AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SoundCloud.bundle; path = AmbientPlayer/SoundCloud.bundle; sourceTree = "<group>"; };
 		AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCustomSoundEntryModels.xcdatamodel; sourceTree = "<group>"; };
 		AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCustomSoundEntryModel.h; sourceTree = "<group>"; };
@@ -1120,9 +1121,10 @@
 		AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				AF8288781676CA7A0022B1AA /* APCustomSoundEntryModels 2.xcdatamodel */,
 				AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */,
 			);
-			currentVersion = AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */;
+			currentVersion = AF8288781676CA7A0022B1AA /* APCustomSoundEntryModels 2.xcdatamodel */;
 			path = APCustomSoundEntryModels.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
