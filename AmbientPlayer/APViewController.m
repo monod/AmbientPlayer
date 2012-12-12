@@ -249,14 +249,13 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     [cell.backView.doneButton addTarget:self action:@selector(hideBackView:) forControlEvents:UIControlEventTouchUpInside];
     [cell.backView.deleteButton addTarget:self action:@selector(showDeleteConfirmAlert) forControlEvents:UIControlEventTouchUpInside];
     [cell.backView.shareButton addTarget:self action:@selector(showShareSheet:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.backView.uploadButton addTarget:self action:@selector(showUploadView:) forControlEvents:UIControlEventTouchUpInside];
+
 
     if (collectionView.tag == kTagPresetSoundCollectionView) {
         NSString *path = [[NSBundle mainBundle] pathForResource:entry.imageFileName ofType:@"jpg"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         cell.preview.image = img;
         cell.backView.deleteButton.hidden = YES;
-        cell.backView.uploadButton.hidden = YES;
         cell.backView.description.text = entry.description;
 
         // check wheter it is now playing
@@ -517,7 +516,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     }
 
     UIImage *img = nil;
-    APSoundEntry *entry = nil;
+    APSoundEntry *recordedSoundEntry = nil;
     if (_playingItemPathInPreset) {
         APSoundSelectViewCell *cell = (APSoundSelectViewCell *) [self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
         [text appendString:@"\""];
@@ -525,13 +524,14 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         [text appendString:@"\""];
         img = cell.preview.image;
     } else if (_playingItemPathInRecorded) {
-        entry = [self.recordedSoundEntries objectAtIndex:[self currentRecordedSoundPlayingItemIndex]];
+        recordedSoundEntry = [self.recordedSoundEntries objectAtIndex:[self currentRecordedSoundPlayingItemIndex]];
         APSoundSelectViewCell *cell = (APSoundSelectViewCell *) [self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
         [text appendString:@"\""];
         [text appendString:cell.title.text];
         [text appendString:@"\""];
         img = cell.preview.image;
     }
+
     if (img) {
         UIGraphicsBeginImageContext(CGSizeMake(160, 160));
         [img drawInRect:CGRectMake(0, 0, 160, 160)];
@@ -546,10 +546,22 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     APSoundCloudActivity *scActivity = nil;
     NSArray *applicationActivities = nil;
 
-    if (entry){
+    if (recordedSoundEntry && recordedSoundEntry.soundCloudURL) {
+        //SoundCloudのURLがある場合、画像の添付ではなく、そっちのURLを共有する。Facebookの場合、そのまま再生できるはず。
         scActivity = [[APSoundCloudActivity alloc] init];
         applicationActivities = [NSArray arrayWithObject:scActivity];
-        items = @[text, img, url, entry];
+        url = [NSURL URLWithString:recordedSoundEntry.soundCloudURL];
+
+        //textの方に公式サイトへのリンクはつけとく。
+        [text appendString:@"\n"];
+        [text appendString:@"http://www.veronicasoft.com/AmbientPlayer"];
+        [text appendString:@"\n"];
+
+        items = @[text, url, recordedSoundEntry];
+    } else if (recordedSoundEntry){
+        scActivity = [[APSoundCloudActivity alloc] init];
+        applicationActivities = [NSArray arrayWithObject:scActivity];
+        items = @[text, img, url, recordedSoundEntry];
     } else {
         items = @[text, img, url];
     }
@@ -565,47 +577,6 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     ];
 
     [self presentViewController:activityVC animated:YES completion:nil];
-}
-
-- (void)showUploadView:(id)sender {
-    //SoundCloudへのUpload用のViewを表示する
-
-    [self showSoundCloudShareView];
-}
-
-- (void)showSoundCloudShareView {
-    if (_playingItemPathInRecorded) {
-        //該当のSoundEntryを取得
-        APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:[self currentRecordedSoundPlayingItemIndex]];
-
-        NSURL *trackURL = [entry getRecordedFileURL];
-
-        SCShareViewController *shareViewController;
-        SCSharingViewControllerComletionHandler handler;
-
-        handler = ^(NSDictionary *trackInfo, NSError *error) {
-            if (SC_CANCELED(error)) {
-                NSLog(@"Canceled!");
-            } else if (error) {
-                NSLog(@"Error: %@", [error localizedDescription]);
-            } else {
-                NSLog(@"Uploaded track: %@", trackInfo);
-            }
-        };
-        shareViewController = [SCShareViewController
-                shareViewControllerWithFileURL:trackURL
-                             completionHandler:handler];
-        [shareViewController setTitle:entry.title];
-        [shareViewController setPrivate:NO];
-        [shareViewController setDownloadable:YES];
-        [shareViewController setTags:[NSArray arrayWithObjects:@"AmbientPlayer", nil]];
-
-        UIImage *image = [entry getRecordedImage];
-
-        [shareViewController setCoverImage:[entry getRecordedImage]];
-        [self presentViewController:shareViewController animated:YES completion:nil];
-
-    }
 }
 
 - (void)showDeleteConfirmAlert {

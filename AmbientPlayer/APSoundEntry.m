@@ -59,5 +59,9 @@ SYNTHESIZE(fileName);
     return [UIImage imageWithContentsOfFile:[self getRecordedImageFilePath]];
 }
 
+- (void)finishUploadingSoundCloud:(NSString *)soundCloudURL {
+    self.isSoundCloudFile = YES;
+    self.soundCloudURL = soundCloudURL;
+}
 
 @end

@@ -9,6 +9,8 @@
 #import "APSoundCloudActivity.h"
 #import "APSoundEntry.h"
 #import "SCUI.h"
+#import "APCustomSoundEntryModel.h"
+#import "APAppDelegate.h"
 
 @implementation APSoundCloudActivity
 
@@ -73,6 +75,15 @@
             [self activityDidFinish:NO];
         } else {
             NSLog(@"Uploaded track: %@", trackInfo);
+            NSString *soundCloudURL = [trackInfo objectForKey:@"permalink_url"];
+            NSLog(@"soundCloudURL: %@", soundCloudURL);
+
+            //ビュー用のモデル情報を更新
+            [entry finishUploadingSoundCloud:soundCloudURL];
+
+            //CoreData用のモデル情報を更新
+            [APCustomSoundEntryModel finishUploadingSoundCloud:entry.moID soundCloudURL:soundCloudURL inManagedObjectContext:[APAppDelegate sharedManagedObjectContext]];
+
             [self activityDidFinish:YES];
         }
     };

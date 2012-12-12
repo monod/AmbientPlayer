@@ -14,6 +14,8 @@
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *imageFileName;
 @property (nonatomic, copy) NSManagedObjectID *moID; //CoreDataのデータを操作するために対応するデータのキー情報だけは持たせておく
+@property (nonatomic, copy) NSString *soundCloudURL;
+@property (nonatomic) BOOL isSoundCloudFile;
 
 -(id)initWithTitle:(NSString *)title fileName:(NSString *)fileName;
 -(id)initWithTitle:(NSString *)title fileName:(NSString *)fileName image:(NSString *)imageFileName description:(NSString *)description;
@@ -24,4 +26,6 @@
 -(NSString *) getRecordedFilePath;
 -(NSString *) getRecordedImageFilePath;
 -(UIImage *) getRecordedImage;
+-(void) finishUploadingSoundCloud:(NSString *)soundCloudURL;
+
 @end
