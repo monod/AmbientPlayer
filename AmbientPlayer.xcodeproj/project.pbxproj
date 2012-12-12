@@ -1002,7 +1002,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1027,7 +1027,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "492CA779-9C60-45AA-A564-77AF624844FB";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1039,7 +1039,7 @@
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
 				ONLY_ACTIVE_ARCH = NO;
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+				"OTHER_LDFLAGS[sdk=*]" = (
 					"-all_load",
 					"-ObjC",
 				);
@@ -1056,7 +1056,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AmbientPlayer/AmbientPlayer-Prefix.pch";
 				INFOPLIST_FILE = "AmbientPlayer/AmbientPlayer-Info.plist";
-				"OTHER_LDFLAGS[sdk=iphoneos*]" = (
+				"OTHER_LDFLAGS[sdk=*]" = (
 					"-all_load",
 					"-ObjC",
 				);
