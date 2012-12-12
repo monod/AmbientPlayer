@@ -15,6 +15,7 @@
 #import "APSoundSelectViewCell.h"
 #import "APCustomSoundEntryModel.h"
 #import "SCUI.h"
+#import "APSoundCloudActivity.h"
 
 NSString *const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString *const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
@@ -516,6 +517,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     }
 
     UIImage *img = nil;
+    APSoundEntry *entry = nil;
     if (_playingItemPathInPreset) {
         APSoundSelectViewCell *cell = (APSoundSelectViewCell *) [self.presetCollectionView cellForItemAtIndexPath:_playingItemPathInPreset];
         [text appendString:@"\""];
@@ -523,6 +525,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         [text appendString:@"\""];
         img = cell.preview.image;
     } else if (_playingItemPathInRecorded) {
+        entry = [self.recordedSoundEntries objectAtIndex:[self currentRecordedSoundPlayingItemIndex]];
         APSoundSelectViewCell *cell = (APSoundSelectViewCell *) [self.recordedCollectionView cellForItemAtIndexPath:_playingItemPathInRecorded];
         [text appendString:@"\""];
         [text appendString:cell.title.text];
@@ -538,8 +541,21 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     NSURL *url = [NSURL URLWithString:@"http://www.veronicasoft.com/AmbientPlayer"];
 
     [text appendString:@" #AmbientPlayer"];
-    NSArray *items = @[text, img, url];
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:@[]];
+
+    NSArray *items = nil;
+    APSoundCloudActivity *scActivity = nil;
+    NSArray *applicationActivities = nil;
+
+    if (entry){
+        scActivity = [[APSoundCloudActivity alloc] init];
+        applicationActivities = [NSArray arrayWithObject:scActivity];
+        items = @[text, img, url, entry];
+    } else {
+        items = @[text, img, url];
+    }
+
+
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:applicationActivities];
     activityVC.excludedActivityTypes = @[
             UIActivityTypeAssignToContact,
             UIActivityTypePrint,
@@ -547,11 +563,17 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
             UIActivityTypeMail,
             UIActivityTypeCopyToPasteboard
     ];
+
     [self presentViewController:activityVC animated:YES completion:nil];
 }
 
 - (void)showUploadView:(id)sender {
     //SoundCloudへのUpload用のViewを表示する
+
+    [self showSoundCloudShareView];
+}
+
+- (void)showSoundCloudShareView {
     if (_playingItemPathInRecorded) {
         //該当のSoundEntryを取得
         APSoundEntry *entry = [self.recordedSoundEntries objectAtIndex:[self currentRecordedSoundPlayingItemIndex]];
