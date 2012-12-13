@@ -538,7 +538,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         img = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
-    NSURL *url = [NSURL URLWithString:@"http://www.veronicasoft.com/AmbientPlayer"];
+    NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com/app/ambientplayer/id578213987?ls=1&mt=8"];
 
     [text appendString:@" #AmbientPlayer"];
 
@@ -554,7 +554,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 
         //textの方に公式サイトへのリンクはつけとく。
         [text appendString:@"\n"];
-        [text appendString:@"http://www.veronicasoft.com/AmbientPlayer"];
+        [text appendString:@"https://itunes.apple.com/app/ambientplayer/id578213987?ls=1&mt=8"];
         [text appendString:@"\n"];
 
         items = @[text, url, recordedSoundEntry];
