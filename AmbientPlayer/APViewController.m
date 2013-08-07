@@ -72,14 +72,20 @@ SYNTHESIZE(preset);
 
 - (void)initPreset {
     self.preset = [NSArray arrayWithObjects:
+            [[APSoundEntry alloc] initWithTitle:@"Waterfall" fileName:@"waterfall" image:@"waterfall" description: NSLocalizedString(@"DescWaterfall", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Forest" fileName:@"forest" image:@"forest" description:NSLocalizedString(@"DescForest", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Ocean" fileName:@"ocean" image:@"ocean" description:NSLocalizedString(@"DescOcean", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Seagull" fileName:@"seagull" image:@"seagull" description:NSLocalizedString(@"DescSeagull", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Rain" fileName:@"rain" image:@"rain" description:NSLocalizedString(@"DescRain", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Thunder" fileName:@"thunder" image:@"thunder" description:NSLocalizedString(@"DescThunder", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Stream" fileName:@"stream" image:@"stream" description:NSLocalizedString(@"DescStream", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Fire" fileName:@"fire" image:@"fire" description:NSLocalizedString(@"DescFire", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Crickets" fileName:@"crickets" image:@"crickets" description:NSLocalizedString(@"DescCrickets", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Cicada" fileName:@"cicada" image:@"cicada" description:NSLocalizedString(@"DescCicada", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Terminal" fileName:@"airport_in" image:@"airport_in" description:NSLocalizedString(@"DescTerminal", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Deck" fileName:@"airport_deck" image:@"airport_deck" description:NSLocalizedString(@"DescDeck", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Fireworks" fileName:@"fireworks" image:@"fireworks" description:NSLocalizedString(@"DescFireworks", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Pub" fileName:@"pub" image:@"pub" description:NSLocalizedString(@"DescPub", nil)],
             nil];
 }
 

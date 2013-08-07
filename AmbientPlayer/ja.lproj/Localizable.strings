@@ -22,7 +22,11 @@
 
 "DescOcean" = "Original sound by Luftrum, http://www.freesound.org/people/Luftrum/sounds/48412/ \nOriginal thumbnail image by aliwest44, http://www.flickr.com/photos/alismith44/662190091/\n";
 
+"DescSeagull" = "Original sound by NHK Creative Library, http://www.nhk.or.jp/creative/material/50/D0002070034_00000.html\nOriginal thumbnail image by Konstantinos Dafalias, http://www.flickr.com/photos/72906133@N00/5860520321/\n";
+
 "DescRain" = "Original sound by RHumphries, http://www.freesound.org/people/RHumphries/sounds/2521/ \nOriginal thumbnail image by mxgirl85, http://www.flickr.com/photos/13013135@N00/5879848337/\n";
+
+"DescThunder" = "Original sound by NHK Creative Library, http://www.nhk.or.jp/creative/material/ce/D0002070046_00000.html\nOriginal thumbnail image by Mike Haller, http://www.flickr.com/photos/mhaller1979/5945559021/\n";
 
 "DescStream" = "Original sound by mystiscool, http://www.freesound.org/people/mystiscool/sounds/7138/ \nOriginal thumbnail image by audreyjm529, http://www.flickr.com/photos/98799884@N00/235458062\n";
 
@@ -30,9 +34,17 @@
 
 "DescCrickets" = "Original sound by martypinso, http://www.freesound.org/people/martypinso/sounds/22604/\nOriginal thumbnail image by vortistic, http://www.flickr.com/photos/63094832@N00/2438889059\n";
 
+"DescCicada" = "Original sound by NHK Creative Library, http://www.nhk.or.jp/creative/material/b5/D0002070053_00000.html\nOriginal thumbnail image by Toshihiro Gamo, http://www.flickr.com/photos/dakiny/8341177601/\n";
+
+"DescWaterfall" = "Original sound by LG, http://freesound.org/people/LG/sounds/102092/\nOriginal thumbnail image by enor, http://www.flickr.com/photos/enor/517787281/\n";
+
 "DescTerminal" = "成田空港第2ターミナル（千葉県）にて録音。オリジナルサウンドは下記よりクリエイティブ・コモンズライセンスにて入手可能です。 https://soundcloud.com/veronicasoft/narita-terminal-2-arrival";
 
 "DescDeck" = "羽田空港第2ターミナル（東京都）にて録音。オリジナルサウンドは下記よりクリエイティブ・コモンズライセンスにて入手可能です。 http://soundcloud.com/veronicasoft/haneda-airport-terminal-2-deck";
+
+"DescFireworks" = "Original sound by NHK Creative Library, http://www.nhk.or.jp/creative/material/be/D0002070054_00000.html\nOriginal thumbnail image by bayasaa, http://www.flickr.com/photos/bayasaa/2693161493/\n";
+
+"DescPub" = "Original sound by Islabonita, http://freesound.org/people/Islabonita/sounds/178525/\nOriginal thumbnail image by David Blaikie, http://www.flickr.com/photos/nikonvscanon/4519133003/\n";
 
 "DateFormat" = "yyyy/MM/dd HH:mm:ss";
 
