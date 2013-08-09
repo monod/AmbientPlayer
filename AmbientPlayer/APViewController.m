@@ -46,8 +46,7 @@ const NSInteger kTagAlertDeleteSound = 1;
 
 @implementation APViewController
 
-SYNTHESIZE(session)
-;
+SYNTHESIZE(session);
 SYNTHESIZE(player);
 SYNTHESIZE(preset);
 
@@ -58,6 +57,8 @@ SYNTHESIZE(preset);
         //self.bannerView = [ADBannerView new];
         //self.bannerView.delegate = self;
         _updateTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerUpdate:)];
+        _dateFormatter = [[NSDateFormatter alloc]init];
+        _dateFormatter.dateFormat = @"HH:mm:ss";
     }
     return self;
 }
@@ -156,6 +157,9 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 
     // Init CALayer
     [self initLayersAndViewsForAnimation];
+    
+    // Set default value for timer
+    self.timerPicker.countDownDuration = 1800;
 }
 
 - (void)setupAudioSession {
@@ -484,6 +488,8 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         float ch1 = [self.player powerForChannel:1];
         [cell.levelMeter updateValuesWith:ch0 and:ch1];
     }
+    
+    [self updateTimer:sender.timestamp];
 }
 
 - (IBAction)changeVolume:(id)sender {
@@ -613,12 +619,16 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     int index = self.pageControl.currentPage;
     if (index == 0) {
         [self turnFace:1];
+    } else if (index == 1) {
+        [self turnFace:2];
     }
 }
 
 - (IBAction)onSwipeRight:(id)sender {
     int index = self.pageControl.currentPage;
-    if (index == 1) {
+    if (index == 2) {
+        [self turnFace:1];
+    } else if (index == 1) {
         [self turnFace:0];
     }
 }
@@ -626,8 +636,8 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 #pragma mark Cubic transition
 
 CALayer *_parent;
-CALayer *_layers[2];
-UIView *_views[2];
+CALayer *_layers[3];
+UIView *_views[3];
 
 - (void)initLayersAndViewsForAnimation {
 
@@ -642,7 +652,11 @@ UIView *_views[2];
     r = CATransform3DMakeRotation(M_PI * 0.5, 0, 1, 0);
     t = CATransform3DMakeTranslation(viewWidth / 2, 0, -viewWidth / 2);
     CATransform3D right = CATransform3DConcat(r, t);
-
+    
+    r = CATransform3DMakeRotation(-M_PI * 0.5, 0, 1, 0);
+    t = CATransform3DMakeTranslation(-viewWidth / 2, 0, -viewWidth / 2);
+    CATransform3D left = CATransform3DConcat(r, t);
+    
     if (_parent == nil) {
         _parent = [CALayer layer];
         _parent.bounds = CGRectMake(0, 0, viewWidth, viewHeight);
@@ -651,12 +665,12 @@ UIView *_views[2];
         [self initParentTransform];
         [self.view.layer insertSublayer:_parent atIndex:0];
     }
+
     if (_layers[0] == nil) {
         _layers[0] = [CALayer layer];
         _layers[0].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
         _layers[0].position = CGPointMake(viewWidth / 2, viewHeight / 2);
-        //_layers[0].backgroundColor = [UIColor redColor].CGColor;
-        _layers[0].transform = front;
+        _layers[0].transform = left;
         [_parent addSublayer:_layers[0]];
     }
 
@@ -664,13 +678,21 @@ UIView *_views[2];
         _layers[1] = [CALayer layer];
         _layers[1].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
         _layers[1].position = CGPointMake(viewWidth / 2, viewHeight / 2);
-        //_layers[1].backgroundColor = [UIColor blueColor].CGColor;
-        _layers[1].transform = right;
+        _layers[1].transform = front;
         [_parent addSublayer:_layers[1]];
     }
 
-    _views[0] = self.presetCollectionView;
-    _views[1] = self.recordedCollectionView;
+    if (_layers[2] == nil) {
+        _layers[2] = [CALayer layer];
+        _layers[2].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
+        _layers[2].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        _layers[2].transform = right;
+        [_parent addSublayer:_layers[2]];
+    }
+
+    _views[0] = self.settingsView;
+    _views[1] = self.presetCollectionView;
+    _views[2] = self.recordedCollectionView;
 }
 
 - (void)turnFace:(int)newIndex {
@@ -695,7 +717,7 @@ UIView *_views[2];
     _views[index].frame = CGRectMake(-viewWidth, 0, viewWidth, viewHeight);
 
     // Begin animation
-    CGFloat rad = (0 - newIndex) * M_PI * 0.5;
+    CGFloat rad = (1 - newIndex) * M_PI * 0.5;
     [CATransaction begin];
     [CATransaction setAnimationDuration:0.5];
     [CATransaction setCompletionBlock:^(void) {
@@ -730,4 +752,43 @@ UIView *_views[2];
     [self setCollectionParent:nil];
     [super viewDidUnload];
 }
+
+#pragma mark Timer
+
+BOOL _timerRunning = NO;
+NSTimeInterval _startTime = 0;
+
+- (void)toggleTimer:(id)sender {
+    if (_timerRunning) {
+        _timerRunning = NO;
+        self.timerPicker.hidden = NO;
+        [self.timerStartButton setTitle:@"Start" forState:UIControlStateNormal];
+    } else {
+        self.timerLabel.text = [_dateFormatter stringFromDate:self.timerPicker.date];
+        _startTime = _updateTimer.timestamp;
+        _timerRunning = YES;
+        self.timerPicker.hidden = YES;
+        [self.timerStartButton setTitle:@"Stop" forState:UIControlStateNormal];
+    }
+}
+
+- (void)updateTimer:(NSTimeInterval)timestamp {
+    if (_timerRunning) {
+        NSInteger t = (NSInteger)(self.timerPicker.countDownDuration - (timestamp - _startTime));
+        NSInteger h = t / 3600;
+        NSInteger m = (t % 3600) / 60;
+        NSInteger s = t % 60;
+        NSString *label = [NSString stringWithFormat:@"%02d:%02d:%02d", h, m, s];
+        self.timerLabel.text = label;
+        
+        if (t == 0) {
+            [self toggleTimer:nil];
+            [self deselectAll];
+            [self updatePlayState];
+            // Stop playing music as well
+            [[MPMusicPlayerController iPodMusicPlayer] stop];
+        }
+    }
+}
+
 @end
