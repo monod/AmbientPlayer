@@ -76,12 +76,12 @@ SYNTHESIZE(preset);
             [[APSoundEntry alloc] initWithTitle:@"Waterfall" fileName:@"waterfall" image:@"waterfall" description: NSLocalizedString(@"DescWaterfall", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Forest" fileName:@"forest" image:@"forest" description:NSLocalizedString(@"DescForest", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Ocean" fileName:@"ocean" image:@"ocean" description:NSLocalizedString(@"DescOcean", nil)],
-            [[APSoundEntry alloc] initWithTitle:@"Seagulls" fileName:@"seagull" image:@"seagull" description:NSLocalizedString(@"DescSeagull", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Rain" fileName:@"rain" image:@"rain" description:NSLocalizedString(@"DescRain", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Thunder" fileName:@"thunder" image:@"thunder" description:NSLocalizedString(@"DescThunder", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Stream" fileName:@"stream" image:@"stream" description:NSLocalizedString(@"DescStream", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Fire" fileName:@"fire" image:@"fire" description:NSLocalizedString(@"DescFire", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Crickets" fileName:@"crickets" image:@"crickets" description:NSLocalizedString(@"DescCrickets", nil)],
+            [[APSoundEntry alloc] initWithTitle:@"Seagulls" fileName:@"seagull" image:@"seagull" description:NSLocalizedString(@"DescSeagull", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Cicadas" fileName:@"cicada" image:@"cicada" description:NSLocalizedString(@"DescCicada", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Airport" fileName:@"airport_in" image:@"airport_in" description:NSLocalizedString(@"DescTerminal", nil)],
             [[APSoundEntry alloc] initWithTitle:@"Runway" fileName:@"airport_deck" image:@"airport_deck" description:NSLocalizedString(@"DescDeck", nil)],
@@ -488,8 +488,6 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         float ch1 = [self.player powerForChannel:1];
         [cell.levelMeter updateValuesWith:ch0 and:ch1];
     }
-    
-    [self updateTimer:sender.timestamp];
 }
 
 - (IBAction)changeVolume:(id)sender {
@@ -756,32 +754,38 @@ UIView *_views[3];
 #pragma mark Timer
 
 BOOL _timerRunning = NO;
-NSTimeInterval _startTime = 0;
+NSInteger _remaining = 0;
+NSTimer *_timer = nil;
 
 - (void)toggleTimer:(id)sender {
     if (_timerRunning) {
         _timerRunning = NO;
+        [_timer invalidate];
         self.timerPicker.hidden = NO;
+        self.timerLabel.hidden = YES;
         [self.timerStartButton setTitle:@"Start" forState:UIControlStateNormal];
     } else {
         self.timerLabel.text = [_dateFormatter stringFromDate:self.timerPicker.date];
-        _startTime = _updateTimer.timestamp;
+        _remaining = self.timerPicker.countDownDuration;
         _timerRunning = YES;
         self.timerPicker.hidden = YES;
+        self.timerLabel.hidden = NO;
         [self.timerStartButton setTitle:@"Stop" forState:UIControlStateNormal];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+        [_timer fire];
     }
 }
 
-- (void)updateTimer:(NSTimeInterval)timestamp {
-    if (_timerRunning) {
-        NSInteger t = (NSInteger)(self.timerPicker.countDownDuration - (timestamp - _startTime));
-        NSInteger h = t / 3600;
-        NSInteger m = (t % 3600) / 60;
-        NSInteger s = t % 60;
+- (void)updateTimer:(NSTimer *)timer {
+    if (_timerRunning) { 
+        _remaining = MAX(0, _remaining - timer.timeInterval);
+        NSInteger h = _remaining / 3600;
+        NSInteger m = (_remaining % 3600) / 60;
+        NSInteger s = _remaining % 60;
         NSString *label = [NSString stringWithFormat:@"%02d:%02d:%02d", h, m, s];
         self.timerLabel.text = label;
         
-        if (t == 0) {
+        if (_remaining == 0) {
             [self toggleTimer:nil];
             [self deselectAll];
             [self updatePlayState];
