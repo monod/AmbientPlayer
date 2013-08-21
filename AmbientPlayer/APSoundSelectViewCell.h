@@ -13,7 +13,6 @@
 
 @interface APSoundSelectViewCell : UICollectionViewCell {
     APGradientBackgroundView *_cover;
-    UIView *_frontView;
     BOOL _playing;
 }
 
@@ -21,6 +20,7 @@
 @property (nonatomic, strong) UIImageView *preview;
 @property (nonatomic, strong) UIButton *info;
 @property (nonatomic, strong) APLevelMeterView *levelMeter;
+@property (nonatomic, strong) UIView *frontView;
 @property (nonatomic, strong) APSoundCellBackView *backView;
 
 @property (getter=isPlaying) BOOL playing;

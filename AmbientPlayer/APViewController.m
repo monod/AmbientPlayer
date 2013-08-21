@@ -496,7 +496,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 }
 
 - (void)showBackView:(id)sender {
-    APSoundSelectViewCell *cell = (APSoundSelectViewCell *) ((UIView *) sender).superview.superview;
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell *) ((UIView *) sender).superview.superview.superview;
     [cell flipViewToBackSide:YES withAnimation:YES];
     if (_playingItemPathInPreset) {
         _playingItemInPresetFlipped = YES;
@@ -506,7 +506,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 }
 
 - (void)hideBackView:(id)sender {
-    APSoundSelectViewCell *cell = (APSoundSelectViewCell *) ((UIView *) sender).superview.superview.superview;
+    APSoundSelectViewCell *cell = (APSoundSelectViewCell *) ((UIView *) sender).superview.superview.superview.superview;
     [cell flipViewToBackSide:NO withAnimation:YES];
     if (_playingItemPathInPreset) {
         _playingItemInPresetFlipped = NO;
