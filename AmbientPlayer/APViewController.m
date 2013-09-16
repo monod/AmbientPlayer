@@ -140,20 +140,17 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 
     // Slider (Only for iOS 6)
     if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"knob" ofType:@"png"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"slider_thumb" ofType:@"png"];
         UIImage *img = [UIImage imageWithContentsOfFile:path];
         [self.volumeSlider setThumbImage:img forState:UIControlStateNormal];
-        
-        path = [[NSBundle mainBundle] pathForResource:@"knob_hl" ofType:@"png"];
-        img = [UIImage imageWithContentsOfFile:path];
         [self.volumeSlider setThumbImage:img forState:UIControlStateHighlighted];
         
-        path = [[NSBundle mainBundle] pathForResource:@"min" ofType:@"png"];
-        img = [UIImage imageWithContentsOfFile:path];
+        path = [[NSBundle mainBundle] pathForResource:@"slider_left" ofType:@"png"];
+        img = [[UIImage imageWithContentsOfFile:path] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 4, 0, 0)];
         [self.volumeSlider setMinimumTrackImage:img forState:UIControlStateNormal];
         
-        path = [[NSBundle mainBundle] pathForResource:@"max" ofType:@"png"];
-        img = [UIImage imageWithContentsOfFile:path];
+        path = [[NSBundle mainBundle] pathForResource:@"slider_right" ofType:@"png"];
+        img = [[UIImage imageWithContentsOfFile:path] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 4)];
         [self.volumeSlider setMaximumTrackImage:img forState:UIControlStateNormal];
     }
 
