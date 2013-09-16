@@ -48,6 +48,7 @@
         self.info = [UIButton buttonWithType:UIButtonTypeInfoLight];
         self.info.frame = CGRectMake(frame.size.width - 27.0, 9.0, 18.0, 18.0);
         self.info.hidden = YES;
+        self.info.tintColor = [UIColor whiteColor];
         [self.frontView addSubview:self.info];
         
         // Back View

@@ -138,28 +138,35 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     CGSize sz = [self.routeView sizeThatFits:self.routeView.bounds.size];
     self.routeView.bounds = CGRectMake(self.routeView.bounds.origin.x, self.routeView.bounds.origin.y, sz.width, sz.height);
 
-    // Slider
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"knob" ofType:@"png"];
-    UIImage *img = [UIImage imageWithContentsOfFile:path];
-    [self.volumeSlider setThumbImage:img forState:UIControlStateNormal];
-
-    path = [[NSBundle mainBundle] pathForResource:@"knob_hl" ofType:@"png"];
-    img = [UIImage imageWithContentsOfFile:path];
-    [self.volumeSlider setThumbImage:img forState:UIControlStateHighlighted];
-
-    path = [[NSBundle mainBundle] pathForResource:@"min" ofType:@"png"];
-    img = [UIImage imageWithContentsOfFile:path];
-    [self.volumeSlider setMinimumTrackImage:img forState:UIControlStateNormal];
-
-    path = [[NSBundle mainBundle] pathForResource:@"max" ofType:@"png"];
-    img = [UIImage imageWithContentsOfFile:path];
-    [self.volumeSlider setMaximumTrackImage:img forState:UIControlStateNormal];
+    // Slider (Only for iOS 6)
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"knob" ofType:@"png"];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        [self.volumeSlider setThumbImage:img forState:UIControlStateNormal];
+        
+        path = [[NSBundle mainBundle] pathForResource:@"knob_hl" ofType:@"png"];
+        img = [UIImage imageWithContentsOfFile:path];
+        [self.volumeSlider setThumbImage:img forState:UIControlStateHighlighted];
+        
+        path = [[NSBundle mainBundle] pathForResource:@"min" ofType:@"png"];
+        img = [UIImage imageWithContentsOfFile:path];
+        [self.volumeSlider setMinimumTrackImage:img forState:UIControlStateNormal];
+        
+        path = [[NSBundle mainBundle] pathForResource:@"max" ofType:@"png"];
+        img = [UIImage imageWithContentsOfFile:path];
+        [self.volumeSlider setMaximumTrackImage:img forState:UIControlStateNormal];
+    }
 
     // Init CALayer
     [self initLayersAndViewsForAnimation];
     
     // Set default value for timer
     self.timerPicker.countDownDuration = 1800;
+}
+
+// Change Status Bar Style for iOS 7
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleBlackOpaque;
 }
 
 - (void)setupAudioSession {
@@ -641,6 +648,11 @@ UIView *_views[3];
 
     CGFloat viewWidth = self.presetCollectionView.frame.size.width;
     CGFloat viewHeight = self.presetCollectionView.frame.size.height;
+    CGFloat topMargin = 20; //self.topLayoutGuide.length;
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+        // for iOS 6, height of status bar need not be considered
+        topMargin = 0;
+    }
 
     CATransform3D r;
     CATransform3D t;
@@ -658,7 +670,7 @@ UIView *_views[3];
     if (_parent == nil) {
         _parent = [CALayer layer];
         _parent.bounds = CGRectMake(0, 0, viewWidth, viewHeight);
-        _parent.position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        _parent.position = CGPointMake(viewWidth / 2, (viewHeight + topMargin) / 2);
 
         [self initParentTransform];
         [self.view.layer insertSublayer:_parent atIndex:0];
@@ -667,7 +679,7 @@ UIView *_views[3];
     if (_layers[0] == nil) {
         _layers[0] = [CALayer layer];
         _layers[0].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
-        _layers[0].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        _layers[0].position = CGPointMake(viewWidth / 2, (viewHeight + topMargin) / 2);
         _layers[0].transform = left;
         [_parent addSublayer:_layers[0]];
     }
@@ -675,7 +687,7 @@ UIView *_views[3];
     if (_layers[1] == nil) {
         _layers[1] = [CALayer layer];
         _layers[1].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
-        _layers[1].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        _layers[1].position = CGPointMake(viewWidth / 2, (viewHeight + topMargin) / 2);
         _layers[1].transform = front;
         [_parent addSublayer:_layers[1]];
     }
@@ -683,7 +695,7 @@ UIView *_views[3];
     if (_layers[2] == nil) {
         _layers[2] = [CALayer layer];
         _layers[2].bounds = CGRectMake(0, 0, viewWidth, viewHeight);
-        _layers[2].position = CGPointMake(viewWidth / 2, viewHeight / 2);
+        _layers[2].position = CGPointMake(viewWidth / 2, (viewHeight + topMargin) / 2);
         _layers[2].transform = right;
         [_parent addSublayer:_layers[2]];
     }
