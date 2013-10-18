@@ -6,7 +6,9 @@
 //  Copyright (c) 2012年 InteractionPlus. All rights reserved.
 //
 
-#import <SoundCloudAPI/SCAPI.h>
+//#import <SoundCloudAPI/SCAPI.h>
+//#import "SCAPI.h"
+#import "CocoaSoundCloudAPI/SCAPI.h"
 #import "APAppDelegate.h"
 
 #import "APViewController.h"

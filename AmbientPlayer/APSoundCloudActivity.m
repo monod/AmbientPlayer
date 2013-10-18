@@ -8,7 +8,9 @@
 
 #import "APSoundCloudActivity.h"
 #import "APSoundEntry.h"
-#import "SCUI.h"
+//#import "SCUI.h"
+#import "CocoaSoundCloudUI/SCUI.h"
+#import "CocoaSoundCloudUI/SCShareViewController.h"
 #import "APCustomSoundEntryModel.h"
 #import "APAppDelegate.h"
 
@@ -64,7 +66,7 @@
     NSURL *trackURL = [entry getRecordedFileURL];
 
     SCShareViewController *shareViewController;
-    SCSharingViewControllerComletionHandler handler;
+    SCSharingViewControllerCompletionHandler handler;
 
     handler = ^(NSDictionary *trackInfo, NSError *error) {
         if (SC_CANCELED(error)) {

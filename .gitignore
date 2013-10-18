@@ -18,3 +18,21 @@ DerivedData
 .idea/
 
 /sound
+
+Pods/*
+
+#xcodeprojの必要な者以外葉無視する
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+
+#サブディレクトリ内のxcodeproj
+**/*.xcodeproj/*
+!**/*.xcodeproj/project.pbxproj
+
+!*.xcodeproj/default.*
+!**/*.xcodeproj/default.*
+
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
+
+
