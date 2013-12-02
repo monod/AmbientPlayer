@@ -22,6 +22,7 @@ NSString *const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
 
 NSString *const SoundCellIdentifier = @"SoundCell";
 NSString *const AddCellIdentifier = @"AddCell";
+NSString *const DownloadCellIdentifier = @"DownloadCell";
 
 const int kSectionPreset = 0;
 const int kSectionRecorded = 1;
@@ -126,6 +127,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
     self.recordedCollectionView.tag = kTagRecordedSoundCollectionView;
     [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:SoundCellIdentifier];
     [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:AddCellIdentifier];
+    [self.recordedCollectionView registerClass:[APSoundSelectViewCell class] forCellWithReuseIdentifier:DownloadCellIdentifier];
     ((UICollectionViewFlowLayout *) self.recordedCollectionView.collectionViewLayout).minimumInteritemSpacing = 2;
     ((UICollectionViewFlowLayout *) self.recordedCollectionView.collectionViewLayout).minimumLineSpacing = 2;
     _playingItemPathInRecorded = nil;
@@ -232,12 +234,22 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
             if (indexPath.section == 0 && indexPath.row == 0) {
                 // first item in the section: "Add" button
                 APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddCellIdentifier forIndexPath:indexPath];
-                cell.title.text = @"Add...";
+                cell.title.text = @"Record...";
                 NSString *path = [[NSBundle mainBundle] pathForResource:@"add" ofType:@"png"];
                 UIImage *img = [UIImage imageWithContentsOfFile:path];
                 cell.preview.image = img;
                 return cell;
-            } else {
+            } else if (indexPath.section == 0 && indexPath.row == 1){
+                // second item in the section: "Download" button
+                APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DownloadCellIdentifier forIndexPath:indexPath];
+                cell.title.text = @"Download...";
+                NSString *path = [[NSBundle mainBundle] pathForResource:@"add" ofType:@"png"];
+                UIImage *img = [UIImage imageWithContentsOfFile:path];
+                cell.preview.image = img;
+                return cell;
+
+                
+            }else {
                 return [self setUpCollectionViewCell:collectionView cellForItemAtIndexPath:indexPath soundEntries:self.recordedSoundEntries];
             }
         }
@@ -250,7 +262,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 - (UICollectionViewCell *)setUpCollectionViewCell:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath soundEntries:(NSArray *)soundEntries {
     NSInteger index = indexPath.row;
     if (collectionView.tag == kTagRecordedSoundCollectionView) {
-        index--;
+        index = index - 2; //Add ボタンと Downloadボタンの分を引いておく
     }
     APSoundEntry *entry = [soundEntries objectAtIndex:index];
     APSoundSelectViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SoundCellIdentifier forIndexPath:indexPath];
@@ -313,7 +325,7 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         case kTagPresetSoundCollectionView:
             return [self.preset count];
         case kTagRecordedSoundCollectionView:
-            return [self.recordedSoundEntries count] + 1;
+            return [self.recordedSoundEntries count] + 2; //Add ボタンと Downloadボタンの分
         default:
             NSAssert(NO, @"This line should not be reached");
             return 0;
@@ -337,7 +349,14 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         [self deselectAll];
         [self updatePlayState];
         [self performSegueWithIdentifier:@"toRecord" sender:self];
-    } else {
+    } else if (collectionView.tag == kTagRecordedSoundCollectionView && indexPath.section == 0 && indexPath.row
+               == 1) {
+        // 「ダウンロード」のセルだった場合、録音用画面を呼び出すようにする
+        //[self deselectAll];
+        [self updatePlayState];
+        //TODO ここをダウンロード画面を呼び出すように修正する。
+        [self performSegueWithIdentifier:@"toRecord" sender:self];
+    }else {
         [self toggleCellInView:collectionView withIndexPath:indexPath];
     }
 }
@@ -423,7 +442,8 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
 }
 
 - (int)currentRecordedSoundPlayingItemIndex {
-    return _playingItemPathInRecorded.row - 1;
+//    return _playingItemPathInRecorded.row - 1;
+    return _playingItemPathInRecorded.row - 2;
 }
 
 - (int)currentPresetSoundPlayingItemIndex {
