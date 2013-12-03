@@ -16,6 +16,7 @@
 #import "APCustomSoundEntryModel.h"
 #import "SCUI.h"
 #import "APSoundCloudActivity.h"
+#import "APSoundCloudDownloadController.h"
 
 NSString *const BannerViewActionWillBegin = @"BannerViewActionWillBegin";
 NSString *const BannerViewActionDidFinish = @"BannerViewActionDidFinish";
@@ -354,8 +355,11 @@ void audioRouteChangeListenerCallback(void *clientData, AudioSessionPropertyID i
         // 「ダウンロード」のセルだった場合、録音用画面を呼び出すようにする
         //[self deselectAll];
         [self updatePlayState];
-        //TODO ここをダウンロード画面を呼び出すように修正する。
-        [self performSegueWithIdentifier:@"toRecord" sender:self];
+        //ダウンロード画面を呼び出す
+        APSoundCloudDownloadController *vc = [[APSoundCloudDownloadController alloc] initWithNibName:@"APSoundCloudDownloadController" bundle:nil];
+        //UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+        [self presentViewController:vc animated:YES completion:nil];
+        
     }else {
         [self toggleCellInView:collectionView withIndexPath:indexPath];
     }

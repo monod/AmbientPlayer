@@ -119,6 +119,8 @@
 		AF85BA201677505D002F5380 /* APSoundCloudActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = AF85BA1F1677505D002F5380 /* APSoundCloudActivity.m */; };
 		AF85BA2316775178002F5380 /* scshareicon.png in Resources */ = {isa = PBXBuildFile; fileRef = AF85BA2116775178002F5380 /* scshareicon.png */; };
 		AF85BA2416775178002F5380 /* scshareicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AF85BA2216775178002F5380 /* scshareicon@2x.png */; };
+		AFA421B6184DFF15005B4959 /* APSoundCloudDownloadController.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA421B4184DFF15005B4959 /* APSoundCloudDownloadController.m */; };
+		AFA421B7184DFF15005B4959 /* APSoundCloudDownloadController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFA421B5184DFF15005B4959 /* APSoundCloudDownloadController.xib */; };
 		AFB57AA5166F051400294FE0 /* SoundCloud.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */; };
 		AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
 		AFC37ECB163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */; };
@@ -266,6 +268,9 @@
 		AF85BA1F1677505D002F5380 /* APSoundCloudActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundCloudActivity.m; sourceTree = "<group>"; };
 		AF85BA2116775178002F5380 /* scshareicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scshareicon.png; sourceTree = "<group>"; };
 		AF85BA2216775178002F5380 /* scshareicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scshareicon@2x.png"; sourceTree = "<group>"; };
+		AFA421B3184DFF15005B4959 /* APSoundCloudDownloadController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APSoundCloudDownloadController.h; sourceTree = "<group>"; };
+		AFA421B4184DFF15005B4959 /* APSoundCloudDownloadController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APSoundCloudDownloadController.m; sourceTree = "<group>"; };
+		AFA421B5184DFF15005B4959 /* APSoundCloudDownloadController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = APSoundCloudDownloadController.xib; sourceTree = "<group>"; };
 		AFB57AA4166F050E00294FE0 /* SoundCloud.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SoundCloud.bundle; path = AmbientPlayer/SoundCloud.bundle; sourceTree = "<group>"; };
 		AFC37EC9163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = APCustomSoundEntryModels.xcdatamodel; sourceTree = "<group>"; };
 		AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APCustomSoundEntryModel.h; sourceTree = "<group>"; };
@@ -519,6 +524,9 @@
 		AFA421B0184CB929005B4959 /* SoundCloudDownload */ = {
 			isa = PBXGroup;
 			children = (
+				AFA421B3184DFF15005B4959 /* APSoundCloudDownloadController.h */,
+				AFA421B4184DFF15005B4959 /* APSoundCloudDownloadController.m */,
+				AFA421B5184DFF15005B4959 /* APSoundCloudDownloadController.xib */,
 			);
 			name = SoundCloudDownload;
 			sourceTree = "<group>";
@@ -645,6 +653,7 @@
 				406A52D21644EDEF003CA38D /* paper@2x.png in Resources */,
 				406A52D81644F163003CA38D /* delete.png in Resources */,
 				4084D43A17E6B4D70075A649 /* slider_left@2x.png in Resources */,
+				AFA421B7184DFF15005B4959 /* APSoundCloudDownloadController.xib in Resources */,
 				406A52D91644F163003CA38D /* delete@2x.png in Resources */,
 				406A52DA1644F163003CA38D /* share.png in Resources */,
 				406A52DB1644F163003CA38D /* share@2x.png in Resources */,
@@ -763,6 +772,7 @@
 				40D289CF1608C46E00685175 /* APGradientBackgroundView.m in Sources */,
 				40B6FA5A161BCB540051FD8B /* APLevelMeterView.m in Sources */,
 				403270FF1621056600E44DDB /* APWaveFormView.m in Sources */,
+				AFA421B6184DFF15005B4959 /* APSoundCloudDownloadController.m in Sources */,
 				40DB23E416229C640015CD81 /* APSoundCellBackView.m in Sources */,
 				AFC37ECA163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld in Sources */,
 				AFC37ECE163BA86A0022E023 /* APCustomSoundEntryModel.m in Sources */,
