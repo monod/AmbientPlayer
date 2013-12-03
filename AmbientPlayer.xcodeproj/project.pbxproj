@@ -456,34 +456,13 @@
 		40A2069515F67790004BE2E1 /* AmbientPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				AFA421BD184E0940005B4959 /* Timer */,
+				AFA421BC184E08CA005B4959 /* SoundSelect */,
+				AFA421BB184E0883005B4959 /* model */,
+				AFA421BA184E084F005B4959 /* Record */,
+				AFA421B9184E081B005B4959 /* main */,
+				AFA421B8184E07E7005B4959 /* CoreData */,
 				AFA421B0184CB929005B4959 /* SoundCloudDownload */,
-				AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */,
-				AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */,
-				AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */,
-				40A2069E15F67790004BE2E1 /* APAppDelegate.h */,
-				40A2069F15F67790004BE2E1 /* APAppDelegate.m */,
-				7EDE0C0215FB108200789400 /* APCrossFadePlayer.h */,
-				7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */,
-				40D289CD1608C46E00685175 /* APGradientBackgroundView.h */,
-				40D289CE1608C46E00685175 /* APGradientBackgroundView.m */,
-				40B6FA58161BCB530051FD8B /* APLevelMeterView.h */,
-				40B6FA59161BCB540051FD8B /* APLevelMeterView.m */,
-				403270FD1621056500E44DDB /* APWaveFormView.h */,
-				403270FE1621056500E44DDB /* APWaveFormView.m */,
-				AF4E5D0915FB376A001438B3 /* APRecordViewController.h */,
-				AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */,
-				40DB23E216229C640015CD81 /* APSoundCellBackView.h */,
-				40DB23E316229C640015CD81 /* APSoundCellBackView.m */,
-				40DB23E71622BA400015CD81 /* APSoundCellBackView.xib */,
-				7EDE0C1015FB2C4300789400 /* APSoundEntry.h */,
-				7EDE0C1115FB2C4300789400 /* APSoundEntry.m */,
-				409D4F0B1608314D00261E70 /* APSoundSelectViewCell.h */,
-				409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */,
-				AF85BA1E1677505D002F5380 /* APSoundCloudActivity.h */,
-				AF85BA1F1677505D002F5380 /* APSoundCloudActivity.m */,
-				40A206A115F67790004BE2E1 /* APViewController.h */,
-				40A206A215F67790004BE2E1 /* APViewController.m */,
-				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
 				4084D43517E6A61C0075A649 /* Images.xcassets */,
 				40A2069615F67790004BE2E1 /* Supporting Files */,
 			);
@@ -529,6 +508,75 @@
 				AFA421B5184DFF15005B4959 /* APSoundCloudDownloadController.xib */,
 			);
 			name = SoundCloudDownload;
+			sourceTree = "<group>";
+		};
+		AFA421B8184E07E7005B4959 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				AFC37EC8163BA5080022E023 /* APCustomSoundEntryModels.xcdatamodeld */,
+				AFC37ECC163BA86A0022E023 /* APCustomSoundEntryModel.h */,
+				AFC37ECD163BA86A0022E023 /* APCustomSoundEntryModel.m */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
+		AFA421B9184E081B005B4959 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				40A2069E15F67790004BE2E1 /* APAppDelegate.h */,
+				40A2069F15F67790004BE2E1 /* APAppDelegate.m */,
+				7EDE0C0B15FB234C00789400 /* iPhone.storyboard */,
+				40A206A115F67790004BE2E1 /* APViewController.h */,
+				40A206A215F67790004BE2E1 /* APViewController.m */,
+			);
+			name = main;
+			sourceTree = "<group>";
+		};
+		AFA421BA184E084F005B4959 /* Record */ = {
+			isa = PBXGroup;
+			children = (
+				AF4E5D0915FB376A001438B3 /* APRecordViewController.h */,
+				AF4E5D0A15FB376A001438B3 /* APRecordViewController.m */,
+				403270FD1621056500E44DDB /* APWaveFormView.h */,
+				403270FE1621056500E44DDB /* APWaveFormView.m */,
+			);
+			name = Record;
+			sourceTree = "<group>";
+		};
+		AFA421BB184E0883005B4959 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				40DB23E216229C640015CD81 /* APSoundCellBackView.h */,
+				7EDE0C1015FB2C4300789400 /* APSoundEntry.h */,
+				7EDE0C1115FB2C4300789400 /* APSoundEntry.m */,
+				7EDE0C0215FB108200789400 /* APCrossFadePlayer.h */,
+				7EDE0C0315FB108200789400 /* APCrossFadePlayer.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		AFA421BC184E08CA005B4959 /* SoundSelect */ = {
+			isa = PBXGroup;
+			children = (
+				AF85BA1E1677505D002F5380 /* APSoundCloudActivity.h */,
+				AF85BA1F1677505D002F5380 /* APSoundCloudActivity.m */,
+				409D4F0C1608314D00261E70 /* APSoundSelectViewCell.m */,
+				409D4F0B1608314D00261E70 /* APSoundSelectViewCell.h */,
+				40DB23E316229C640015CD81 /* APSoundCellBackView.m */,
+				40DB23E71622BA400015CD81 /* APSoundCellBackView.xib */,
+				40B6FA58161BCB530051FD8B /* APLevelMeterView.h */,
+				40B6FA59161BCB540051FD8B /* APLevelMeterView.m */,
+			);
+			name = SoundSelect;
+			sourceTree = "<group>";
+		};
+		AFA421BD184E0940005B4959 /* Timer */ = {
+			isa = PBXGroup;
+			children = (
+				40D289CD1608C46E00685175 /* APGradientBackgroundView.h */,
+				40D289CE1608C46E00685175 /* APGradientBackgroundView.m */,
+			);
+			name = Timer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
